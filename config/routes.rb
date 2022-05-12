@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   # root "articles#index"
 
   scope :v1, defaults: { format: :json } do
-    resources :raw_events, only: [:create] do
+    resources :raw_events, only: [:index, :create] do
       post :ingest, on: :collection
     end
   end
