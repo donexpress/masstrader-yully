@@ -3,4 +3,10 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "articles#index"
+
+  scope :v1, defaults: { format: :json } do
+    resources :raw_events, only: [:create] do
+      post :ingest, on: :collection
+    end
+  end
 end
