@@ -14,4 +14,9 @@ class RawEventsController < ApplicationController
     RawEvent.create!(data: params.permit!.to_h)
     head :ok
   end
+
+  def dump
+    raw_events = RawEvent.all
+    send_data raw_events.to_csv, filename: "raw_events-#{Time.now}.csv"
+  end
 end

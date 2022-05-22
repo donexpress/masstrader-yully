@@ -84,6 +84,7 @@ GEM
     childprocess (4.1.0)
     concurrent-ruby (1.1.10)
     crass (1.0.6)
+    csv (3.2.3)
     debug (1.5.0)
       irb (>= 1.3.6)
       reline (>= 0.2.7)
@@ -214,6 +215,7 @@ PLATFORMS
 DEPENDENCIES
   bootsnap
   capybara
+  csv (~> 3.0)
   debug
   importmap-rails
   jbuilder
