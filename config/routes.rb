@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   scope :v1, defaults: { format: :json } do
     resources :raw_events, only: [:index, :create] do
       post :ingest, on: :collection
+      get :dump, on: :collection
     end
   end
 end
