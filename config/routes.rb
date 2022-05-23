@@ -9,5 +9,7 @@ Rails.application.routes.draw do
       post :ingest, on: :collection
       get :dump, on: :collection
     end
+
+    resources :shipments, only: [:index]
   end
 end
