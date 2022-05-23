@@ -37,6 +37,8 @@ class ShipmentsController < ApplicationController
       render json: {
         status: 200,
         message: 'Ok',
+        carrier: 'easy2go',
+        country: 'CL',
         data: {
           tracking_number: tracking_number,
           delivered: !!tracking_event_data.find { |e| e[:milestone].upcase == 'DELIVERED' },
