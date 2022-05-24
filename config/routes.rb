@@ -12,4 +12,6 @@ Rails.application.routes.draw do
 
     resources :shipments, only: [:index]
   end
+
+  get 'docs', to: 'docs#index'
 end
