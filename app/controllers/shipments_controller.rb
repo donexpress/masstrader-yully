@@ -80,6 +80,25 @@ class ShipmentsController < ApplicationController
     tracking_event_data
       .map { |e| e.delete(:tracking_number); e }
       .sort_by { |e| DateTime.parse(e[:timestamp]).to_i }
+      .map do |e|
+        if e[:milestone].upcase == 'RECEIVED'
+          e[:milestone] == 'RECEIVED BY DISTRIBUTOR'
+        end
+
+        if e[:milestone].upcase == 'ASSIGNED'
+          e[:milestone] == 'ASSIGNED LAST MILE DELIVERY'
+        end
+
+        if e[:milestone].upcase == 'NOT AVAILABLE'
+          e[:milestone] == 'The package was not received by distributor (not available)'.upcase
+        end
+
+        if e[:milestone].upcase == 'REFUSED'
+          e[:milestone] == 'The package cannot be delivered'.upcase
+        end
+
+        e
+    end
   end
 
   def render_unauthorized
