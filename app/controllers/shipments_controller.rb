@@ -61,7 +61,6 @@ class ShipmentsController < ApplicationController
   def verify_api_token
     begin
       authorization_token = request.headers['Authorization'].split('Bearer ').last
-      puts "authorization_token #{authorization_token}"
       if Rails.env.development?
         dev_value = '1aa92cfc7a2b81f7052608d8bb172838a3b0d2c1aeff618955b12e9cca396baf1178df3f1cc3dc9e653683afed02051a76df9ee2b1a4e1ae74385bc302871362'
         render_unauthorized unless authorization_token == dev_value
