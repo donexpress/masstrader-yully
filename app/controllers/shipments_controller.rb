@@ -37,7 +37,7 @@ class ShipmentsController < ApplicationController
       render json: {
         status: 200,
         message: 'Ok',
-        carrier: 'easy2go',
+        carrier: 'CL2',
         country: 'CL',
         data: {
           tracking_number: tracking_number,
