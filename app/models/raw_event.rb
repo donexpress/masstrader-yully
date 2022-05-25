@@ -8,7 +8,13 @@ class RawEvent < ApplicationRecord
       csv << attributes
 
       all.find_each do |raw_event|
-        csv << attributes.map{ |attr| raw_event.data[attr] }
+        csv << attributes.map do |attr|
+          if raw_event.data[attr].downcase == 'e2go'
+            'CL2'
+          else
+            raw_event.data[attr]
+          end
+        end
       end
     end
   end
