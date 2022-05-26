@@ -9,6 +9,14 @@ class RawEvent < ApplicationRecord
 
       all.find_each do |raw_event|
         csv << attributes.map do |attr|
+          if attr == 'date'
+            if RawEvent.after_threshold?(raw_event.data[attr])
+              next RawEvent.swap_month_day(raw_event.data[attr])
+            else
+              next raw_event.data[attr]
+            end
+          end
+
           if raw_event.data[attr].downcase == 'e2go'
             'CL2'
           else
@@ -17,5 +25,16 @@ class RawEvent < ApplicationRecord
         end
       end
     end
+  end
+
+  def self.after_threshold?(ts_str)
+    threshold_dt = DateTime.parse("2022-05-25")
+    DateTime.parse(ts_str).after? threshold_dt
+  end
+
+  def self.swap_month_day(ts_str)
+    month = ts_str[5..6]
+    day = ts_str[8..9]
+    ts_str[0..4] + day + "-" + month + ts_str[10..]
   end
 end
