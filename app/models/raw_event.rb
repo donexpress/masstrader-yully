@@ -28,7 +28,7 @@ class RawEvent < ApplicationRecord
   end
 
   def self.after_threshold?(ts_str, id)
-    return false if id < 622
+    return false if id > 622
 
     threshold_dt = DateTime.parse("2022-05-25")
     DateTime.parse(ts_str).after? threshold_dt
