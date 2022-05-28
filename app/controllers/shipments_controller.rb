@@ -15,11 +15,11 @@ class ShipmentsController < ApplicationController
     tracking_number = tracking_number.upcase
 
     raw_events = RawEvent.all
-    raw_events_data = raw_events.map(&:data)
-    parsed_event_data = (raw_events_data.map do |raw_event_hash|
+    parsed_event_data = (raw_events.map do |raw_event|
       begin
+        raw_event_hash = raw_event.data
         parsed_event = {}
-        parsed_event[:timestamp] = RawEvent.after_threshold?(raw_event_hash['date']) ? RawEvent.swap_month_day(raw_event_hash['date']) : raw_event_hash['date']
+        parsed_event[:timestamp] = RawEvent.after_threshold?(raw_event_hash['date'], raw_event.id) ? RawEvent.swap_month_day(raw_event_hash['date']) : raw_event_hash['date']
         parsed_event[:tracking_number] = raw_event_hash['tracking'].upcase
         parsed_event[:milestone] = raw_event_hash['description']
         parsed_event[:location] = nil
