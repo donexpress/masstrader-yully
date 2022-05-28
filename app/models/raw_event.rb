@@ -10,7 +10,7 @@ class RawEvent < ApplicationRecord
       all.find_each do |raw_event|
         csv << attributes.map do |attr|
           if attr == 'date'
-            if RawEvent.after_threshold?(raw_event.data[attr], raw_event.data['id'])
+            if RawEvent.after_threshold?(raw_event.data[attr], raw_event.id)
               next RawEvent.swap_month_day(raw_event.data[attr])
             else
               next raw_event.data[attr]
