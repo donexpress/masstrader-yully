@@ -2,7 +2,7 @@ class RawEvent < ApplicationRecord
   validates :data, presence: true
 
   def self.to_csv
-    attributes = %w[date office tracking description id]
+    attributes = %w[date office tracking description]
 
     CSV.generate(headers: true) do |csv|
       csv << attributes
