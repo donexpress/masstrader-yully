@@ -45,6 +45,10 @@ class RawEvent < ApplicationRecord
   end
 
   def self.map_milestone(milestone)
+    if milestone.upcase == 'LOADED'
+      return 'PRE-ALERT LOADED'
+    end
+
     if milestone.upcase == 'RECEIVED'
       return 'RECEIVED BY DISTRIBUTOR'
     end
