@@ -77,21 +77,21 @@ class RawEvent < ApplicationRecord
     when  'DELIVERED'
       'Recipient\'s address'.upcase
     when 'RECEIVED'
-      'Distribution Center'.upcase
+      'Destination Distribution Center'.upcase
     when 'RELEASED CUSTOMS'
       'Airport'.upcase
     when 'NOT AVAILABLE'
-      'Unknown'.upcase
+      'Origin or unknown'.upcase
     when 'DETAINED IN CUSTOMS'
       'Airport'.upcase
     when 'ASSIGNED'
-      'Distribution Center'.upcase
+      'Santiago - Sorting Center'.upcase
     when 'LOADED'
       'Origin'.upcase
     when 'REFUSED'
-      'Unknown'.upcase
+      'Airport'.upcase
     when 'DISPATCHED'
-      'Distribution Center'.upcase
+      'Destination Distribution Center'.upcase
     else
       "Milestone: #{milestone} does not have location."
     end
