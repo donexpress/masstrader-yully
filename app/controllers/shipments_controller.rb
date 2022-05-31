@@ -22,7 +22,7 @@ class ShipmentsController < ApplicationController
         parsed_event[:timestamp] = RawEvent.after_threshold?(raw_event_hash['date'], raw_event.id) ? RawEvent.swap_month_day(raw_event_hash['date']) : raw_event_hash['date']
         parsed_event[:tracking_number] = raw_event_hash['tracking'].upcase
         parsed_event[:milestone] = raw_event_hash['description']
-        parsed_event[:location] = nil
+        parsed_event[:location] = RawEvent.location_from_milestone(raw_event.data['description'])
         parsed_event
       rescue StandardError => _e
         nil

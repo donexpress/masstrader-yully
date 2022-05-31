@@ -2,13 +2,17 @@ class RawEvent < ApplicationRecord
   validates :data, presence: true
 
   def self.to_csv
-    attributes = %w[date office tracking description]
+    attributes = %w[date office tracking description location]
 
     CSV.generate(headers: true) do |csv|
       csv << attributes
 
       all.find_each do |raw_event|
         csv << attributes.map do |attr|
+          if attr == 'location'
+            next RawEvent.location_from_milestone(raw_event.data['milestone'])
+          end
+
           if attr == 'description'
             next RawEvent.map_milestone(raw_event.data[attr])
           end
@@ -66,5 +70,30 @@ class RawEvent < ApplicationRecord
     end
 
     milestone
+  end
+
+  def self.location_from_milestone(milestone)
+    case milestone
+    when  'DELIVERED'
+      'Recipient\'s address'.upcase
+    when 'RECEIVED'
+      'Airport'.upcase
+    when 'RELEASED CUSTOMS'
+      'Airport'.upcase
+    when 'NOT AVAILABLE'
+      'Unknown'.upcase
+    when 'DETAINED IN CUSTOMS'
+      'Airport'.upcase
+    when 'ASSIGNED'
+      'Distribution Center'.upcase
+    when 'LOADED'
+      'Origin'.upcase
+    when 'REFUSED'
+      'Unknown'.upcase
+    when 'DISPATCHED'
+      'Distribution Center'.upcase
+    else
+      "Milestone: #{milestone} does not have location."
+    end
   end
 end
