@@ -77,7 +77,7 @@ class RawEvent < ApplicationRecord
     when  'DELIVERED'
       'Recipient\'s address'.upcase
     when 'RECEIVED'
-      'Airport'.upcase
+      'Distribution Center'.upcase
     when 'RELEASED CUSTOMS'
       'Airport'.upcase
     when 'NOT AVAILABLE'
