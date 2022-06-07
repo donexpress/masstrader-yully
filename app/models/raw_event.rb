@@ -10,7 +10,7 @@ class RawEvent < ApplicationRecord
       all.find_each do |raw_event|
         csv << attributes.map do |attr|
           if attr == 'location'
-            next RawEvent.location_from_milestone(raw_event.data['milestone'])
+            next RawEvent.location_from_milestone(raw_event.data['description'])
           end
 
           if attr == 'description'
