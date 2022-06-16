@@ -85,7 +85,7 @@ class RawEvent < ApplicationRecord
     when 'DETAINED IN CUSTOMS'
       'Airport'.upcase
     when 'ASSIGNED'
-      'Destination station'.upcase
+      'Destination branch office'.upcase
     when 'LOADED'
       'Origin'.upcase
     when 'REFUSED'
