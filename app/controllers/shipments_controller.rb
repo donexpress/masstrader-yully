@@ -14,7 +14,7 @@ class ShipmentsController < ApplicationController
 
     tracking_number = tracking_number.upcase
 
-    raw_events = RawEvent.all
+    raw_events = RawEvent.where("data ->> 'tracking' = ?", tracking_number)
     parsed_event_data = (raw_events.map do |raw_event|
       begin
         raw_event_hash = raw_event.data
@@ -29,9 +29,7 @@ class ShipmentsController < ApplicationController
       end
     end).compact
 
-    tracking_event_data = parsed_event_data.select do |event_data|
-      event_data[:tracking_number] == tracking_number
-    end
+    tracking_event_data = parsed_event_data
 
     if tracking_event_data.any?
       render json: {
