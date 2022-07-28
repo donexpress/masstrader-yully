@@ -16,8 +16,7 @@ class RawEventsController < ApplicationController
   end
 
   def dump
-    raw_events = RawEvent.all
     current_time_str = Time.now.utc.strftime '%Y%m%d%H%M%S'
-    send_data raw_events.to_csv, filename: "raw_events-#{current_time_str}.csv"
+    send_data RawEvent.to_csv(filter: params[:filter]), filename: "raw_events-#{current_time_str}.csv"
   end
 end

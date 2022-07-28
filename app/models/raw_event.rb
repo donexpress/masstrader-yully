@@ -1,35 +1,53 @@
 class RawEvent < ApplicationRecord
   validates :data, presence: true
 
-  def self.to_csv
+  def self.to_csv(opts = {})
     attributes = %w[date office tracking description location]
 
     CSV.generate(headers: true) do |csv|
       csv << attributes
 
+      raw_events = []
       all.find_each do |raw_event|
-        csv << attributes.map do |attr|
-          if attr == 'location'
-            next RawEvent.location_from_milestone(raw_event.data['description'])
-          end
+        raw_events << raw_event
+      end
 
-          if attr == 'description'
-            next RawEvent.map_milestone(raw_event.data[attr])
-          end
+      if opts[:filter] == 'latest'
+        reverse_raw_events = raw_events.reverse
+        grouped_raw_events = reverse_raw_events.group_by do |raw_event|
+          raw_event.data['tracking']
+        end
 
-          if attr == 'date'
-            if RawEvent.after_threshold?(raw_event.data[attr], raw_event.id)
-              next RawEvent.swap_month_day(raw_event.data[attr])
-            else
-              next raw_event.data[attr]
-            end
-          end
+        raw_events = grouped_raw_events.transform_values(&:first).values.flatten.reverse
+      end
 
-          if raw_event.data[attr].downcase == 'e2go'
-            'CL2'
+      inject_into_csv(csv, raw_events, attributes)
+    end
+  end
+
+  def self.inject_into_csv(csv, raw_events, attributes)
+    raw_events.each do |raw_event|
+      csv << attributes.map do |attr|
+        if attr == 'location'
+          next RawEvent.location_from_milestone(raw_event.data['description'])
+        end
+
+        if attr == 'description'
+          next RawEvent.map_milestone(raw_event.data[attr])
+        end
+
+        if attr == 'date'
+          if RawEvent.after_threshold?(raw_event.data[attr], raw_event.id)
+            next RawEvent.swap_month_day(raw_event.data[attr])
           else
-            raw_event.data[attr]
+            next raw_event.data[attr]
           end
+        end
+
+        if raw_event.data[attr].downcase == 'e2go'
+          'CL2'
+        else
+          raw_event.data[attr]
         end
       end
     end
