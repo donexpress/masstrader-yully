@@ -1,8 +1,6 @@
 class FbWebhookController < ApplicationController
 
   def index
-
-    puts params.inspect
-    head :ok
+    render :plain, params[:hub.challenge]
   end
 end
