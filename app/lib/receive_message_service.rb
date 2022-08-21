@@ -47,7 +47,7 @@ class ReceiveMessageService
   end
 
   def process
-    incoming_messages = @payload['entry']['changes'].first['value']['messages']
+    incoming_messages = @payload['entry'].first['changes'].first['value']['messages']
     incoming_messages.map do |incoming_message|
       message = Message.new(outgoing: false)
       message.message = incoming_message['text']['body']
