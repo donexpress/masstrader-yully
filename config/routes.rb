@@ -15,4 +15,5 @@ Rails.application.routes.draw do
 
   get 'docs', to: 'docs#index'
   get 'fb-listener', to: 'fb_webhook#index'
+  post 'fb-listener', to: 'fb_webhook#ingest'
 end
