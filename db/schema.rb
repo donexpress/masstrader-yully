@@ -10,9 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_11_235201) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_21_173912) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "messages", force: :cascade do |t|
+    t.string "receiver_phone_number"
+    t.string "message"
+    t.string "sender_phone_number"
+    t.jsonb "meta"
+    t.boolean "outgoing"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["meta"], name: "index_messages_on_meta"
+    t.index ["receiver_phone_number"], name: "index_messages_on_receiver_phone_number"
+  end
 
   create_table "raw_events", force: :cascade do |t|
     t.jsonb "data", null: false
