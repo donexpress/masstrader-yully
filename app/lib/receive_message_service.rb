@@ -2,7 +2,6 @@
 
 # Processes webhook incoming messages from the WhatsApp API
 class ReceiveMessageService
-  WA_OUTGOING_PHONE_NUMBER_ID = '108212608656928'
   # {
   #     "object":"whatsapp_business_account",
   #     "entry":[
@@ -44,7 +43,6 @@ class ReceiveMessageService
   #  }
 
   def initialize(payload)
-    @messages = []
     @payload = payload
   end
 
