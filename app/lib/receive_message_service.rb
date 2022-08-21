@@ -52,6 +52,7 @@ class ReceiveMessageService
       message = Message.new(outgoing: false)
       message.message = incoming_message['text']['body']
       message.receiver_phone_number = incoming_message['from']
+      message
     end
   end
 end
