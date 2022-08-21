@@ -2,7 +2,7 @@
 
 # Saves a message for every successful outgoing message
 # via the WA Business API
-class OutgoingMessage < ApplicationRecord
+class Message < ApplicationRecord
   WA_SENDER_PHONE_NUMBER = '56959261264'
 
   validates :receiver_phone_number, presence: true
