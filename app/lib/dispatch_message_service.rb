@@ -38,7 +38,7 @@ class DispatchMessageService
       type: 'text',
       text: {
         preview_url: false,
-        body: @message.message
+        body: @message.body
       }
 
       # type: 'template',

@@ -13,6 +13,7 @@ Rails.application.routes.draw do
 
   scope :wa do
     resources :messages
+    resources :conversations
   end
 
   get 'docs', to: 'docs#index'

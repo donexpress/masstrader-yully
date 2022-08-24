@@ -1,16 +1,16 @@
 class CreateMessages < ActiveRecord::Migration[7.0]
   def change
     create_table :messages do |t|
-      t.string :receiver_phone_number
-      t.string :message
-      t.string :sender_phone_number
-      t.jsonb :meta
-      t.boolean :outgoing
+      t.references :conversations, foreign_key: true
+      t.string :body, null: false
+      t.jsonb :meta, null: false
+      t.boolean :outgoing, null: false
+      t.timestamp :sent_at
+      t.boolean :read, null: false, default: false
 
       t.timestamps
     end
 
-    add_index :messages, :receiver_phone_number
     add_index :messages, :meta
   end
 end
