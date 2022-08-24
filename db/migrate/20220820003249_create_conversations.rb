@@ -10,5 +10,6 @@ class CreateConversations < ActiveRecord::Migration[7.0]
 
     add_index :conversations, :latest_message_sent_at
     add_index :conversations, :client_phone_number
+    add_index :conversations, %i[client_phone_number business_phone_number], unique: true, name: 'index_conversations_phone_pair_unique'
   end
 end

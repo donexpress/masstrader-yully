@@ -20,6 +20,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_21_181459) do
     t.datetime "latest_message_sent_at", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["client_phone_number", "business_phone_number"], name: "index_conversations_phone_pair_unique", unique: true
     t.index ["client_phone_number"], name: "index_conversations_on_client_phone_number"
     t.index ["latest_message_sent_at"], name: "index_conversations_on_latest_message_sent_at"
   end

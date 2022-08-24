@@ -9,7 +9,7 @@ class DispatchMessageService
     @message.outgoing = true
   end
 
-  def send
+  def send(business_phone_number = nil)
     token = 'EAAPncdI4jmIBAD841GkJG0erAnySVx5iZAOBqQ8Ab1sXJ95hG3qCkrJuP8mVwtFzlHVCyAZBadQ4ZCVXzBpraFBVux4q55KZCptw6zTvrABeZCfZAw1lknB8sY8L3i0ZAZAwkeu5itUzBkshkdlfOH7n44GGiuivgs6ZBB8OudOwacwWxOoBm6TnWM5yrYHF7J3fZAedHZBK80nmWKtUqrbMKVf'
 
     conn = Faraday.new(
@@ -34,7 +34,7 @@ class DispatchMessageService
     {
       messaging_product: 'whatsapp',
       recipient_type: 'individual',
-      to: @message.receiver_phone_number,
+      to: @message.conversation.client_phone_number,
       type: 'text',
       text: {
         preview_url: false,
