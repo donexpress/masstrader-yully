@@ -33,7 +33,7 @@ class ShipmentsController < ApplicationController
 
         location =
           if RawEvent.override_contact_threshold?(raw_event.id)
-            'Contact contacto@easy2go.com'
+            'Contact contacto@easy2go.cl'
           else
             RawEvent.location_from_milestone(raw_event_hash['description'])
           end
