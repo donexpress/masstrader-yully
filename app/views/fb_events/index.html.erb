@@ -2,13 +2,6 @@
 
 <h1>Fb events</h1>
 
-<div id="fb_events">
-  <% @fb_events.each do |fb_event| %>
-    <%= render fb_event %>
-    <p>
-      <%= link_to "Show this fb event", fb_event %>
-    </p>
-  <% end %>
-</div>
-
-<%= link_to "New fb event", new_fb_event_path %>
+<% @fb_events.each do |fb_event| %>
+  <%= render fb_event %>
+<% end %>

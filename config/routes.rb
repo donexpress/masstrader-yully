@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   scope :wa do
     resources :messages
     resources :conversations
+    resources :fb_events, only: [:index]
   end
 
   get '/', to: 'health#index'
