@@ -53,9 +53,9 @@ class ReceiveMessageService
     processed_messages = incoming_messages.map do |incoming_message|
       message = Message.new(outgoing: false)
       message.meta = @payload
-      message.message = incoming_message['text']['body']
+      message.body = incoming_message['text']['body']
       message.outgoing = false
-      message.sent_at = DateTime.now
+      message.sent_at = Time.at(incoming_message['timestamp'].to_i)
       message
     end
 
