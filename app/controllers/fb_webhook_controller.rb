@@ -7,20 +7,25 @@ class FbWebhookController < ApplicationController
 
   def ingest
     event = params[:fb_webhook]
-    FbEvent.create!(data: event.permit!.to_h)
+    begin
+      FbEvent.create!(data: event.permit!.to_h)
 
-    messages, client_phone_number = ReceiveMessageService.new(event).process
-    conversation = Conversation.find_by(client_phone_number: client_phone_number)
+      messages, client_phone_number = ReceiveMessageService.new(event).process
+      conversation = Conversation.find_by(client_phone_number: client_phone_number)
 
-    if conversation.nil?
-      conversation = Conversation.create!(client_phone_number: client_phone_number)
+      if conversation.nil?
+        conversation = Conversation.create!(client_phone_number: client_phone_number)
+      end
+
+      messages.each do |message|
+        message.conversation_id = conversation.id
+        message.save!
+      end
+
+      head :ok
+    rescue StandardError => e
+      Rails.logger.error(e.backtrace)
+      head :ok
     end
-
-    messages.each do |message|
-      message.conversation_id = conversation.id
-      message.save!
-    end
-
-    head :ok
   end
 end

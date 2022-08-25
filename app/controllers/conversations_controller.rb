@@ -3,7 +3,7 @@ class ConversationsController < ApplicationController
 
   # GET /conversations or /conversations.json
   def index
-    @conversations = Conversation.includes(:messages).all
+    @conversations = Conversation.includes(:messages).all.order(latest_message_sent_at: :desc)
   end
 
   # GET /conversations/1 or /conversations/1.json

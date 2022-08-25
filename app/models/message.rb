@@ -13,9 +13,15 @@ class Message < ApplicationRecord
 
   validate :no_dispatch_error
 
+  after_create :update_conversation_timestamp
+
   def no_dispatch_error
     return if dispatch_error.nil?
 
     errors.add(:dispatch_error, "Facebook API dispatch error: #{dispatch_error}")
+  end
+
+  def update_conversation_timestamp
+    conversation.update_column(:latest_message_sent_at, DateTime.now)
   end
 end
