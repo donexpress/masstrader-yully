@@ -6,6 +6,7 @@ class Conversation < ApplicationRecord
   validate :check_client_phone_number
 
   validates_uniqueness_of :client_phone_number, scope: :business_phone_number
+  has_many :messages
 
   after_initialize :initialize_callback
 

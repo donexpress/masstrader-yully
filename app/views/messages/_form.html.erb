@@ -11,32 +11,11 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :receiver_phone_number, style: "display: block" %>
-    <%= form.text_field :receiver_phone_number %>
+  <div class='my-2'>
+    <%= form.text_field :message, class: 'w-full rounded-lg', placeholder: 'Enter your message here' %>
   </div>
 
   <div>
-    <%= form.label :message, style: "display: block" %>
-    <%= form.text_field :message %>
-  </div>
-
-  <div>
-    <%= form.label :sender_phone_number, style: "display: block" %>
-    <%= form.text_field :sender_phone_number %>
-  </div>
-
-  <div>
-    <%= form.label :meta, style: "display: block" %>
-    <%= form.text_field :meta %>
-  </div>
-
-  <div>
-    <%= form.label :outgoing, style: "display: block" %>
-    <%= form.check_box :outgoing %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+    <%= form.submit class: 'w-full bg-sky-600 text-slate-50 p-4 text-center rounded-lg cursor-pointer' %>
   </div>
 <% end %>

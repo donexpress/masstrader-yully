@@ -8,6 +8,7 @@ class ConversationsController < ApplicationController
 
   # GET /conversations/1 or /conversations/1.json
   def show
+    @message = @conversation.messages.build
   end
 
   # GET /conversations/new

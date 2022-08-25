@@ -32,7 +32,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_21_181459) do
   end
 
   create_table "messages", force: :cascade do |t|
-    t.bigint "conversations_id"
+    t.bigint "conversation_id"
     t.string "body", null: false
     t.jsonb "meta", null: false
     t.boolean "outgoing", null: false
@@ -40,7 +40,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_21_181459) do
     t.boolean "read", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["conversations_id"], name: "index_messages_on_conversations_id"
+    t.index ["conversation_id"], name: "index_messages_on_conversation_id"
     t.index ["meta"], name: "index_messages_on_meta"
   end
 
@@ -50,5 +50,5 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_21_181459) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "messages", "conversations", column: "conversations_id"
+  add_foreign_key "messages", "conversations"
 end
