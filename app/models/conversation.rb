@@ -23,8 +23,18 @@ class Conversation < ApplicationRecord
       if client_phone_number.length != 11
         errors.add(:client_phone_number, 'Chilean numbers require 8-digits followed after the country code and mobile fixed digit')
       end
-    else
-      errors.add(:client_phone_number, 'Cannot send message to this number. Check for the correct country code.')
+    elsif client_phone_number.starts_with?('86')
+      if client_phone_number.length != 13
+        errors.add(:client_phone_number, 'Cannot send message to this number. Check for the correct country code.')
+      end
+    elsif client_phone_number.starts_with?('54')
+      if client_phone_number.length != 12
+        errors.add(:client_phone_number, 'Cannot send message to this number. Check for the correct country code.')
+      end
+    elsif client_phone_number.starts_with?('55')
+      if client_phone_number.length != 12
+        errors.add(:client_phone_number, 'Cannot send message to this number. Check for the correct country code.')
+      end
     end
   end
 end
