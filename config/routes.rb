@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     resources :conversations
   end
 
+  get '/', to: 'health#index'
   get 'docs', to: 'docs#index'
   get 'fb-listener', to: 'fb_webhook#index'
   post 'fb-listener', to: 'fb_webhook#ingest'
