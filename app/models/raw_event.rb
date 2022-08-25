@@ -60,6 +60,10 @@ class RawEvent < ApplicationRecord
     DateTime.parse(ts_str).after? threshold_dt
   end
 
+  def self.override_contact_threshold?(id)
+    id >= 148124 && id <= 148742
+  end
+
   def self.swap_month_day(ts_str)
     month = ts_str[5..6]
     day = ts_str[8..9]

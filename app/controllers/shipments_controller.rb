@@ -22,7 +22,15 @@ class ShipmentsController < ApplicationController
         parsed_event[:timestamp] = RawEvent.after_threshold?(raw_event_hash['date'], raw_event.id) ? RawEvent.swap_month_day(raw_event_hash['date']) : raw_event_hash['date']
         parsed_event[:tracking_number] = raw_event_hash['tracking'].upcase
         parsed_event[:milestone] = raw_event_hash['description']
-        parsed_event[:location] = RawEvent.location_from_milestone(raw_event_hash['description'])
+
+        location =
+          if RawEvent.override_contact_threshold?(raw_event.id)
+            'Contact contacto@easy2go.com'
+          else
+            RawEvent.location_from_milestone(raw_event_hash['description'])
+          end
+
+        parsed_event[:location] = location
         parsed_event
       rescue StandardError => _e
         nil
