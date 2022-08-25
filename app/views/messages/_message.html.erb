@@ -1,27 +1,13 @@
-<div id="<%= dom_id message %>">
+<div id="<%= dom_id message %>" class='bg-teal-200 rounded-lg mt-3 py-3 px-2 shadow-xl'>
   <p>
-    <strong>Receiver phone number:</strong>
-    <%= message.receiver_phone_number %>
+    <% if message.outgoing %>
+      <strong>Outgoing Message --></strong>
+    <% else %>
+      <strong>Incoming Message <--</strong>
+    <% end %>
+    <%= message.body %>
   </p>
-
-  <p>
-    <strong>Message:</strong>
-    <%= message.message %>
+  <p class='text-sm text-slate-700'>
+    <%= message.sent_at %>
   </p>
-
-  <p>
-    <strong>Sender phone number:</strong>
-    <%= message.sender_phone_number %>
-  </p>
-
-  <p>
-    <strong>Meta:</strong>
-    <%= message.meta %>
-  </p>
-
-  <p>
-    <strong>Outgoing:</strong>
-    <%= message.outgoing %>
-  </p>
-
 </div>

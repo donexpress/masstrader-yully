@@ -11,8 +11,10 @@
     </div>
   <% end %>
 
+  <%= form.hidden_field :conversation_id, value: conversation.id %>
+
   <div class='my-2'>
-    <%= form.text_area :message, class: 'w-full rounded-lg', placeholder: 'Enter your message here' %>
+    <%= form.text_area :body, class: 'w-full rounded-lg', placeholder: 'Enter your message here' %>
   </div>
 
   <div>

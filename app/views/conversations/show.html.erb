@@ -5,4 +5,13 @@
   <h1 class='text-3xl font-bold underline'>Conversation: <%= @conversation.client_phone_number %></h1>
 </div>
 
-<%= render "messages/form", message: @message %>
+<div class='w-1/2 mx-auto'>
+  <%= render "messages/form", message: @message, conversation: @conversation %>
+
+  <% @conversation.messages.each do |message| %>
+    <% if !message.new_record? %>
+      <%= render message %>
+    <% end %>
+  <% end %>
+</div>
+

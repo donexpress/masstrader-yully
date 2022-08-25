@@ -9,8 +9,8 @@ class DispatchMessageService
     @message.outgoing = true
   end
 
-  def send(business_phone_number = nil)
-    token = 'EAAPncdI4jmIBAD841GkJG0erAnySVx5iZAOBqQ8Ab1sXJ95hG3qCkrJuP8mVwtFzlHVCyAZBadQ4ZCVXzBpraFBVux4q55KZCptw6zTvrABeZCfZAw1lknB8sY8L3i0ZAZAwkeu5itUzBkshkdlfOH7n44GGiuivgs6ZBB8OudOwacwWxOoBm6TnWM5yrYHF7J3fZAedHZBK80nmWKtUqrbMKVf'
+  def send
+    token = 'EAAPncdI4jmIBALj6apXGyOXjrmsoW5z7ZB8leSgRX0dffsofdTENsdRS1tY3HNNbHPuYYXoka4QJ4ZBrvpQYEO2JVT9IpENRRrYfWSZA8Vw0pBjLeTM2I3n0SdDRUZAZCnG9id98clwVgVjZByOYvKOmwm6qBPyed9LrIWuvi3b28zi4BD8yVFkim50JnVEnmR3EoVvhoXDFjeamBxnQ1P'
 
     conn = Faraday.new(
       url: 'https://graph.facebook.com/v14.0',
@@ -21,8 +21,10 @@ class DispatchMessageService
     response = conn.post("/v14.0/#{WA_OUTGOING_PHONE_NUMBER_ID}/messages", json_body)
     response_body = JSON.parse(response.body)
     @message.meta = response_body
-    unless response.success?
-      @message.errors.add(:message, "Could not send message due to #{response_body['error']['message']}")
+    if response.success?
+      @message.sent_at = DateTime.now
+    else
+      @message.dispatch_error = response_body['error']['message']
     end
 
     @message

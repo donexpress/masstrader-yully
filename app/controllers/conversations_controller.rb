@@ -3,7 +3,7 @@ class ConversationsController < ApplicationController
 
   # GET /conversations or /conversations.json
   def index
-    @conversations = Conversation.all
+    @conversations = Conversation.includes(:messages).all
   end
 
   # GET /conversations/1 or /conversations/1.json
@@ -61,7 +61,7 @@ class ConversationsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_conversation
-      @conversation = Conversation.find(params[:id])
+      @conversation = Conversation.includes(:messages).find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

@@ -5,8 +5,23 @@
       <%= conversation.client_phone_number %>
     </p>
 
-    <p class='text-slate-50'>
-      No messages yet
-    </p>
+    <% if conversation.messages.size.zero? %>
+      <p class='text-slate-50'>
+        No messages yet
+      </p>
+    <% else %>
+      <p class='text-slate-50'>
+        <% if conversation.messages.last.outgoing %>
+        You said: 
+        <% else %>
+        Client said:
+        <% end %>
+        <strong>
+        <%= conversation.messages.last.body %>
+        </strong>
+        at
+        <%= conversation.messages.last.sent_at %>
+      </p>
+    <% end %>
   </div>
 <% end %>

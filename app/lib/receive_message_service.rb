@@ -48,12 +48,17 @@ class ReceiveMessageService
 
   def process
     incoming_messages = @payload['entry'].first['changes'].first['value']['messages']
-    incoming_messages.map do |incoming_message|
+
+    client_phone_number = incoming_messages.first['from']
+    processed_messages = incoming_messages.map do |incoming_message|
       message = Message.new(outgoing: false)
       message.meta = @payload
       message.message = incoming_message['text']['body']
-      message.receiver_phone_number = incoming_message['from']
+      message.outgoing = false
+      message.sent_at = DateTime.now
       message
     end
+
+    [processed_messages, client_phone_number]
   end
 end

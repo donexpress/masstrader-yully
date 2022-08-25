@@ -22,17 +22,23 @@ class MessagesController < ApplicationController
   # POST /messages or /messages.json
   def create
     @message = Message.new(message_params)
+    @conversation = Conversation.find(message_params[:conversation_id])
 
     respond_to do |format|
+      dms = DispatchMessageService.new(@message)
+      @message = dms.send
+
       if @message.save
-        format.html { redirect_to message_url(@message), notice: "Message was successfully created." }
+        format.html { redirect_to conversation_url(@message.conversation), notice: "Message was successfully created." }
         format.json { render :show, status: :created, location: @message }
       else
-        format.html { render :new, status: :unprocessable_entity }
+        format.html { render 'conversations/show', status: :unprocessable_entity }
         format.json { render json: @message.errors, status: :unprocessable_entity }
       end
     end
   end
+
+  
 
   # PATCH/PUT /messages/1 or /messages/1.json
   def update
@@ -65,6 +71,10 @@ class MessagesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def message_params
-      params.require(:message).permit(:receiver_phone_number, :message, :sender_phone_number, :meta, :outgoing)
+      params.require(:message).permit(:body, :conversation_id)
+    end
+
+    def render_creation_failure
+
     end
 end
