@@ -29,11 +29,19 @@ class RawEvent < ApplicationRecord
     raw_events.each do |raw_event|
       csv << attributes.map do |attr|
         if attr == 'location'
-          next RawEvent.location_from_milestone(raw_event.data['description'])
+          if RawEvent.override_contact_threshold?(raw_event.id)
+            next 'Contact contacto@easy2go.cl'
+          else
+            next RawEvent.location_from_milestone(raw_event.data['description'])
+          end
         end
 
         if attr == 'description'
-          next RawEvent.map_milestone(raw_event.data[attr])
+          if RawEvent.override_contact_threshold?(raw_event.id) && raw_event.data['description'].upcase == 'DISPATCHED'
+            next 'DELIVERY FAILED'
+          else
+            next RawEvent.map_milestone(raw_event.data[attr])
+          end
         end
 
         if attr == 'date'
