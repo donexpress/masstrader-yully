@@ -15,16 +15,26 @@
 
   <div class='mb-2'>
     <%= form.label :message_type, style: "display: block", class: 'font-bold' %>
-    <%= form.select :message_type, options_for_select(Message::BODY_TYPES, conversation.messages.count.zero? ? Message::TEMPLATE_TYPE : Message::TEXT_TYPE), {}, class: 'w-full rounded-lg', data: { action: "change->new-message#handleSelectChange" } %>
+    <%= form.select :message_type, options_for_select(Message::BODY_TYPES, message_type), {}, class: 'w-full rounded-lg', data: { action: "change->new-message#handleSelectChange", 'new-message-target': 'select' } %>
   </div>
 
-  <div class='my-2' id='text-type' data-new-message-target='text'>
+  <div class='my-2' id='text-type' data-new-message-target='textSection'>
     <%= form.label :body, style: "display: block", class: 'font-bold' %>
-    <%= form.text_area :body, class: 'w-full rounded-lg', placeholder: 'Enter your message here', data: { action: 'input->new-message#handleTextChange' } %>
+    <%= form.text_area :body, class: 'w-full rounded-lg', placeholder: 'Enter your message here' %>
   </div>
 
   <div class='my-2' id='template-type' data-new-message-target='templateSection'>
+    <%= form.label 'Product title', style: "display: block", class: 'font-bold' %>
+    <%= form.text_field :'template_params[0]', class: 'w-full rounded-lg', placeholder: 'Product title', data: { action: 'input->new-message#handleInputChange' }, value: template_params[0] %>
 
+    <%= form.label 'Address', style: "display: block", class: 'font-bold' %>
+    <%= form.text_field :'template_params[1]', class: 'w-full rounded-lg', placeholder: 'Address', data: { action: 'input->new-message#handleInputChange' }, value: template_params[1] %>
+
+    <%= form.label 'Amount', style: "display: block", class: 'font-bold' %>
+    <%= form.text_field :'template_params[2]', class: 'w-full rounded-lg', placeholder: 'Amount', data: { action: 'input->new-message#handleInputChange' }, value: template_params[2] %>
+
+    <%= form.label 'Preview', style: "display: block", class: 'font-bold' %>
+    <%= form.text_area :preview, class: 'w-full rounded-lg', rows: 12, disabled: true, data: { 'new-message-target': 'preview' }  %>
   </div>
 
   <div>

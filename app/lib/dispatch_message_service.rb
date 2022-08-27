@@ -32,8 +32,8 @@ class DispatchMessageService
 
   private
 
-  def generate_template_params(list)
-    list.map do |element|
+  def generate_template_params
+    @message.template_params.values.map do |element|
       {
         type: 'text',
         text: element
@@ -55,19 +55,11 @@ class DispatchMessageService
           name: 'cod_alert',
           language: {
             code: 'es',
-           components: [{
-           type: "body",
-           parameters: [
-             {
-                        "type": "text",
-                        "text": "name"
-                    },
-                    {
-                    "type": "text",
-                    "text": "Hi there"
-                    }]
-              }]
-          }
+          },
+          components: [{
+            type: "body",
+            parameters: generate_template_params
+          }]
         }
       })
     else

@@ -6,9 +6,8 @@
 </div>
 
 <div class='w-1/2 mx-auto'>
-
   <div data-controller='new-message'>
-    <%= render "messages/form", message: @message, conversation: @conversation %>
+    <%= render "messages/form", message: @message, conversation: @conversation, message_type: @message_type, template_params: @template_params %>
   </div>
 
   <% @conversation.messages.each do |message| %>

@@ -23,6 +23,12 @@ class MessagesController < ApplicationController
   def create
     @message = Message.new(message_params)
     @conversation = Conversation.find(message_params[:conversation_id])
+    @message_type = message_params[:message_type]
+    @template_params = message_params[:template_params].values
+
+    if @message.body.blank?
+      @message.body = "cod_alert_template #{@template_params.join(',')}"
+    end
 
     respond_to do |format|
       dms = DispatchMessageService.new(@message)
@@ -71,7 +77,7 @@ class MessagesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def message_params
-      params.require(:message).permit(:body, :conversation_id, :message_type)
+      params.require(:message).permit(:body, :conversation_id, :message_type, template_params: {})
     end
 
     def render_creation_failure

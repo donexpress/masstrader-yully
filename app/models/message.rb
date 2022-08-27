@@ -19,9 +19,10 @@ class Message < ApplicationRecord
 
   attribute :dispatch_error, :string, default: nil
   attribute :message_type, :string, default: TEMPLATE_TYPE
+  attribute :template_params, :json, default: {}
 
   validate :no_dispatch_error
-  validate :validate_message_type
+  validate :validate_message_type_and_template_params
 
   after_create :update_conversation_timestamp
 
@@ -33,13 +34,15 @@ class Message < ApplicationRecord
     errors.add(:dispatch_error, "Facebook API dispatch error: #{dispatch_error}")
   end
 
-  def validate_message_type
+  def validate_message_type_and_template_params
     if message_type.blank?
-      errors.add(:message_type, 'Cannot be blank')
+      errors.add(:message_type, 'cannot be blank')
     elsif message_type == TEXT_TYPE
       # do something here
     elsif message_type == TEMPLATE_TYPE
-      # do something here
+      if template_params.values.any?(&:blank?)
+        errors.add(:message, 'must fill in all template params.')
+      end
     else
       errors.add(:message_type, 'Invalid message type')
     end
