@@ -71,7 +71,7 @@ class MessagesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def message_params
-      params.require(:message).permit(:body, :conversation_id)
+      params.require(:message).permit(:body, :conversation_id, :message_type)
     end
 
     def render_creation_failure

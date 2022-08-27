@@ -10,7 +10,7 @@ class DispatchMessageService
   end
 
   def send
-    token = 'EAAPncdI4jmIBALj6apXGyOXjrmsoW5z7ZB8leSgRX0dffsofdTENsdRS1tY3HNNbHPuYYXoka4QJ4ZBrvpQYEO2JVT9IpENRRrYfWSZA8Vw0pBjLeTM2I3n0SdDRUZAZCnG9id98clwVgVjZByOYvKOmwm6qBPyed9LrIWuvi3b28zi4BD8yVFkim50JnVEnmR3EoVvhoXDFjeamBxnQ1P'
+    token = 'EAAPncdI4jmIBAB8kM1i5X4wZCpsapouG5bwR8IZBIM7kZCCi6EjsJ0vG58RJOjtU5LXqEAziCqQ3eU2uyT4gK28onYtNMc0x7dhf99N8ShklQu5nM1FXh0ZCU4VS2ok78OiCuac1cWSpFcg65D5DtDW8xSylee28FY3GrMFBOXhu0luGsugZBn5S7KeGHpDo4HQMGOYce7vFlxMtAiDZCy'
 
     conn = Faraday.new(
       url: 'https://graph.facebook.com/v14.0',
@@ -32,25 +32,54 @@ class DispatchMessageService
 
   private
 
+  def generate_template_params(list)
+    list.map do |element|
+      {
+        type: 'text',
+        text: element
+      }
+    end
+  end
+
   def body
-    {
+    base_params = {
       messaging_product: 'whatsapp',
       recipient_type: 'individual',
       to: @message.conversation.client_phone_number,
-      type: 'text',
-      text: {
-        preview_url: false,
-        body: @message.body
-      }
-
-      # type: 'template',
-      # template: {
-      #   name: 'hello_world',
-      #   language: {
-      #     code: 'en_US'
-      #   }
-      # }
     }
+
+    if @message.message_type == Message::TEMPLATE_TYPE
+      base_params.merge({
+        type: 'template',
+        template: {
+          name: 'cod_alert',
+          language: {
+            code: 'es',
+           components: [{
+           type: "body",
+           parameters: [
+             {
+                        "type": "text",
+                        "text": "name"
+                    },
+                    {
+                    "type": "text",
+                    "text": "Hi there"
+                    }]
+              }]
+          }
+        }
+      })
+    else
+      base_params.merge({
+        type: 'text',
+        text: {
+          preview_url: false,
+          body: @message.body
+        }
+      })
+    end
+
   end
 
   def headers(token)

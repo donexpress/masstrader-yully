@@ -6,7 +6,10 @@
 </div>
 
 <div class='w-1/2 mx-auto'>
-  <%= render "messages/form", message: @message, conversation: @conversation %>
+
+  <div data-controller='new-message'>
+    <%= render "messages/form", message: @message, conversation: @conversation %>
+  </div>
 
   <% @conversation.messages.each do |message| %>
     <% if !message.new_record? %>

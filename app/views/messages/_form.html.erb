@@ -13,8 +13,18 @@
 
   <%= form.hidden_field :conversation_id, value: conversation.id %>
 
-  <div class='my-2'>
-    <%= form.text_area :body, class: 'w-full rounded-lg', placeholder: 'Enter your message here' %>
+  <div class='mb-2'>
+    <%= form.label :message_type, style: "display: block", class: 'font-bold' %>
+    <%= form.select :message_type, options_for_select(Message::BODY_TYPES, conversation.messages.count.zero? ? Message::TEMPLATE_TYPE : Message::TEXT_TYPE), {}, class: 'w-full rounded-lg', data: { action: "change->new-message#handleSelectChange" } %>
+  </div>
+
+  <div class='my-2' id='text-type' data-new-message-target='text'>
+    <%= form.label :body, style: "display: block", class: 'font-bold' %>
+    <%= form.text_area :body, class: 'w-full rounded-lg', placeholder: 'Enter your message here', data: { action: 'input->new-message#handleTextChange' } %>
+  </div>
+
+  <div class='my-2' id='template-type' data-new-message-target='templateSection'>
+
   </div>
 
   <div>
