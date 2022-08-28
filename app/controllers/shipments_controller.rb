@@ -54,8 +54,8 @@ class ShipmentsController < ApplicationController
         carrier: 'CL2',
         country: 'CL',
         data: {
-          tracking_number: tracking_number,
-          delivered: !!tracking_event_data.find { |e| e[:milestone].upcase == 'Entregado' },
+          tracking_number:,
+          delivered: !!tracking_event_data.find { |e| e[:milestone] == 'Entregado' },
           events: build_events(tracking_event_data)
         }
       }
@@ -64,7 +64,7 @@ class ShipmentsController < ApplicationController
         status: 404,
         message: 'Not found',
         data: {
-          tracking_number: tracking_number,
+          tracking_number:,
           delivered: nil,
           events: nil
         }
