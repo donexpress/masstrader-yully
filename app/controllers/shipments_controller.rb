@@ -55,7 +55,7 @@ class ShipmentsController < ApplicationController
         country: 'CL',
         data: {
           tracking_number: tracking_number,
-          delivered: !!tracking_event_data.find { |e| e[:milestone].upcase == 'DELIVERED' },
+          delivered: !!tracking_event_data.find { |e| e[:milestone].upcase == 'Entregado' },
           events: build_events(tracking_event_data)
         }
       }

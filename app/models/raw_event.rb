@@ -104,26 +104,49 @@ class RawEvent < ApplicationRecord
 
   def self.location_from_milestone(milestone)
     case milestone
-    when  'DELIVERED'
-      'Recipient\'s address'.upcase
-    when 'RECEIVED'
-      'Destination Distribution Center'.upcase
-    when 'RELEASED CUSTOMS'
-      'Airport'.upcase
-    when 'NOT AVAILABLE'
-      'Origin or unknown'.upcase
-    when 'DETAINED IN CUSTOMS'
-      'Airport'.upcase
-    when 'ASSIGNED'
-      'Destination branch office'.upcase
-    when 'LOADED'
-      'Origin'.upcase
-    when 'REFUSED'
-      'Airport'.upcase
-    when 'DISPATCHED'
-      'Destination Distribution Center'.upcase
+    when 'Entregado'
+      'Domicilio del cliente'
+    when 'Pago Exitoso', 'A la espera del pago de impuestos', 'Recepcionado'
+      'Bodega easy2go'
+    when 'No Hay Quien Reciba', 'Recepción Destino'
+      'Sucursal última milla'
+    when 'Dir Insuficiente', 'Rechazado'
+      'Ubicación desconocida'
+    when 'Despachado', 'Despacho Mayor', 'Despacho Menor'
+      'En tránsito'
+    when 'Bloqueados'
+      'Ubicación desconocida'
+    when 'Recepción Aeropuerto'
+      'Aeropuerto'
+    when 'PreAlerta'
+      'Origen'
     else
-      "Milestone: #{milestone} does not have location."
+      'Ubicación desconocida'
     end
   end
+
+  # def self.location_from_milestone(milestone)
+  #   case milestone.upcase
+  #   when  'DELIVERED'
+  #     'Recipient\'s address'.upcase
+  #   when 'RECEIVED'
+  #     'Destination Distribution Center'.upcase
+  #   when 'RELEASED CUSTOMS'
+  #     'Airport'.upcase
+  #   when 'NOT AVAILABLE'
+  #     'Origin or unknown'.upcase
+  #   when 'DETAINED IN CUSTOMS'
+  #     'Airport'.upcase
+  #   when 'ASSIGNED'
+  #     'Destination branch office'.upcase
+  #   when 'LOADED'
+  #     'Origin'.upcase
+  #   when 'REFUSED'
+  #     'Airport'.upcase
+  #   when 'DISPATCHED'
+  #     'Destination Distribution Center'.upcase
+  #   else
+  #     "Milestone: #{milestone} does not have location."
+  #   end
+  # end
 end
