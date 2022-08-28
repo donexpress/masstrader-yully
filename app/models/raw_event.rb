@@ -29,8 +29,8 @@ class RawEvent < ApplicationRecord
     raw_events.each do |raw_event|
       csv << attributes.map do |attr|
         if attr == 'location'
-          if RawEvent.override_contact_threshold?(raw_event.id)
-            next 'Contact contacto@easy2go.cl'
+          if RawEvent.override_contact_threshold?(raw_event.data['tracking'], raw_event.data['description'])
+            next 'Contactar a contacto@easy2go.cl'
           else
             next RawEvent.location_from_milestone(raw_event.data['description'])
           end
@@ -68,8 +68,11 @@ class RawEvent < ApplicationRecord
     DateTime.parse(ts_str).after? threshold_dt
   end
 
-  def self.override_contact_threshold?(id)
-    id >= 148124 && id <= 148742
+  def self.override_contact_threshold?(tracking_number, milestone)
+    overridable_tracking_numbers = File.read('june.txt').split("\n")
+    return false unless overridable_tracking_numbers.include?(tracking_number)
+
+    milestone == 'Despacho'
   end
 
   def self.swap_month_day(ts_str)

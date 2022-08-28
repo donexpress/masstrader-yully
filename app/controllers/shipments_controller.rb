@@ -22,18 +22,19 @@ class ShipmentsController < ApplicationController
         parsed_event[:timestamp] = RawEvent.after_threshold?(raw_event_hash['date'], raw_event.id) ? RawEvent.swap_month_day(raw_event_hash['date']) : raw_event_hash['date']
         parsed_event[:tracking_number] = raw_event_hash['tracking'].upcase
 
-        milestone =
-          if RawEvent.override_contact_threshold?(raw_event.id) && raw_event_hash['description'].upcase == 'DISPATCHED'
-            'DELIVERY FAILED'
-          else
-            raw_event_hash['description']
-          end
+        # milestone =
+        #   if RawEvent.override_contact_threshold?(raw_event.id) && raw_event_hash['description'].upcase == 'DISPATCHED'
+        #     'DELIVERY FAILED'
+        #   else
+        #     raw_event_hash['description']
+        #   end
 
+        milestone = raw_event_hash['description']
         parsed_event[:milestone] = milestone
 
         location =
-          if RawEvent.override_contact_threshold?(raw_event.id)
-            'Contact contacto@easy2go.cl'
+          if RawEvent.override_contact_threshold?(parsed_event[:tracking_number], parsed_event[:milestone])
+            'Contactar a contacto@easy2go.cl'
           else
             RawEvent.location_from_milestone(raw_event_hash['description'])
           end
