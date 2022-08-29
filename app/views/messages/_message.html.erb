@@ -11,7 +11,9 @@
     Sent at: <%= message.sent_at %>
   </p>
 
-  <p class='text-sm text-slate-700'>
-    Delivered at: <%= message.delivered_at %>
-  </p>
+  <% if message.outgoing %>
+    <p class='text-sm text-slate-700'>
+      Delivered at: <%= message.delivered_at %>
+    </p>
+  <% end %>
 </div>
