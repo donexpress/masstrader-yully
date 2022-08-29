@@ -1,5 +1,6 @@
 class ConversationsController < ApplicationController
   before_action :set_conversation, only: %i[ show edit update destroy ]
+  after_action :read_unread_messages, only: %i[ show ]
 
   # GET /conversations or /conversations.json
   def index
@@ -17,11 +18,6 @@ class ConversationsController < ApplicationController
 
   # GET /conversations/1 or /conversations/1.json
   def show
-    messages = @conversation.messages.reject(&:read)
-    messages.each do |message|
-      message.update(read: true)
-    end
-
     @message = @conversation.messages.build
     @message_type = @conversation.messages.size.zero? ? Message::TEMPLATE_TYPE : Message::TEXT_TYPE
 
@@ -84,5 +80,12 @@ class ConversationsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def conversation_params
       params.require(:conversation).permit(:client_phone_number, :business_phone_number)
+    end
+
+    def read_unread_messages
+      messages = @conversation.messages.reject(&:read)
+      messages.each do |message|
+        message.update(read: true)
+      end
     end
 end
