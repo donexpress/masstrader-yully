@@ -42,6 +42,10 @@ class Conversation < ApplicationRecord
       if client_phone_number.length != 12
         errors.add(:client_phone_number, 'Cannot send message to this number. Check for the correct country code.')
       end
+    elsif client_phone_number.starts_with?('52')
+      if client_phone_number.length != 12
+        errors.add(:client_phone_number, 'Cannot send message to this number. Check for the correct country code.')
+      end
     else
       errors.add(:client_phone_number, 'Invalid phone number')
     end
