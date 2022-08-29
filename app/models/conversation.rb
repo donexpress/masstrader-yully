@@ -16,6 +16,10 @@ class Conversation < ApplicationRecord
     self.client_phone_number = client_phone_number.gsub(/\D+/, "")
   end
 
+  def unread_messages?
+    !messages.reject(&:outgoing).all?(&:read)
+  end
+
   private
 
 

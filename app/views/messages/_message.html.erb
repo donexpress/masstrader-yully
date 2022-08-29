@@ -1,4 +1,8 @@
-<div id="<%= dom_id message %>" class='bg-teal-200 rounded-lg mt-3 py-3 px-2 shadow-xl'>
+<div id="<%= dom_id message %>" class='bg-teal-200 rounded-lg mt-3 py-3 px-2 shadow-xl' style='position: relative'>
+  <% if !message.read? && !message.outgoing  %>
+    <div class='text-sm rounded-md p-1 bg-amber-500 text-slate-50' style='position: absolute; top: 8px; right: 8px'>New</div>
+  <% end %>
+
   <p>
     <% if message.outgoing %>
       <strong>Outgoing Message --></strong>

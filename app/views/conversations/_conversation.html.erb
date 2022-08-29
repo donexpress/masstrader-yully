@@ -1,5 +1,10 @@
 <%= link_to conversation_path(conversation), data: { turbo_frame: '_top' } do %>
-  <div id="<%= dom_id conversation %>" class='bg-sky-600 shadow-xl rounded-lg mt-3 px-2 py-4'>
+  <div id="<%= dom_id conversation %>" class='bg-sky-600 shadow-xl rounded-lg mt-3 px-2 py-4' style='position: relative'>
+
+    <% if conversation.unread_messages? %>
+      <div class='text-sm rounded-md p-1 bg-amber-500 text-slate-50' style='position: absolute; top: 8px; right: 8px'>New messages</div>
+    <% end %>
+
     <p class='text-slate-50'>
       <strong>Client phone number:</strong>
       <%= conversation.client_phone_number %>

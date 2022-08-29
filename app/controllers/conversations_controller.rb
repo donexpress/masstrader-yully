@@ -17,8 +17,14 @@ class ConversationsController < ApplicationController
 
   # GET /conversations/1 or /conversations/1.json
   def show
+    messages = @conversation.messages.reject(&:read)
+    messages.each do |message|
+      message.update(read: true)
+    end
+
     @message = @conversation.messages.build
     @message_type = @conversation.messages.size.zero? ? Message::TEMPLATE_TYPE : Message::TEXT_TYPE
+
     @template_params = ['', '', '']
   end
 
