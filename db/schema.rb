@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_21_181459) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_29_183838) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,8 +40,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_21_181459) do
     t.boolean "read", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "delivered_at", precision: nil
+    t.datetime "dispatched_at", precision: nil
+    t.string "wa_id", null: false
     t.index ["conversation_id"], name: "index_messages_on_conversation_id"
     t.index ["meta"], name: "index_messages_on_meta"
+    t.index ["wa_id"], name: "index_messages_on_wa_id", unique: true
   end
 
   create_table "raw_events", force: :cascade do |t|
