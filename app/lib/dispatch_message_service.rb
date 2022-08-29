@@ -23,6 +23,7 @@ class DispatchMessageService
     @message.meta = response_body
     if response.success?
       @message.dispatch_at = DateTime.now
+      @message.wa_id = @message.meta_wa_id
     else
       @message.dispatch_error = response_body['error']['message']
     end

@@ -56,6 +56,7 @@ class ReceiveMessageService
       message.body = incoming_message['text']['body']
       message.outgoing = false
       message.sent_at = Time.at(incoming_message['timestamp'].to_i)
+      message.wa_id = incoming_message['id']
       message
     end
 
