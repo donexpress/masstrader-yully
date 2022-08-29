@@ -26,6 +26,12 @@ class Message < ApplicationRecord
 
   after_create :update_conversation_timestamp
 
+  def meta_wa_id
+    return if meta.nil?
+
+    meta['messages'].first['id']
+  end
+
   private
 
   def no_dispatch_error
