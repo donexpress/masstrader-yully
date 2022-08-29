@@ -3,7 +3,7 @@ class FbEventsController < ApplicationController
 
   # GET /fb_events or /fb_events.json
   def index
-    @fb_events = FbEvent.all
+    @fb_events = FbEvent.all.order(id: :desc)
   end
 
   # GET /fb_events/1 or /fb_events/1.json
