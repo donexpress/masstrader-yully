@@ -1,7 +1,7 @@
 class EnhanceMessages < ActiveRecord::Migration[7.0]
   def change
-    add_column :delivered_at
-    add_column :dispatched_at
+    add_column :messages, :delivered_at, :timestamp
+    add_column :messages, :dispatched_at, :timestamp
     add_column :messages, :wa_id, :string
 
     Message.all.each do |message|
