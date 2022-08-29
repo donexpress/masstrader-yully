@@ -22,7 +22,7 @@ class DispatchMessageService
     response_body = JSON.parse(response.body)
     @message.meta = response_body
     if response.success?
-      @message.sent_at = DateTime.now
+      @message.dispatch_at = DateTime.now
     else
       @message.dispatch_error = response_body['error']['message']
     end

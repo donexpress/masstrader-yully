@@ -29,7 +29,11 @@ class Message < ApplicationRecord
   def meta_wa_id
     return if meta.nil?
 
-    meta['messages'].first['id']
+    if outgoing
+      meta['messages'].first['id']
+    else
+      meta['entry'].first['changes'].first['value']['messages'].first['id']
+    end
   end
 
   private
