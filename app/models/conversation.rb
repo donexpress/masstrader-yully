@@ -6,11 +6,11 @@ class Conversation < ApplicationRecord
   validate :check_client_phone_number
 
   validates_uniqueness_of :client_phone_number, scope: :business_phone_number
-  has_many :messages
+  has_many :messages, -> { order(id: :asc) }
 
   after_initialize :initialize_callback
 
-  before_validation :sanitize_client_phone_number
+  before_validation :sanitize_client_phone_number, on: :create
 
   def sanitize_client_phone_number
     self.client_phone_number = client_phone_number.gsub(/\D+/, "")
