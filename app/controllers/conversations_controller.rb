@@ -3,7 +3,16 @@ class ConversationsController < ApplicationController
 
   # GET /conversations or /conversations.json
   def index
-    @conversations = Conversation.includes(:messages).all.order(latest_message_sent_at: :desc)
+    @q = params[:q]
+
+    @conversations =
+      if @q.blank?
+        Conversation.includes(:messages).all.order(latest_message_sent_at: :desc)
+      else
+        Conversation.includes(:messages).where('client_phone_number LIKE ?', "%#{@q}%").order(latest_message_sent_at: :desc)
+      end
+
+    @conversations
   end
 
   # GET /conversations/1 or /conversations/1.json
