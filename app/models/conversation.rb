@@ -10,7 +10,14 @@ class Conversation < ApplicationRecord
 
   after_initialize :initialize_callback
 
+  before_validation :sanitize_client_phone_number
+
+  def sanitize_client_phone_number
+    self.client_phone_number = client_phone_number.gsub(/\D+/, "")
+  end
+
   private
+
 
   def initialize_callback
     self.business_phone_number = WA_SENDER_PHONE_NUMBER
@@ -35,6 +42,8 @@ class Conversation < ApplicationRecord
       if client_phone_number.length != 12
         errors.add(:client_phone_number, 'Cannot send message to this number. Check for the correct country code.')
       end
+    else
+      errors.add(:client_phone_number, 'Invalid phone number')
     end
   end
 end
