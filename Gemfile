@@ -47,6 +47,8 @@ gem "bootsnap", require: false
 
 gem 'csv', '~> 3.0'
 
+gem 'mechanize', '~> 2.8'
+
 # Use Sass to process CSS
 # gem "sassc-rails"
 
