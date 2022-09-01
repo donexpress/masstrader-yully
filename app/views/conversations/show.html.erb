@@ -1,9 +1,4 @@
-<div class="flex items-center">
-  <div class='mr-2'>
-    <%= link_to "<-- Back to conversations", conversations_path %>
-  </div>
-  <h1 class='text-3xl font-bold underline'>Conversation: <%= @conversation.client_phone_number %></h1>
-</div>
+<%= render partial: 'shared/conversation_header', locals: { client_phone_number: @conversation.client_phone_number, heading: 'Conversation' } %>
 
 <div class='w-1/2 mx-auto'>
   <div data-controller='new-message'>

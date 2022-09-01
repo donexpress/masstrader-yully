@@ -13,7 +13,7 @@ class Conversation < ApplicationRecord
   before_validation :sanitize_client_phone_number, on: :create
 
   def sanitize_client_phone_number
-    self.client_phone_number = client_phone_number.gsub(/\D+/, "")
+    self.client_phone_number = client_phone_number.gsub(/\D+/, '')
   end
 
   def unread_messages?

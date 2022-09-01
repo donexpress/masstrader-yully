@@ -11,7 +11,12 @@
     </div>
   <% end %>
 
-  <%= form.hidden_field :conversation_id, value: conversation.id %>
+  <% if conversation.present? %>
+    <%= form.hidden_field :conversation_id, value: conversation.id %>
+  <% else %>
+    <%= form.label :csv_file, style: "display: block", class: 'font-bold' %>
+    <%= form.file_field :csv_file %>
+  <% end %>
 
   <div class='mb-2'>
     <%= form.label :message_type, style: "display: block", class: 'font-bold' %>
@@ -25,13 +30,13 @@
 
   <div class='my-2' id='template-type' data-new-message-target='templateSection'>
     <%= form.label 'Product title', style: "display: block", class: 'font-bold' %>
-    <%= form.text_field :'template_params[0]', class: 'w-full rounded-lg', placeholder: 'Product title', data: { action: 'input->new-message#handleInputChange' }, value: template_params[0] %>
+    <%= form.text_field :'template_params[0]', class: 'w-full rounded-lg', placeholder: 'Product title', data: { action: 'input->new-message#handleInputChange' }, value: conversation.nil? ? 'CSV Product title' : template_params[0], disabled: conversation.nil? %>
 
     <%= form.label 'Address', style: "display: block", class: 'font-bold' %>
-    <%= form.text_field :'template_params[1]', class: 'w-full rounded-lg', placeholder: 'Address', data: { action: 'input->new-message#handleInputChange' }, value: template_params[1] %>
+    <%= form.text_field :'template_params[1]', class: 'w-full rounded-lg', placeholder: 'Address', data: { action: 'input->new-message#handleInputChange' }, value: conversation.nil? ? 'CSV Address' : template_params[1], disabled: conversation.nil? %>
 
     <%= form.label 'Amount', style: "display: block", class: 'font-bold' %>
-    <%= form.text_field :'template_params[2]', class: 'w-full rounded-lg', placeholder: 'Amount', data: { action: 'input->new-message#handleInputChange' }, value: template_params[2] %>
+    <%= form.text_field :'template_params[2]', class: 'w-full rounded-lg', placeholder: 'Amount', data: { action: 'input->new-message#handleInputChange' }, value: conversation.nil? ? 'CSV Amount' : template_params[2], disabled: conversation.nil? %>
 
     <%= form.label 'Preview', style: "display: block", class: 'font-bold' %>
     <%= form.text_area :preview, class: 'w-full rounded-lg', rows: 12, disabled: true, data: { 'new-message-target': 'preview' }  %>

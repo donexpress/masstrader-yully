@@ -1,9 +1,7 @@
-<h1>New message</h1>
+<%= render partial: 'shared/conversation_header', locals: { client_phone_number: nil, heading: 'Bulk Conversations' } %>
 
-<%= render "form", message: @message %>
-
-<br>
-
-<div>
-  <%= link_to "Back to messages", messages_path %>
+<div class='w-1/2 mx-auto'>
+  <div data-controller='new-message'>
+    <%= render "form", message: @message, conversation: nil, message_type: @message_type, template_params: @template_params %>
+  </div>
 </div>

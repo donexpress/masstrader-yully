@@ -20,6 +20,7 @@ class Message < ApplicationRecord
   attribute :dispatch_error, :string, default: nil
   attribute :message_type, :string, default: TEMPLATE_TYPE
   attribute :template_params, :json, default: {}
+  attribute :client_phone_number, :string, default: nil
 
   validate :no_dispatch_error
   validate :validate_message_type_and_template_params
@@ -33,6 +34,21 @@ class Message < ApplicationRecord
       meta['messages'].first['id']
     else
       meta['entry'].first['changes'].first['value']['messages'].first['id']
+    end
+  end
+
+  def from_csv_rows(rows)
+    rows.map do |row|
+      Message.new(
+        body:,
+        client_phone_number: row[0].gsub(/\D+/, ''),
+        message_type:,
+        template_params: {
+          0 => row[3],
+          1 => row[2],
+          2 => row[4]
+        }
+      )
     end
   end
 
