@@ -14,7 +14,7 @@ class ShipmentsController < ApplicationController
 
     tracking_number = tracking_number.upcase
 
-    raw_events = RawEvent.where("data ->> 'tracking' = ?", tracking_number)
+    raw_events = RawEvent.find_by_tracking_number(tracking_number)
     parsed_event_data = (raw_events.map do |raw_event|
       begin
         raw_event_hash = raw_event.data

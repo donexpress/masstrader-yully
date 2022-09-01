@@ -1,6 +1,10 @@
 class RawEvent < ApplicationRecord
   validates :data, presence: true
 
+  def self.find_by_tracking_number(tracking_number)
+    RawEvent.where("data ->> 'tracking' = ?", tracking_number)
+  end
+
   def self.to_csv(opts = {})
     attributes = %w[date office tracking description location]
 
