@@ -34,7 +34,8 @@ class HelpCourierExpress::Scraper
 
       {
         timestamp:,
-        milestone: raw_event_hash[:milestone]
+        milestone: raw_event_hash[:milestone],
+        location: '-'
       }
     end
   end

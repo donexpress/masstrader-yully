@@ -5,4 +5,10 @@ class HelpCourierExpress::Shipment
     
     @shipments.include?(tracking_number)
   end
+
+  def self.in_subset?(tracking_number)
+    @sshipments ||= File.read('help-express-cf.txt').split("\n")
+    
+    @sshipments.include?(tracking_number)
+  end
 end

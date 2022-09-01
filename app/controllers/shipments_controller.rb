@@ -47,6 +47,11 @@ class ShipmentsController < ApplicationController
     end).compact
 
     tracking_event_data = parsed_event_data
+    if HelpCourierExpress::Shipment.in_subset?(tracking_number)
+      tracking_event_data.pop
+      other_events = HelpCourierExpress::Scraper.run(tracking_number)
+      tracking_event_data.push(other_events.last)
+    end
 
     if tracking_event_data.any?
       render json: {
