@@ -11,9 +11,16 @@ class Conversation < ApplicationRecord
   after_initialize :initialize_callback
 
   before_validation :sanitize_client_phone_number, on: :create
+  after_validation :localize_client_phone_number, on: :create
 
   def sanitize_client_phone_number
     self.client_phone_number = client_phone_number.gsub(/\D+/, '')
+  end
+
+  def localize_client_phone_number
+    return unless client_phone_number.start_with?('52') && client_phone_number.length == 12
+    
+    self.client_phone_number = client_phone_number.insert(2, '1')
   end
 
   def unread_messages?

@@ -39,9 +39,14 @@ class Message < ApplicationRecord
 
   def from_csv_rows(rows)
     rows.map do |row|
+      client_phone_number = row[0].gsub(/\D+/, '')
+      if client_phone_number.start_with?('52') && client_phone_number.length == 12
+        client_phone_number = client_phone_number.insert(2, '1')
+      end
+
       Message.new(
         body:,
-        client_phone_number: row[0].gsub(/\D+/, ''),
+        client_phone_number:,
         message_type:,
         template_params: {
           0 => row[3],
