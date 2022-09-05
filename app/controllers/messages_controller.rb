@@ -104,6 +104,7 @@ class MessagesController < ApplicationController
           message.body = "cod_alert_template #{message.template_params.values.join(',')}"
         end
 
+        sleep 0.05
         dms = DispatchMessageService.new(message)
         message = dms.send
         message.save
