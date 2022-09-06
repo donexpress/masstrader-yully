@@ -38,9 +38,10 @@ class Message < ApplicationRecord
   end
 
   def from_csv_rows(rows)
-    selected_rows = rows.select { |r| r.size < 5 }
 
-    selected_rows.map do |row|
+    messages = rows.map do |row|
+      next nil if row.select(&:present?).size < 5
+
       client_phone_number = row[0].gsub(/\D+/, '')
       if client_phone_number.start_with?('52') && client_phone_number.length == 12
         client_phone_number = client_phone_number.insert(2, '1')
@@ -57,6 +58,8 @@ class Message < ApplicationRecord
         }
       )
     end
+
+    messages.compact
   end
 
   private
