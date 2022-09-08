@@ -10,7 +10,7 @@ class DispatchMessageService
   end
 
   def send
-    token = 'EAAPncdI4jmIBAGexzY3bNgzUP1y38xZCDBPgjmntbpJKFwkUIKMBvIEL82Sq059vLZA3kBgsEMwZBtEO9IGUMsoMzFz1IytC1wgR12KN9YjZBmnWJmK2p02AFzxbACGS9a473TAEUhctFcz7xqFlk5roGgwyt2vQSzavN87yDctU9aZBZA4xsi3AdduN6FcrxNUaqF9lBie5dku51HXo58'
+    token = 'EAAPncdI4jmIBAIfWMZAUvX3aB6G1pzszUyS6rk86FR89tatSJZARe02G77e4NyZBoMzWSxP40ghmKgPtTzIKjvm92SWwKFHcfkftueuJK4uIob4zqfrePnErTwDjkSljj7poFZCozOlH8l1VKzg4SIrz43ji25x2CaHrwDS584rMLdyjBZBJKY0VZAIrF9dZAqTuCVKErhH12nqsKfZA4PIi'
 
     conn = Faraday.new(
       url: 'https://graph.facebook.com/v14.0',
