@@ -3,13 +3,14 @@ class Conversation < ApplicationRecord
   WA_SENDER_PHONE_NUMBER = '56959261264'
 
   include PhoneNumber
+  extend PhoneNumber
 
   validates :client_phone_number, presence: true
   validates :business_phone_number, presence: true
   validate :check_client_phone_number
 
   validates_uniqueness_of :client_phone_number, scope: :business_phone_number
-  has_many :messages, -> { order(id: :asc) }
+  has_many :messages, -> { order(id: :asc) }, dependent: :destroy
 
   after_initialize :initialize_callback
 
@@ -21,6 +22,21 @@ class Conversation < ApplicationRecord
 
   def unread_messages?
     !messages.reject(&:outgoing).all?(&:read)
+  end
+
+  def self.sync_keywords_with_phone_number
+    rows = CSV.read('phone_number_keywords.csv')
+    rows.shift
+    rows.each do |row|
+      keyword, raw_phone_number = row
+      client_phone_number = sanitize_and_localize_phone_number(raw_phone_number)
+      conversation = Conversation.find_by(client_phone_number: client_phone_number)
+
+      if conversation.present? && !conversation.keywords.include?(keyword)
+        conversation.keywords << keyword
+        conversation.save
+      end
+    end
   end
 
   private
