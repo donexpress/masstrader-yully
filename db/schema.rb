@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_29_183838) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_08_003911) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -20,8 +20,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_29_183838) do
     t.datetime "latest_message_sent_at", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "keywords", default: [], array: true
     t.index ["client_phone_number", "business_phone_number"], name: "index_conversations_phone_pair_unique", unique: true
     t.index ["client_phone_number"], name: "index_conversations_on_client_phone_number"
+    t.index ["keywords"], name: "index_conversations_on_keywords"
     t.index ["latest_message_sent_at"], name: "index_conversations_on_latest_message_sent_at"
   end
 
