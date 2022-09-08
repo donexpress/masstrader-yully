@@ -4,9 +4,9 @@
   <h1 class='text-3xl font-bold underline'>Conversations</h1>
 
   <%= form_with url: conversations_path, method: :get, data: { turbo_frame: "conversations-turbo-frame", turbo_action: "advance" } do |form| %>
-    <%= form.text_field :q, placeholder: 'Enter a phone number', class: 'rounded-md', value: @q || '' %>
+    <%= form.text_field :q, placeholder: 'Enter phone number or keyword', class: 'rounded-md', value: @q || '' %>
     <%= form.submit "Search", class: 'bg-teal-500 text-slate-50 p-2 rounded-md cursor-pointer' %>
-  <% end %> 
+  <% end %>
 
   <div class='flex'>
     <%= link_to "+ Bulk", new_message_path, class: 'p-2 bg-teal-500 rounded-md text-slate-50 mr-2' %>
