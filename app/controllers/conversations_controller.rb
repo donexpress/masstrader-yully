@@ -10,7 +10,10 @@ class ConversationsController < ApplicationController
       if @q.blank?
         Conversation.includes(:messages).all.order(latest_message_sent_at: :desc)
       else
-        Conversation.includes(:messages).where('client_phone_number LIKE ?', "%#{@q}%").order(latest_message_sent_at: :desc)
+        Conversation.includes(:messages)
+                    .where('client_phone_number LIKE ?', "%#{@q}%").or(
+                    Conversation.where(":keywords = ANY (keywords)", keywords: @q))
+                    .order(latest_message_sent_at: :desc)
       end
 
     @conversations

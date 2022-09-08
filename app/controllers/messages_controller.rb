@@ -89,10 +89,16 @@ class MessagesController < ApplicationController
       # we discard invalid messages for now
       messages = @messages
       messages.each do |message|
-        # can improve this as 
+        # can improve this as
         conversation = Conversation.find_by(client_phone_number: message.client_phone_number)
         if conversation.nil?
           conversation = Conversation.create!(client_phone_number: message.client_phone_number)
+        end
+
+        keyword = message.keyword_string
+        if !conversation.keywords.include?(keyword)
+          conversation.keywords.push(keyword)
+          conversation.save!
         end
 
         message.conversation = conversation

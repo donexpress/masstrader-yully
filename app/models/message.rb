@@ -5,6 +5,8 @@
 class Message < ApplicationRecord
   belongs_to :conversation
 
+  include PhoneNumber
+
   TEXT_TYPE = 'text'
   TEMPLATE_TYPE = 'template'
 
@@ -21,6 +23,7 @@ class Message < ApplicationRecord
   attribute :message_type, :string, default: TEMPLATE_TYPE
   attribute :template_params, :json, default: {}
   attribute :client_phone_number, :string, default: nil
+  attribute :keyword_string, :string
 
   validate :no_dispatch_error
   validate :validate_message_type_and_template_params
@@ -38,18 +41,15 @@ class Message < ApplicationRecord
   end
 
   def from_csv_rows(rows)
-
     messages = rows.map do |row|
       next nil if row.select(&:present?).size < 5
 
-      client_phone_number = row[0].gsub(/\D+/, '')
-      if client_phone_number.start_with?('52') && client_phone_number.length == 12
-        client_phone_number = client_phone_number.insert(2, '1')
-      end
+      client_phone_number = sanitize_and_localize_phone_number(row[0])
 
       Message.new(
         body:,
         client_phone_number:,
+        keyword_string: row[1],
         message_type:,
         template_params: {
           0 => row[3],

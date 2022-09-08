@@ -1,5 +1,8 @@
 class Conversation < ApplicationRecord
+  # https://dev.to/kputra/rails-postgresql-array-1jn0
   WA_SENDER_PHONE_NUMBER = '56959261264'
+
+  include PhoneNumber
 
   validates :client_phone_number, presence: true
   validates :business_phone_number, presence: true
@@ -10,17 +13,10 @@ class Conversation < ApplicationRecord
 
   after_initialize :initialize_callback
 
-  before_validation :sanitize_client_phone_number, on: :create
-  after_validation :localize_client_phone_number, on: :create
+  before_validation :clean_client_phone_number, on: :create
 
-  def sanitize_client_phone_number
-    self.client_phone_number = client_phone_number.gsub(/\D+/, '')
-  end
-
-  def localize_client_phone_number
-    return unless client_phone_number.start_with?('52') && client_phone_number.length == 12
-    
-    self.client_phone_number = client_phone_number.insert(2, '1')
+  def clean_client_phone_number
+    self.client_phone_number = sanitize_and_localize_phone_number(client_phone_number)
   end
 
   def unread_messages?
@@ -28,7 +24,6 @@ class Conversation < ApplicationRecord
   end
 
   private
-
 
   def initialize_callback
     self.business_phone_number = WA_SENDER_PHONE_NUMBER

@@ -8,6 +8,8 @@
     <p class='text-slate-50'>
       <strong>Client phone number:</strong>
       <%= conversation.client_phone_number %>
+      <strong>- Keywords:</strong>
+      <%= conversation.keywords.join(', ') %>
     </p>
 
     <% if conversation.messages.size.zero? %>
@@ -17,7 +19,7 @@
     <% else %>
       <p class='text-slate-50'>
         <% if conversation.messages.last.outgoing %>
-        You said: 
+        You said:
         <% else %>
         Client said:
         <% end %>
