@@ -13,7 +13,7 @@ class ConversationsController < ApplicationController
         Conversation.includes(:messages)
                     .where('client_phone_number LIKE ?', "%#{@q}%").or(
                     Conversation.where(":keywords = ANY (keywords)", keywords: @q))
-                    .order(latest_message_sent_at: :desc)
+                    .order('latest_message_sent_at DESC NULLS LAST')
       end
 
     @conversations
