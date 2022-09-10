@@ -6,17 +6,21 @@ class ConversationsController < ApplicationController
   def index
     @q = params[:q]
 
-    @conversations =
-      if @q.blank?
-        Conversation.includes(:messages).all.order(latest_message_sent_at: :desc)
-      else
-        Conversation.includes(:messages)
-                    .where('client_phone_number LIKE ?', "%#{@q}%").or(
-                    Conversation.where(":keywords = ANY (keywords)", keywords: @q))
-                    .order('latest_message_sent_at DESC NULLS LAST')
-      end
+    conversation_query = Conversation.includes(:messages)
+    if @q.present?
+      conversation_query = conversation_query
+                  .where('client_phone_number LIKE ?', "%#{@q}%").or(
+        Conversation.where(":keywords = ANY (keywords)", keywords: @q))
+    end
 
-    @conversations
+    # https://bhserna.com/query-date-ranges-rails-active-record.html
+    if @date.present?
+      datetime = Datetime.parse(@date)
+      range = (datetime - 12.hours)..(datetime + 12.hours)
+      conversation_query = conversation_query.where(first_message_dispatched_at: range)
+    end
+
+    @conversations = conversation_query.order('latest_message_sent_at DESC NULLS LAST')
   end
 
   # GET /conversations/1 or /conversations/1.json

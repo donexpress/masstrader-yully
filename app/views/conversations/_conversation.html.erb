@@ -30,5 +30,13 @@
         <%= conversation.messages.last.sent_at %>
       </p>
     <% end %>
+
+    <p class='text-slate-50 text-sm'>
+      <% if conversation.messages.empty? %>
+        No outgoing message sent yet
+      <% else %>
+        First message sent at: <%= conversation.messages.first.created_at %>
+      <% end %>
+    </p>
   </div>
 <% end %>

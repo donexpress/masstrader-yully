@@ -114,6 +114,12 @@ class MessagesController < ApplicationController
         dms = DispatchMessageService.new(message)
         message = dms.send
         message.save
+
+        if message.errors.empty?
+          if message.conversation.first_message_dispatched_at.nil?
+
+          end
+        end
       end
 
       # refactor candidate

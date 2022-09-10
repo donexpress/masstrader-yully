@@ -28,7 +28,7 @@ class Message < ApplicationRecord
   validate :no_dispatch_error
   validate :validate_message_type_and_template_params
 
-  after_create :update_conversation_timestamp
+  after_create :update_conversation_timestamps
 
   def meta_wa_id
     return if meta.nil?
@@ -62,6 +62,14 @@ class Message < ApplicationRecord
     messages.compact
   end
 
+  def outgoing?
+    outgoing
+  end
+
+  def incoming?
+    !outgoing?
+  end
+
   private
 
   def no_dispatch_error
@@ -84,7 +92,11 @@ class Message < ApplicationRecord
     end
   end
 
-  def update_conversation_timestamp
+  def update_conversation_timestamps
     conversation.update_column(:latest_message_sent_at, DateTime.now)
+
+    if message.outgoing? && conversation.first_message_dispatched_at.nil?
+      conversation.update_column(:first_message_dispatched_at, DateTime.now)
+    end
   end
 end

@@ -4,6 +4,7 @@
   <h1 class='text-3xl font-bold underline'>Conversations</h1>
 
   <%= form_with url: conversations_path, method: :get, data: { turbo_frame: "conversations-turbo-frame", turbo_action: "advance" } do |form| %>
+    <%= form.date_field :date, class: 'rounded-md' %>
     <%= form.text_field :q, placeholder: 'Enter phone number or keyword', class: 'rounded-md', value: @q || '' %>
     <%= form.submit "Search", class: 'bg-teal-500 text-slate-50 p-2 rounded-md cursor-pointer' %>
   <% end %>
