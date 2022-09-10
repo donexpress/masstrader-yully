@@ -4,5 +4,7 @@ FactoryBot.define do
     body { 'This is the body' }
     meta { { hello: :world } }
     outgoing { [true, false].sample }
+
+    wa_id { SecureRandom.hex }
   end
 end

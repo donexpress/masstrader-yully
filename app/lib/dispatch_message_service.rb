@@ -10,6 +10,12 @@ class DispatchMessageService
   end
 
   def send
+    if Rails.env.test?
+      @message.meta = { foo: 'bar' }
+      @message.dispatched_at = DateTime.now
+      @message.wa_id = SecureRandom.hex
+    end
+
     token = 'EAAPncdI4jmIBABRMTufMjhDLING8ZCrVvYUM90fZCiG0jnyJTHo82Eo4OIriGhyTyp2HAiafV1tmsFS4v4mRCux0ONOBwObQyYP427PRDU2g9OpWkjYY7GXv9ID9ufJVSua7JEjLB2nLgZB1ab3vboaMOy2kYfZAYoDY29ZAZBXuWBXfo0Y5TrLt5i5zkSMix4eJpyDiUS8HCzN9oMoZAas'
 
     conn = Faraday.new(
