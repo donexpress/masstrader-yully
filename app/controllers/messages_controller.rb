@@ -113,7 +113,6 @@ class MessagesController < ApplicationController
         sleep 0.05
         dms = DispatchMessageService.new(message)
         message = dms.send
-        binding.pry
         message.save
 
         if message.errors.empty?
