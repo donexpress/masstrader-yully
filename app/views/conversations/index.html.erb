@@ -18,7 +18,7 @@
 <%= turbo_frame_tag "conversations-turbo-frame" do %>
   <div id="conversations">
     <% @conversations.each do |conversation| %>
-      <%= render conversation %>
+      <%= render conversation, date: @date, q: @q %>
     <% end %>
   </div>
 <% end %>

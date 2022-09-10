@@ -26,6 +26,8 @@ class ConversationsController < ApplicationController
 
   # GET /conversations/1 or /conversations/1.json
   def show
+    @date = params[:date]
+    @q = params[:q]
     @bulk_insert = params[:bulk] == 'true'
     @message = @conversation.messages.build
     @message_type = @conversation.messages.size.zero? ? Message::TEMPLATE_TYPE : Message::TEXT_TYPE

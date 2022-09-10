@@ -21,4 +21,7 @@ RSpec.describe 'Index conversations', type: :feature do
     expect(page).to have_content('Conversations')
     expect(page).to have_content(conversation.client_phone_number)
   end
+
+  scenario 'Can navigate to a specific conversation and revisit the index page' do
+  end
 end

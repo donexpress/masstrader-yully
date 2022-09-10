@@ -1,6 +1,10 @@
 <div class="flex items-center">
   <div class='mr-2'>
-    <%= link_to "<-- Back to conversations", conversations_path %>
+    <% if conversation.present? %>
+      <%= link_to "<-- Back to conversations", conversations_path(q: q, date: date, anchor: dom_id(conversation)) %>
+    <% else %>
+      <%= link_to "<-- Back to conversations", conversations_path(q: q, date: date) %>
+    <% end %>
   </div>
   <h1 class='text-3xl font-bold underline'><%= heading %>: <%= client_phone_number || '' %></h1>
 </div>
