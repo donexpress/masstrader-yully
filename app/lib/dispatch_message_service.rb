@@ -16,7 +16,7 @@ class DispatchMessageService
       @message.wa_id = SecureRandom.hex
     end
 
-    token = 'EAAPncdI4jmIBABRMTufMjhDLING8ZCrVvYUM90fZCiG0jnyJTHo82Eo4OIriGhyTyp2HAiafV1tmsFS4v4mRCux0ONOBwObQyYP427PRDU2g9OpWkjYY7GXv9ID9ufJVSua7JEjLB2nLgZB1ab3vboaMOy2kYfZAYoDY29ZAZBXuWBXfo0Y5TrLt5i5zkSMix4eJpyDiUS8HCzN9oMoZAas'
+    token = 'EAAPncdI4jmIBADuIxQZCrkdcRKAW8HM3kr5dlEohiXoIOJRTPmYo8vskDjCuNQ80f5ksQwi4ARJOWMbl6JYaZAKQg5hgGSZA3OZBSNm0U6mP2VHh1g2JFnfsCxmkZAp3qdPDh4IadxGTLD47E0qUTSV4NgoicBaYyD06whKL2DY8EFvVPxKUMh5L9AZBVLH7G914fIFuQD0WHcCfwXFZBEw'
 
     conn = Faraday.new(
       url: 'https://graph.facebook.com/v14.0',
