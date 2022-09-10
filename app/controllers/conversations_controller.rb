@@ -5,6 +5,7 @@ class ConversationsController < ApplicationController
   # GET /conversations or /conversations.json
   def index
     @q = params[:q]
+    @date = params[:date]
 
     conversation_query = Conversation.includes(:messages)
     if @q.present?
