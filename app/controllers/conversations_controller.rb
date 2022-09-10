@@ -16,7 +16,7 @@ class ConversationsController < ApplicationController
 
     # https://bhserna.com/query-date-ranges-rails-active-record.html
     if @date.present?
-      datetime = Datetime.parse(@date)
+      datetime = DateTime.parse(@date)
       range = (datetime - 12.hours)..(datetime + 12.hours)
       conversation_query = conversation_query.where(first_message_dispatched_at: range)
     end
