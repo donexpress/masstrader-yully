@@ -4,6 +4,6 @@ class ApplicationController < ActionController::Base
   private
 
   def retrieve_tz_from_cookies
-    @tz = cookies['browser-tz']
+    @tz = cookies['browser-tz'] || 'UTC'
   end
 end
