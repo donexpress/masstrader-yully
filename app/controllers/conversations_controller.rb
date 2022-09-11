@@ -18,6 +18,9 @@ class ConversationsController < ApplicationController
     if @date.present?
       datetime = DateTime.parse(@date).in_time_zone(@tz || 'UTC')
       range = (datetime.beginning_of_day)..(datetime.end_of_day)
+      Rails.logger.info "Printing range"
+      Rails.logger.info @tz
+      Rails.logger.info range.inspect
       conversation_query = conversation_query.where(first_message_dispatched_at: range)
     end
 
