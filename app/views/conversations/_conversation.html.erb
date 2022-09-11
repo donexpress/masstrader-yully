@@ -34,15 +34,15 @@
       <%= conversation.messages.last.body %>
       </strong>
       at
-      <%= conversation.messages.last.sent_at %>
+      <%= conversation.messages.last.sent_at&.in_time_zone(tz) %>
     </p>
   <% end %>
 
   <p class='text-slate-50 text-sm'>
-    <% if conversation.messages.empty? %>
+    <% if conversation.messages.select(&:outgoing?).empty? %>
       No outgoing message sent yet
     <% else %>
-      First message sent at: <%= conversation.messages.first.created_at %>
+      First message sent at: <%= conversation.messages.select(&:outgoing?).first.created_at.in_time_zone(tz) %>
     <% end %>
   </p>
 </div>

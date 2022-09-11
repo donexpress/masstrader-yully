@@ -8,7 +8,7 @@
 
   <% @conversation.messages.each do |message| %>
     <% if !message.new_record? %>
-      <%= render message %>
+      <%= render message, tz: @tz %>
     <% end %>
   <% end %>
 </div>

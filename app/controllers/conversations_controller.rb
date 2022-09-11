@@ -16,8 +16,8 @@ class ConversationsController < ApplicationController
 
     # https://bhserna.com/query-date-ranges-rails-active-record.html
     if @date.present?
-      datetime = DateTime.parse(@date)
-      range = (datetime - 12.hours)..(datetime + 12.hours)
+      datetime = DateTime.parse(@date).in_time_zone(@tz || 'UTC')
+      range = (datetime.beginning_of_day)..(datetime.end_of_day)
       conversation_query = conversation_query.where(first_message_dispatched_at: range)
     end
 
@@ -79,7 +79,7 @@ class ConversationsController < ApplicationController
     # we grab the messages from the db again
     # so that the view can be refreshed correctly
     @conversation = Conversation.includes(:messages).find(@conversation.id)
-    @conversation.broadcast_replace(locals: { date: url_params['date'], q: url_params['q'] })
+    @conversation.broadcast_replace(locals: { date: url_params['date'], q: url_params['q'], tz: @tz })
 
     head :ok
   end
