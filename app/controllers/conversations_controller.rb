@@ -17,7 +17,7 @@ class ConversationsController < ApplicationController
     # https://bhserna.com/query-date-ranges-rails-active-record.html
     if @date.present?
       datetime = DateTime.parse(@date)
-      range = (datetime.beginning_of_day.in_time_zone(@tz))..(datetime.end_of_day.in_time_zone(@tz))
+      range = (datetime.in_time_zone(@tz))..((datetime + 1.days).in_time_zone(@tz))
       Rails.logger.info "Printing range"
       Rails.logger.info @tz
       Rails.logger.info range.inspect
