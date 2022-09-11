@@ -13,8 +13,10 @@ RSpec.describe 'Create conversation', type: :feature do
   end
 
   scenario 'it fails when client phone number is invalid' do
-    fill_in :conversation_client_phone_number, with: '569'
+    @conversation.client_phone_number = '569'
+    fill_in :conversation_client_phone_number, with: @conversation.client_phone_number
     click_button 'Create Conversation'
-    expect(page).to have_content(@conversation.errors.messages.first)
+    @conversation.valid?
+    expect(page).to have_content(@conversation.errors.messages[:client_phone_number].first)
   end
 end
