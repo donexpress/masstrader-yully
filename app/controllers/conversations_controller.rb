@@ -16,12 +16,13 @@ class ConversationsController < ApplicationController
 
     # https://bhserna.com/query-date-ranges-rails-active-record.html
     if @date.present?
-      datetime = DateTime.parse(@date)
-      range = (datetime.in_time_zone(@tz))..((datetime + 1.days).in_time_zone(@tz))
-      Rails.logger.info "Printing range"
-      Rails.logger.info @tz
-      Rails.logger.info range.inspect
-      conversation_query = conversation_query.where(first_message_dispatched_at: range)
+      start_datetime = DateTime.parse(@date)
+      end_datetime = start_datetime + 1.days
+      start_utc_offset = Time.parse(start_datetime.to_date.to_s).in_time_zone(@tz).utc_offset
+      end_utc_offset = Time.parse(end_datetime.to_date.to_s).in_time_zone(@tz).utc_offset
+      shifted_start_datetime = start_datetime + start_utc_offset.seconds
+      shifted_end_datetime = end_datetime + end_utc_offset.seconds
+      conversation_query = conversation_query.where('first_message_dispatched_at BETWEEN ? AND ?', shifted_start_datetime, shifted_end_datetime)
     end
 
     @conversations = conversation_query.order('latest_message_sent_at DESC NULLS LAST')
