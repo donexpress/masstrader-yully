@@ -20,8 +20,8 @@ class ConversationsController < ApplicationController
       end_datetime = start_datetime + 1.days
       start_utc_offset = Time.parse(start_datetime.to_date.to_s).in_time_zone(@tz).utc_offset
       end_utc_offset = Time.parse(end_datetime.to_date.to_s).in_time_zone(@tz).utc_offset
-      shifted_start_datetime = start_datetime + start_utc_offset.seconds
-      shifted_end_datetime = end_datetime + end_utc_offset.seconds
+      shifted_start_datetime = start_datetime - start_utc_offset.seconds
+      shifted_end_datetime = end_datetime - end_utc_offset.seconds
       Rails.logger.info shifted_start_datetime
       Rails.logger.info shifted_end_datetime
       conversation_query = conversation_query.where('first_message_dispatched_at BETWEEN ? AND ?', shifted_start_datetime, shifted_end_datetime)
