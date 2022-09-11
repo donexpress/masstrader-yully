@@ -13,7 +13,9 @@ Rails.application.routes.draw do
 
   scope :wa do
     resources :messages
-    resources :conversations
+    resources :conversations, except: [:destroy] do
+      patch '/read', on: :member, action: :read
+    end
     resources :fb_events, only: [:index]
   end
 

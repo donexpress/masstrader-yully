@@ -70,6 +70,14 @@ class Message < ApplicationRecord
     !outgoing?
   end
 
+  def read?
+    read
+  end
+
+  def unread?
+    !read
+  end
+
   private
 
   def no_dispatch_error

@@ -1,10 +1,6 @@
-<%= link_to conversation_path(conversation, date: date, q: q), data: { turbo_frame: '_top' } do %>
-  <div id="<%= dom_id conversation %>" class='bg-sky-600 shadow-xl rounded-lg mt-3 px-2 py-4' style='position: relative'>
-
-    <% if conversation.unread_messages? %>
-      <div class='text-sm rounded-md p-1 bg-amber-500 text-slate-50' style='position: absolute; top: 8px; right: 8px'>New messages</div>
-    <% end %>
-
+<%= turbo_stream_from conversation %>
+<div id="<%= dom_id conversation %>" class='bg-sky-600 shadow-xl rounded-lg mt-3 px-2 py-4' style='position: relative'>
+  <div class="flex w-100 justify-between">
     <p class='text-slate-50'>
       <strong>Client phone number:</strong>
       <%= conversation.client_phone_number %>
@@ -12,31 +8,41 @@
       <%= conversation.keywords.join(', ') %>
     </p>
 
-    <% if conversation.messages.size.zero? %>
-      <p class='text-slate-50'>
-        No messages yet
-      </p>
-    <% else %>
-      <p class='text-slate-50'>
-        <% if conversation.messages.last.outgoing %>
-        You said:
-        <% else %>
-        Client said:
+    <div class="flex">
+      <% if conversation.unread_messages? %>
+        <div class='mr-2 text-sm rounded-md p-1 bg-amber-500 text-slate-50'>New messages <strong>(<%= conversation.messages.count(&:unread?) %>)</strong></div>
+        <%= form_for conversation, url: read_conversation_url(conversation), method: :patch, remote: true do |form| %>
+          <%= form.submit "Mark as Read", class: 'bg-teal-500 text-slate-50 p-1 rounded-md cursor-pointer text-sm mr-2' %>
         <% end %>
-        <strong>
-        <%= conversation.messages.last.body %>
-        </strong>
-        at
-        <%= conversation.messages.last.sent_at %>
-      </p>
-    <% end %>
-
-    <p class='text-slate-50 text-sm'>
-      <% if conversation.messages.empty? %>
-        No outgoing message sent yet
-      <% else %>
-        First message sent at: <%= conversation.messages.first.created_at %>
       <% end %>
-    </p>
+      <%= link_to 'Open', conversation_path(conversation, date: date, q: q), data: { turbo_frame: '_top' }, class: 'bg-teal-500 text-slate-50 p-1 rounded-md cursor-pointer text-sm' %>
+    </div>
   </div>
-<% end %>
+
+  <% if conversation.messages.size.zero? %>
+    <p class='text-slate-50'>
+      No messages yet
+    </p>
+  <% else %>
+    <p class='text-slate-50'>
+      <% if conversation.messages.last.outgoing %>
+      You said:
+      <% else %>
+      Client said:
+      <% end %>
+      <strong>
+      <%= conversation.messages.last.body %>
+      </strong>
+      at
+      <%= conversation.messages.last.sent_at %>
+    </p>
+  <% end %>
+
+  <p class='text-slate-50 text-sm'>
+    <% if conversation.messages.empty? %>
+      No outgoing message sent yet
+    <% else %>
+      First message sent at: <%= conversation.messages.first.created_at %>
+    <% end %>
+  </p>
+</div>

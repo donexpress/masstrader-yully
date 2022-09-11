@@ -1,5 +1,5 @@
 class ConversationsController < ApplicationController
-  before_action :set_conversation, only: %i[ show edit update destroy ]
+  before_action :set_conversation, only: %i[ show edit update destroy read ]
   after_action :read_unread_messages, only: %i[ show ]
 
   # GET /conversations or /conversations.json
@@ -70,6 +70,18 @@ class ConversationsController < ApplicationController
         format.json { render json: @conversation.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def read
+    unread_messages = @conversation.messages.select(&:unread?)
+    Message.where(id: unread_messages.map(&:id)).update_all(read: true)
+    url_params = CGI.parse(URI.parse(request.referrer).query).slice('date', 'q')
+    # we grab the messages from the db again
+    # so that the view can be refreshed correctly
+    @conversation = Conversation.includes(:messages).find(@conversation.id)
+    @conversation.broadcast_replace(locals: { date: url_params['date'], q: url_params['q'] })
+
+    head :ok
   end
 
   # DELETE /conversations/1 or /conversations/1.json
