@@ -92,7 +92,13 @@ class MessagesController < ApplicationController
         # can improve this as
         conversation = Conversation.find_by(client_phone_number: message.client_phone_number)
         if conversation.nil?
-          conversation = Conversation.create!(client_phone_number: message.client_phone_number)
+          new_conversation = Conversation.new(client_phone_number: message.client_phone_number)
+          if new_conversation.save
+            # skip because it would mean that the phone number is invalid
+            conversation = new_conversation
+          else
+            next
+          end
         end
 
         keyword = message.keyword_string
@@ -104,8 +110,12 @@ class MessagesController < ApplicationController
         message.conversation = conversation
       end
 
-      # refactor candidate
+      # may want to join this two each blocks
+      # for now if conversation is nil
+      # we next inside this loop as well
       messages.each do |message|
+        next if message.conversation.nil?
+
         if message.body.blank?
           message.body = "cod_alert_template #{message.template_params.values.join(',')}"
         end
