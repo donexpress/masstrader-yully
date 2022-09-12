@@ -110,7 +110,7 @@ class MessagesController < ApplicationController
         message.conversation = conversation
       end
 
-      # may want to join this two each blocks
+      # may want to join these two each blocks
       # for now if conversation is nil
       # we next inside this loop as well
       messages.each do |message|
