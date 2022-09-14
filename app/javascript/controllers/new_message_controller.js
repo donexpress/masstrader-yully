@@ -1,17 +1,19 @@
 import { Controller } from "@hotwired/stimulus"
 
 function messagePreview(...args){
-  return `Hola! Estamos encargados del despacho del producto ${args[0]} que compraste en línea. 
+  return `Hola ${args[0]}: 
 
-  Te agradeceríamos responder "CONFIRMADO" para que inmediatamente despachemos tu producto el cuál será entregado en la dirección ${args[1]}. El despacho es un cobro contra entrega (COD) y sólo se admiten pagos en efectivo. Por favor, ten listo el monto ${args[2]} en efectivo para pagar al recibirlo.
+  Estamos encargados del despacho del producto ${args[1]} que compraste en línea. 
 
-  Te enviaremos un número de seguimiento a tu correo o a través de este medio una vez que el envío sea despachado.
+  Te agradeceríamos responder "CONFIRMADO" para que inmediatamente despachemos tu producto el cuál será entregado en la dirección ${args[2]}. 
+  El despacho es un cobro contra entrega (COD) y sólo se admiten pagos en efectivo. Por favor, ten listo el monto ${args[3]} en efectivo para pagar al recibirlo. Una vez confirmado el despacho puedes buscar tu pedido con el siguiente número en Shopify: ${args[4]}, dónde podrás también obtener el número de seguimiento.
 
-  El tiempo de entrega es 3-7 días naturales. 
+  El tiempo de entrega es de 3-7 días naturales. 
 
-  Te deseamos un feliz día! 😀
+  Te deseamos un feliz día!
 
-  PD: Te recordamos cordialmente que el vendedor ofrece una garantía de por vida, y te invitamos a contactarlo directamente en caso de cualquier eventualidad.`
+  PD: Recuerda que puedes contactar directamente al vendedor y disfrutar de tu garantía de por vida.
+  `
 }
 
 // Connects to data-controller="new-conversation"
@@ -26,10 +28,12 @@ export default class extends Controller {
 
   fillPreview(){
     const preview = this.previewTarget;
-    const product = document.getElementById('message_template_params[0]').value;
-    const address = document.getElementById('message_template_params[1]').value;
-    const amount = document.getElementById('message_template_params[2]').value;
-    preview.value = messagePreview(product || '{product}', address || '{address}', amount || '{amount}');
+    const clientName = document.getElementById('message_template_params[0]').value;
+    const product = document.getElementById('message_template_params[1]').value;
+    const address = document.getElementById('message_template_params[2]').value;
+    const amount = document.getElementById('message_template_params[3]').value;
+    const referenceId = document.getElementById('message_template_params[4]').value;
+    preview.value = messagePreview(clientName || '{clientName}', product || '{product}', address || '{address}', amount || '{amount}', referenceId || '{referenceId}');
   }
 
   toggleSections(value){

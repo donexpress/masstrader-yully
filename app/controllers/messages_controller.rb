@@ -14,7 +14,7 @@ class MessagesController < ApplicationController
   def new
     @message = Message.new
     @message_type = Message::TEMPLATE_TYPE
-    @template_params = ['', '', '']
+    @template_params = ['', '', '', '', '']
   end
 
   # GET /messages/1/edit
@@ -71,11 +71,16 @@ class MessagesController < ApplicationController
         @message.body = "cod_alert_template #{@template_params.join(',')}"
       end
 
+
       respond_to do |format|
         dms = DispatchMessageService.new(@message)
         @message = dms.send
 
         if @message.save
+          if @conversation.keywords.include?(@template_params.last)
+            @conversation.push(@template_params.last)
+          end
+
           format.html { redirect_to conversation_url(@message.conversation), notice: "Message was successfully created." }
           format.json { render :show, status: :created, location: @message }
         else

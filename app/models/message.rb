@@ -52,9 +52,11 @@ class Message < ApplicationRecord
         keyword_string: row[1],
         message_type:,
         template_params: {
-          0 => row[3],
-          1 => row[2],
-          2 => row[4]
+          0 => row[5],
+          1 => row[3],
+          2 => row[2],
+          3 => row[4],
+          4 => row[1]
         }
       )
     end
