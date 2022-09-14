@@ -78,7 +78,7 @@ class MessagesController < ApplicationController
 
         if @message.save
           if !@conversation.keywords.include?(@template_params.last)
-            @conversation.push(@template_params.last)
+            @conversation.keywords.push(@template_params.last)
           end
 
           format.html { redirect_to conversation_url(@message.conversation), notice: "Message was successfully created." }
