@@ -77,7 +77,7 @@ class MessagesController < ApplicationController
         @message = dms.send
 
         if @message.save
-          if @conversation.keywords.include?(@template_params.last)
+          if !@conversation.keywords.include?(@template_params.last)
             @conversation.push(@template_params.last)
           end
 
