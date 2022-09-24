@@ -1,13 +1,6 @@
 <p style="color: green"><%= notice %></p>
-
 <div class="flex justify-between w-full">
   <h1 class='text-3xl font-bold underline'>Conversations</h1>
-
-  <%= form_with url: conversations_path, method: :get, data: { turbo_frame: "conversations-turbo-frame", turbo_action: "advance" } do |form| %>
-    <%= form.date_field :date, class: 'rounded-md' %>
-    <%= form.text_field :q, placeholder: 'Enter phone number or keyword', class: 'rounded-md', value: @q || '' %>
-    <%= form.submit "Search", class: 'bg-teal-500 text-slate-50 p-2 rounded-md cursor-pointer' %>
-  <% end %>
 
   <div class='flex'>
     <%= link_to "+ Bulk", new_message_path, class: 'p-2 bg-teal-500 rounded-md text-slate-50 mr-2' %>
@@ -16,9 +9,36 @@
 </div>
 
 <%= turbo_frame_tag "conversations-turbo-frame" do %>
+  <div class="w-full text-center">
+    <%= form_with url: conversations_path, method: :get, data: { turbo_frame: "conversations-turbo-frame", turbo_action: "advance" } do |form| %>
+      <%= form.date_field :date, class: 'rounded-md', value: @date || '' %>
+      <%= form.text_field :q, placeholder: 'Enter phone number or keyword', class: 'rounded-md', value: @q || '' %>
+      <%= form.submit "Search", class: 'bg-teal-500 text-slate-50 p-2 rounded-md cursor-pointer' %>
+    <% end %>
+    <div id='conversations-paginator'>
+      <% if @page_count == 1 %>
+        <p>There is only one page</p>
+      <% else %>
+        <div class='flex flex-wrap'>
+          <% (1..@page_count).each do |page_number| %>
+            <span class='mr-2 page cursor-pointer <%= @page == page_number ? 'font-bold' : '' %>' >
+              <%= form_with url: conversations_path, method: :get, data: { turbo_frame: "conversations-turbo-frame", turbo_action: "advance" } do |form| %>
+                <%= form.hidden_field :date, value: @date || '' %>
+                <%= form.hidden_field :q, value: @q || '' %>
+                <%= form.hidden_field :page, value: page_number %>
+                <%= form.submit page_number %>
+              <% end %>
+            </span>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <p class='text-center'>Total Records: <strong><%= @total_count %></strong> - Current Page: <strong><%= @page %></strong> - Total Pages: <strong><%= @page_count %></strong></p>
   <div id="conversations">
     <% @conversations.each do |conversation| %>
-      <%= render conversation, date: @date, q: @q, tz: @tz %>
+      <%= render conversation, date: @date, q: @q, tz: @tz, page: @page %>
     <% end %>
   </div>
 <% end %>

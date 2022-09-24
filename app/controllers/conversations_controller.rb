@@ -4,6 +4,8 @@ class ConversationsController < ApplicationController
 
   # GET /conversations or /conversations.json
   def index
+    @page = params[:page].to_i > 0 ? params[:page].to_i : 1
+    @per = 20
     @q = params[:q]
     @date = params[:date]
 
@@ -27,13 +29,16 @@ class ConversationsController < ApplicationController
       conversation_query = conversation_query.where('first_message_dispatched_at BETWEEN ? AND ?', shifted_start_datetime, shifted_end_datetime)
     end
 
-    @conversations = conversation_query.order('latest_message_sent_at DESC NULLS LAST')
+    @conversations = conversation_query.order('latest_message_sent_at DESC NULLS LAST').limit(@per).offset((@page - 1) * @per)
+    @total_count = conversation_query.count
+    @page_count = (@total_count / @per) + 1
   end
 
   # GET /conversations/1 or /conversations/1.json
   def show
     @date = params[:date]
     @q = params[:q]
+    @page = params[:page]
     @bulk_insert = params[:bulk] == 'true'
     @message = @conversation.messages.build
     @message_type = @conversation.messages.size.zero? ? Message::TEMPLATE_TYPE : Message::TEXT_TYPE
@@ -85,7 +90,7 @@ class ConversationsController < ApplicationController
     # we grab the messages from the db again
     # so that the view can be refreshed correctly
     @conversation = Conversation.includes(:messages).find(@conversation.id)
-    @conversation.broadcast_replace(locals: { date: url_params['date'], q: url_params['q'], tz: @tz })
+    @conversation.broadcast_replace(locals: { date: url_params['date'], q: url_params['q'], tz: @tz, page: url_params['page'] })
 
     head :ok
   end

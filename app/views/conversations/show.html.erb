@@ -1,4 +1,4 @@
-<%= render partial: 'shared/conversation_header', locals: { conversation: @conversation, client_phone_number: @conversation.client_phone_number, heading: 'Conversation', q: @q, date: @date } %>
+<%= render partial: 'shared/conversation_header', locals: { conversation: @conversation, client_phone_number: @conversation.client_phone_number, heading: 'Conversation', q: @q, date: @date, page: @page } %>
 
 <div class='w-1/2 mx-auto'>
   <div class='my-2'><strong>Keywords:</strong> <%= @conversation.keywords.join(', ') %></div>
