@@ -50,8 +50,6 @@ gem 'csv', '~> 3.0'
 gem 'mechanize', '~> 2.8'
 gem 'rexml', '~> 3.2', '>= 3.2.4'
 
-gem 'pagy', '~> 5.10'
-
 # Use Sass to process CSS
 # gem "sassc-rails"
 
