@@ -13,6 +13,7 @@
     <%= form_with url: conversations_path, method: :get, data: { turbo_frame: "conversations-turbo-frame", turbo_action: "advance" } do |form| %>
       <%= form.date_field :date, class: 'rounded-md', value: @date || '' %>
       <%= form.text_field :q, placeholder: 'Enter phone number or keyword', class: 'rounded-md', value: @q || '' %>
+      <%= form.select :sort, [["Latest updated", "latest_updated"], ["Keyword DESC", "keyword_desc"], ["Keyword ASC", "keyword_asc"]], { selected: @sort || 'latest_updated' }, { class: 'rounded-md' } %>
       <%= form.submit "Search", class: 'bg-teal-500 text-slate-50 p-2 rounded-md cursor-pointer' %>
     <% end %>
     <div id='conversations-paginator'>
@@ -25,6 +26,7 @@
               <%= form_with url: conversations_path, method: :get, data: { turbo_frame: "conversations-turbo-frame", turbo_action: "advance" } do |form| %>
                 <%= form.hidden_field :date, value: @date || '' %>
                 <%= form.hidden_field :q, value: @q || '' %>
+                <%= form.hidden_field :sort, value: @sort || 'latest_updated' %>
                 <%= form.hidden_field :page, value: page_number %>
                 <%= form.submit page_number %>
               <% end %>
@@ -38,7 +40,7 @@
   <p class='text-center'>Total Records: <strong><%= @total_count %></strong> - Current Page: <strong><%= @page %></strong> - Total Pages: <strong><%= @page_count %></strong></p>
   <div id="conversations">
     <% @conversations.each do |conversation| %>
-      <%= render conversation, date: @date, q: @q, tz: @tz, page: @page %>
+      <%= render conversation, date: @date, q: @q, tz: @tz, page: @page, sort: @sort %>
     <% end %>
   </div>
 <% end %>

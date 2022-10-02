@@ -15,7 +15,7 @@
           <%= form.submit "Mark as Read", class: 'bg-teal-500 text-slate-50 p-1 rounded-md cursor-pointer text-sm mr-2' %>
         <% end %>
       <% end %>
-      <%= link_to 'Open', conversation_path(conversation, date: date, q: q, page: page), data: { turbo_frame: '_top' }, class: 'bg-teal-500 text-slate-50 p-1 rounded-md cursor-pointer text-sm' %>
+      <%= link_to 'Open', conversation_path(conversation, date: date, q: q, page: page, sort: sort), data: { turbo_frame: '_top' }, class: 'bg-teal-500 text-slate-50 p-1 rounded-md cursor-pointer text-sm' %>
     </div>
   </div>
 
