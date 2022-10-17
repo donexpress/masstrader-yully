@@ -98,10 +98,15 @@ class ConversationsController < ApplicationController
     unread_messages = @conversation.messages.select(&:unread?)
     Message.where(id: unread_messages.map(&:id)).update_all(read: true)
     url_params = CGI.parse(URI.parse(request.referrer).query || '')
+    date = url_params['date'].is_a?(Array) ? url_params['date']&.first : url_params['date']
+    q = url_params['q'].is_a?(Array) ? url_params['q']&.first : url_params['q']
+    sort = url_params['sort'].is_a?(Array) ? url_params['sort']&.first : url_params['sort']
+    page = url_params['page'].is_a?(Array) ? url_params['page']&.first : url_params['page']
     # we grab the messages from the db again
     # so that the view can be refreshed correctly
     @conversation = Conversation.includes(:messages).find(@conversation.id)
-    @conversation.broadcast_replace(locals: { date: url_params['date'], q: url_params['q'], tz: @tz, page: url_params['page'], sort: url_params['sort'] })
+
+    @conversation.broadcast_replace(locals: { date: date, q: q, tz: @tz, page: page, sort: sort })
 
     head :ok
   end
