@@ -1,4 +1,4 @@
-<%= render partial: 'shared/conversation_header', locals: { page: nil, client_phone_number: nil, heading: 'Bulk Conversations', conversation: nil, date: nil, q: nil } %>
+<%= render partial: 'shared/conversation_header', locals: { page: @page, client_phone_number: nil, heading: 'Bulk Conversations', conversation: nil, date: @date, q: @q, sort: @sort } %>
 
 <div class='w-1/2 mx-auto'>
   <div data-controller='new-message'>

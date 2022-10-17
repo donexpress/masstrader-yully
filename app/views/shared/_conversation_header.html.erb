@@ -3,7 +3,7 @@
     <% if conversation.present? %>
       <%= link_to "<-- Back to conversations", conversations_path(page: page, q: q, date: date, anchor: dom_id(conversation), sort: sort) %>
     <% else %>
-      <%= link_to "<-- Back to conversations", conversations_path(page: page, q: q, date: date) %>
+      <%= link_to "<-- Back to conversations", conversations_path(page: page, q: q, date: date, sort: sort) %>
     <% end %>
   </div>
   <h1 class='text-3xl font-bold underline'><%= heading %>: <%= client_phone_number || '' %></h1>

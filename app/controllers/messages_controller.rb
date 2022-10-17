@@ -15,6 +15,12 @@ class MessagesController < ApplicationController
     @message = Message.new
     @message_type = Message::TEMPLATE_TYPE
     @template_params = ['', '', '', '', '']
+
+    url_params = CGI.parse(URI.parse(request.referrer || '').query || '')
+    @date = url_params['date']
+    @q = url_params['q']
+    @page = url_params['page']
+    @sort = url_params['sort']
   end
 
   # GET /messages/1/edit
@@ -67,10 +73,15 @@ class MessagesController < ApplicationController
       @conversation = Conversation.find(message_params[:conversation_id])
       @template_params = message_params[:template_params].values
 
-      if @message.body.blank?
+      if @message.body.blank? && @template_params.any? { |v| v.present? }
         @message.body = "cod_alert_template #{@template_params.join(',')}"
       end
 
+      url_params = CGI.parse(URI.parse(request.referrer || '').query || '')
+      @date = url_params['date']&.first
+      @q = url_params['q']&.first
+      @page = url_params['page']&.first
+      @sort = url_params['sort']&.first
 
       respond_to do |format|
         dms = DispatchMessageService.new(@message)
@@ -82,7 +93,7 @@ class MessagesController < ApplicationController
             @conversation.save
           end
 
-          format.html { redirect_to conversation_url(@message.conversation), notice: "Message was successfully created." }
+          format.html { redirect_to conversation_url(@message.conversation, date: @date, q: @q, sort: @sort, page: @page), notice: "Message was successfully created." }
           format.json { render :show, status: :created, location: @message }
         else
           format.html { render 'conversations/show', status: :unprocessable_entity }

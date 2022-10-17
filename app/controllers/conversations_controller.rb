@@ -97,7 +97,7 @@ class ConversationsController < ApplicationController
   def read
     unread_messages = @conversation.messages.select(&:unread?)
     Message.where(id: unread_messages.map(&:id)).update_all(read: true)
-    url_params = CGI.parse(URI.parse(request.referrer).query || '').slice('date', 'q')
+    url_params = CGI.parse(URI.parse(request.referrer).query || '')
     # we grab the messages from the db again
     # so that the view can be refreshed correctly
     @conversation = Conversation.includes(:messages).find(@conversation.id)
