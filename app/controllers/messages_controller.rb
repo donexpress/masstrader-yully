@@ -17,10 +17,10 @@ class MessagesController < ApplicationController
     @template_params = ['', '', '', '', '']
 
     url_params = CGI.parse(URI.parse(request.referrer || '').query || '')
-    @date = url_params['date']
-    @q = url_params['q']
-    @page = url_params['page']
-    @sort = url_params['sort']
+    @date = url_params['date'].is_a?(Array) ? url_params['date']&.first : url_params['date']
+    @q = url_params['q'].is_a?(Array) ? url_params['q']&.first : url_params['q']
+    @sort = url_params['sort'].is_a?(Array) ? url_params['sort']&.first : url_params['sort']
+    @page = url_params['page'].is_a?(Array) ? url_params['page']&.first : url_params['page']
   end
 
   # GET /messages/1/edit
@@ -78,10 +78,10 @@ class MessagesController < ApplicationController
       end
 
       url_params = CGI.parse(URI.parse(request.referrer || '').query || '')
-      @date = url_params['date']&.first
-      @q = url_params['q']&.first
-      @page = url_params['page']&.first
-      @sort = url_params['sort']&.first
+      @date = url_params['date'].is_a?(Array) ? url_params['date']&.first : url_params['date']
+      @q = url_params['q'].is_a?(Array) ? url_params['q']&.first : url_params['q']
+      @sort = url_params['sort'].is_a?(Array) ? url_params['sort']&.first : url_params['sort']
+      @page = url_params['page'].is_a?(Array) ? url_params['page']&.first : url_params['page']
 
       respond_to do |format|
         dms = DispatchMessageService.new(@message)
