@@ -2,6 +2,13 @@
 
 <div class='w-1/2 mx-auto'>
   <div data-controller='new-message'>
+    <% flash.each do |type, msg| %>
+      <% if type == 'error' %>
+        <div class="bg-red-300 p-4 rounded-md" role='alert'>
+          <span class="text-red-800"><%= msg %></span>
+        </div>
+      <% end %>
+    <% end %>
     <%= render "form", message: @message, conversation: nil, message_type: @message_type, template_params: @template_params %>
   </div>
 </div>

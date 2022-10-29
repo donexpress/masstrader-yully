@@ -1,5 +1,6 @@
 class MessagesController < ApplicationController
   before_action :set_message, only: %i[ show edit update destroy ]
+  before_action :assign_new_message_vars, only: %i[ new  create ]
 
   # GET /messages or /messages.json
   def index
@@ -12,15 +13,6 @@ class MessagesController < ApplicationController
 
   # GET /messages/new
   def new
-    @message = Message.new
-    @message_type = Message::TEMPLATE_TYPE
-    @template_params = ['', '', '', '', '']
-
-    url_params = CGI.parse(URI.parse(request.referrer || '').query || '')
-    @date = url_params['date'].is_a?(Array) ? url_params['date']&.first : url_params['date']
-    @q = url_params['q'].is_a?(Array) ? url_params['q']&.first : url_params['q']
-    @sort = url_params['sort'].is_a?(Array) ? url_params['sort']&.first : url_params['sort']
-    @page = url_params['page'].is_a?(Array) ? url_params['page']&.first : url_params['page']
   end
 
   # GET /messages/1/edit
@@ -33,9 +25,18 @@ class MessagesController < ApplicationController
 
     csv_file = params[:message][:csv_file]
     if csv_file.present?
-      csv_rows = CSV.read(csv_file)
-      csv_rows.shift # remove headers - unorthodox but whatever
+      begin
+        csv_rows = CSV.read(csv_file)
+      rescue StandardError => e
+        Rails.logger.error(e.message)
+        flash[:error] = e.message
 
+        return respond_to do |format|
+          format.html { render :new, status: :unprocessable_entity }
+          format.json { render json: { error: e.message }, status: :unprocessable_entity }
+        end
+      end
+      csv_rows.shift # remove headers - unorthodox but whatever
       @messages = Message.new(message_params).from_csv_rows(csv_rows)
       bulk_create
     else
@@ -166,7 +167,15 @@ class MessagesController < ApplicationController
       params.require(:message).permit(:body, :conversation_id, :message_type, :csv_file, template_params: {}).except(:csv_file)
     end
 
-    def render_creation_failure
+    def assign_new_message_vars
+      @message = Message.new
+      @message_type = Message::TEMPLATE_TYPE
+      @template_params = ['', '', '', '', '']
 
+      url_params = CGI.parse(URI.parse(request.referrer || '').query || '')
+      @date = url_params['date'].is_a?(Array) ? url_params['date']&.first : url_params['date']
+      @q = url_params['q'].is_a?(Array) ? url_params['q']&.first : url_params['q']
+      @sort = url_params['sort'].is_a?(Array) ? url_params['sort']&.first : url_params['sort']
+      @page = url_params['page'].is_a?(Array) ? url_params['page']&.first : url_params['page']
     end
 end
