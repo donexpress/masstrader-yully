@@ -1,6 +1,6 @@
 class Conversation < ApplicationRecord
   # https://dev.to/kputra/rails-postgresql-array-1jn0
-  WA_SENDER_PHONE_NUMBER = '56959261264'
+  WA_SENDER_PHONE_NUMBER = ENV.fetch('WA_SENDER_PHONE_NUMBER')
 
   include PhoneNumber
   extend PhoneNumber
