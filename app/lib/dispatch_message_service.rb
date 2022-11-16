@@ -2,7 +2,7 @@
 
 # Dispatches messages on the WhatsApp API
 class DispatchMessageService
-  WA_OUTGOING_PHONE_NUMBER_ID = '108212608656928'
+  WA_OUTGOING_PHONE_NUMBER_ID = ENV.fetch('WA_OUTGOING_PHONE_NUMBER_ID')
 
   def initialize(message)
     @message = message
