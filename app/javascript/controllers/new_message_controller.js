@@ -6,12 +6,9 @@ function messagePreview(...args){
   Se nos ha confiado la entrega de ${args[1]} producto(s) que compra en línea. 
 
   Le agradeceríamos que respondiera "Confirmado" para que podamos enviar su producto de inmediato y enviarlo a la dirección ${args[2]}. 
-  Los envíos son contra reembolso (COD) y solo se acepta pago en efectivo. Tenga efectivo por la cantidad de ${args[3]} listo para pagar cuando lo reciba. El tiempo de entrega es de 3-7 días.
-  Después de confirmar el envío, si tiene alguna pregunta, puede usar la referencia: ${args[4]}, para comunicarse con service@mxwahaha.com. Este mensaje es solo para sus registros, si acepta la entrega, no utilizaremos esta ruta para el servicio al cliente.
+  Los envíos son contra reembolso (COD) y solo se acepta pago en efectivo. Tenga efectivo por la cantidad de ${args[3]} listo para pagar cuando lo reciba. El tiempo de entrega es de 3-7 días. Después de confirmar el envío, si tiene alguna pregunta, puede usar la referencia: ${args[4]}, para comunicarse con service@mxwahaha.com. Este mensaje es solo para sus registros, si acepta la entrega, no utilizaremos esta ruta para el servicio al cliente.
 
   ¡Que tengas un buen día!
-
-  PD: Recuerda que puedes contactar directamente al vendedor y disfrutar de tu garantía de por vida.
   `
 }
 
