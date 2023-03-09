@@ -3,14 +3,13 @@ import { Controller } from "@hotwired/stimulus"
 function messagePreview(...args){
   return `Hola ${args[0]}: 
 
-  Estamos encargados del despacho del producto ${args[1]} que compraste en línea. 
+  Se nos ha confiado la entrega de ${args[1]} producto(s) que compra en línea. 
 
-  Te agradeceríamos responder "CONFIRMADO" para que inmediatamente despachemos tu producto el cuál será entregado en la dirección ${args[2]}. 
-  El despacho es un cobro contra entrega (COD) y sólo se admiten pagos en efectivo. Por favor, ten listo el monto ${args[3]} en efectivo para pagar al recibirlo. Una vez confirmado el despacho puedes buscar tu pedido con el siguiente número en Shopify: ${args[4]}, dónde podrás también obtener el número de seguimiento.
+  Le agradeceríamos que respondiera "Confirmado" para que podamos enviar su producto de inmediato y enviarlo a la dirección ${args[2]}. 
+  Los envíos son contra reembolso (COD) y solo se acepta pago en efectivo. Tenga efectivo por la cantidad de ${args[3]} listo para pagar cuando lo reciba. El tiempo de entrega es de 3-7 días.
+  Después de confirmar el envío, si tiene alguna pregunta, puede usar la referencia: ${args[4]}, para comunicarse con service@mxwahaha.com. Este mensaje es solo para sus registros, si acepta la entrega, no utilizaremos esta ruta para el servicio al cliente.
 
-  El tiempo de entrega es de 3-7 días naturales. 
-
-  Te deseamos un feliz día!
+  ¡Que tengas un buen día!
 
   PD: Recuerda que puedes contactar directamente al vendedor y disfrutar de tu garantía de por vida.
   `
