@@ -104,7 +104,10 @@ class ConversationsController < ApplicationController
     page = url_params['page'].is_a?(Array) ? url_params['page']&.first : url_params['page']
     # we grab the messages from the db again
     # so that the view can be refreshed correctly
-    @conversation = Conversation.includes(:messages).find(@conversation.id)
+    date_init = DateTime.parse(date)
+    at_end_of_day = date_init.at_end_of_day()
+    # @conversation = Conversation.includes(:messages).find(@conversation.id)
+    @conversation = Conversation.includes(:messages).where({ id: @conversation.id, latest_message_sent_at:(date_init)..at_end_of_day })
 
     @conversation.broadcast_replace(locals: { date: date, q: q, tz: @tz, page: page, sort: sort })
 
