@@ -106,8 +106,8 @@ class ConversationsController < ApplicationController
     # so that the view can be refreshed correctly
     date_init = DateTime.parse(date)
     at_end_of_day = date_init.at_end_of_day()
-    # @conversation = Conversation.includes(:messages).find(@conversation.id)
-    @conversation = Conversation.includes(:messages).where({ id: @conversation.id, messages.sent_at:(date_init)..at_end_of_day }).references(:messages)
+    @conversation = Conversation.includes(:messages).find(@conversation.id)
+    #@conversation = Conversation.includes(:messages).where({ id: @conversation.id, messages.sent_at:(date_init)..at_end_of_day }).references(:messages)
 
     @conversation.broadcast_replace(locals: { date: date, q: q, tz: @tz, page: page, sort: sort })
 
