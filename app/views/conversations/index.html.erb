@@ -21,7 +21,6 @@
         <p>There is only one page</p>
       <% else %>
         <div class='flex flex-wrap'>
-        <%= paginate @conversations_paginate %>
           <% (1..@page_count).each do |page_number| %>
             <span class='mr-2 page cursor-pointer <%= @page == page_number ? 'font-bold' : '' %>' >
               <%= form_with url: conversations_path, method: :get, data: { turbo_frame: "conversations-turbo-frame", turbo_action: "advance" } do |form| %>

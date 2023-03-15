@@ -41,7 +41,6 @@ class ConversationsController < ApplicationController
 
     
     @conversations = conversation_query.limit(@per).offset((@page - 1) * @per)
-    @conversations_paginate = kaminari.paginate_array(conversation_query).page(params[:page]).per(5)
     @total_count = conversation_query.count
     @page_count = (@total_count / @per) + 1
   end

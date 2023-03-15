@@ -49,8 +49,6 @@ gem 'csv', '~> 3.0'
 
 gem 'mechanize', '~> 2.8'
 gem 'rexml', '~> 3.2', '>= 3.2.4'
-gem 'kaminari', '~> 0.17.0'
-
 # Use Sass to process CSS
 # gem "sassc-rails"
 
