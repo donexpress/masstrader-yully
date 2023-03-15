@@ -20,7 +20,7 @@ class ConversationsController < ApplicationController
     # https://bhserna.com/query-date-ranges-rails-active-record.html
     if @date.present?
       start_datetime = DateTime.parse(@date)
-      end_datetime = start_datetime + 1.days
+      end_datetime = start_datetime.at_end_of_day()
       start_utc_offset = Time.parse(start_datetime.to_date.to_s).in_time_zone(@tz).utc_offset
       end_utc_offset = Time.parse(end_datetime.to_date.to_s).in_time_zone(@tz).utc_offset
       shifted_start_datetime = start_datetime - start_utc_offset.seconds
