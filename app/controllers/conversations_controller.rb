@@ -27,7 +27,7 @@ class ConversationsController < ApplicationController
       shifted_end_datetime = end_datetime - end_utc_offset.seconds
       Rails.logger.info shifted_start_datetime
       Rails.logger.info shifted_end_datetime
-      conversation_query = conversation_query.where('first_message_dispatched_at BETWEEN ? AND ?', shifted_start_datetime, shifted_end_datetime)
+      conversation_query = conversation_query.where('latest_message_sent_at BETWEEN ? AND ?', shifted_start_datetime, shifted_end_datetime)
     end
 
     conversation_query =
@@ -107,7 +107,6 @@ class ConversationsController < ApplicationController
     date_init = DateTime.parse(date)
     at_end_of_day = date_init.at_end_of_day()
     @conversation = Conversation.includes(:messages).find(@conversation.id)
-    #@conversation = Conversation.includes(:messages).where({ id: @conversation.id, messages.sent_at:(date_init)..at_end_of_day }).references(:messages)
 
     @conversation.broadcast_replace(locals: { date: date, q: q, tz: @tz, page: page, sort: sort })
 
