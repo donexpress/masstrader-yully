@@ -27,21 +27,47 @@ class ConversationsController < ApplicationController
       shifted_end_datetime = end_datetime - end_utc_offset.seconds
       Rails.logger.info shifted_start_datetime
       Rails.logger.info shifted_end_datetime
+      puts("------------------DATES--------------------")
+      puts(shifted_start_datetime)
+      puts(shifted_end_datetime)
       conversation_query = conversation_query.where('latest_message_sent_at BETWEEN ? AND ?', shifted_start_datetime, shifted_end_datetime)
     end
-      conversation_query =
+    conversation_query = conversation_query.select("*")
+    conversation_query =
         if @sort == 'keyword_asc'
-          unnesting_arr = Conversation.select('distinct on(conversations.id) id', 'unnest(conversations.keywords)')
-          unnesting_arr = unnesting_arr.order(Arel.sql("id, unnest DESC"))
-          conversation_query = conversation_query.joins("join (#{unnesting_arr.to_sql}) as c1 on conversations.id = c1.id")
-          conversation_query = conversation_query.select("*")
-          conversation_query.order(Arel.sql("unnest ASC NULLS LAST"))
+          if @q.present?
+            unnesting_arr = Conversation.select('distinct on (conversations.id) id', 'unnest(conversations.keywords)')
+            unnesting_arr = unnesting_arr.order(Arel.sql("id, unnest DESC NULLS LAST"))
+            conversation_query = conversation_query.joins("join (#{unnesting_arr.to_sql}) as c1 on conversations.id = c1.id")
+            conversation_query = conversation_query.order(Arel.sql("unnest ASC NULLS LAST"))
+          else
+            if !@date.present?
+              unnesting_arr = Conversation.select('conversations.id', 'unnest(conversations.keywords)')
+              conversation_query = conversation_query.joins("join (#{unnesting_arr.to_sql}) as c1 on conversations.id = c1.id")
+              conversation_query = conversation_query.order(Arel.sql("unnest ASC NULLS LAST"))
+            end
+          end
+          if !@q.present? && @date.present?
+            conversation_query.order('latest_message_sent_at DESC NULLS LAST')
+          end
+          conversation_query
         elsif @sort == 'keyword_desc'
-          unnesting_arr = Conversation.select('distinct on(conversations.id) id', 'unnest(conversations.keywords)')
-          unnesting_arr = unnesting_arr.order(Arel.sql("id, unnest DESC"))
-          conversation_query = conversation_query.joins("join (#{unnesting_arr.to_sql}) as c1 on conversations.id = c1.id")
-          conversation_query = conversation_query.select("*")
-          conversation_query.order(Arel.sql("unnest DESC NULLS LAST"))
+          if @q.present?
+            unnesting_arr = Conversation.select('distinct on (conversations.id) id', 'unnest(conversations.keywords)')
+            unnesting_arr = unnesting_arr.order(Arel.sql("id, unnest DESC NULLS LAST"))
+            conversation_query = conversation_query.joins("join (#{unnesting_arr.to_sql}) as c1 on conversations.id = c1.id")
+            conversation_query = conversation_query.order(Arel.sql("unnest DESC NULLS LAST"))
+          else
+            if !@date.present?
+              unnesting_arr = Conversation.select('conversations.id', 'unnest(conversations.keywords)')
+              conversation_query = conversation_query.joins("join (#{unnesting_arr.to_sql}) as c1 on conversations.id = c1.id")
+              conversation_query = conversation_query.order(Arel.sql("unnest DESC NULLS LAST"))
+            end
+          end
+          if !@q.present? && @date.present?
+            conversation_query.order('latest_message_sent_at DESC NULLS LAST')
+          end
+          conversation_query
         else
           conversation_query.order('latest_message_sent_at DESC NULLS LAST')
         end
