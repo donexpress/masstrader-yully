@@ -32,7 +32,7 @@ class ConversationsController < ApplicationController
       conversation_query =
         if @sort == 'keyword_asc'
           unnesting_arr = Conversation.select('distinct on(conversations.id) id', 'unnest(conversations.keywords)')
-          unnesting_arr = unnesting_arr.order(Arel.sql("id, unnest DESC"))
+          unnesting_arr = unnesting_arr.order(Arel.sql("id, unnest ASC"))
           conversation_query = conversation_query.joins("join (#{unnesting_arr.to_sql}) as c1 on conversations.id = c1.id")
           conversation_query = conversation_query.select("*")
           conversation_query.order(Arel.sql("unnest ASC NULLS LAST"))
