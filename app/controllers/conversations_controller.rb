@@ -46,11 +46,10 @@ class ConversationsController < ApplicationController
           conversation_query.order('latest_message_sent_at DESC NULLS LAST')
         end
 
-      
-      @conversations = conversation_query.limit(@per).offset((@page - 1) * @per)
-      @total_count = conversation_query.count
-      @page_count = (@total_count / @per) + 1
-    # end
+    
+    @conversations = conversation_query.limit(@per).offset((@page - 1) * @per)
+    @total_count = conversation_query.count
+    @page_count = (@total_count / @per) + 1
   end
 
   # GET /conversations/1 or /conversations/1.json
