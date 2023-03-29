@@ -34,6 +34,7 @@ class ConversationsController < ApplicationController
           unnesting_arr = Conversation.select('conversations.id', 'unnest(conversations.keywords)').to_sql
           conversation_query = conversation_query.joins("join (#{unnesting_arr}) as c1 on conversations.id = c1.id")
           conversation_query = conversation_query.select("*")
+          Rails.logger.info conversation_query
           conversation_query = conversation_query.where(":keywords = ANY (keywords)", keywords: @q)
           conversation_query.order(Arel.sql("unnest ASC NULLS LAST"))
         elsif @sort == 'keyword_desc'
