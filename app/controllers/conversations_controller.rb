@@ -15,6 +15,7 @@ class ConversationsController < ApplicationController
       conversation_query = conversation_query
                   .where('client_phone_number LIKE ?', "%#{@q}%").or(
         Conversation.where(":keywords = ANY (keywords)", keywords: @q))
+      conversation_query = conversation_query.select(":keywords").uniq
     end
 
     # https://bhserna.com/query-date-ranges-rails-active-record.html
@@ -29,15 +30,20 @@ class ConversationsController < ApplicationController
       Rails.logger.info shifted_end_datetime
       conversation_query = conversation_query.where('latest_message_sent_at BETWEEN ? AND ?', shifted_start_datetime, shifted_end_datetime)
     end
-
-    conversation_query =
-      if @sort == 'keyword_asc'
-        conversation_query.order(Arel.sql("NULLIF(keywords, '{}') ASC NULLS LAST"))
-      elsif @sort == 'keyword_desc'
-        conversation_query.order(Arel.sql("NULLIF(keywords, '{}') DESC NULLS LAST"))
-      else
-        conversation_query.order('latest_message_sent_at DESC NULLS LAST')
-      end
+      conversation_query =
+        if @sort == 'keyword_asc'
+          unnesting_arr = Conversation.select('conversations.id', 'unnest(conversations.keywords)').to_sql
+          conversation_query = conversation_query.joins("join (#{unnesting_arr}) as c1 on conversations.id = c1.id")
+          conversation_query = conversation_query.select("*")
+          conversation_query.order(Arel.sql("unnest ASC NULLS LAST"))
+        elsif @sort == 'keyword_desc'
+          unnesting_arr = Conversation.select('conversations.id', 'unnest(conversations.keywords)').to_sql
+          conversation_query = conversation_query.joins("join (#{unnesting_arr}) as c1 on conversations.id = c1.id")
+          conversation_query = conversation_query.select("*")
+          conversation_query.order(Arel.sql("unnest DESC NULLS LAST"))
+        else
+          conversation_query.order('latest_message_sent_at DESC NULLS LAST')
+        end
 
     
     @conversations = conversation_query.limit(@per).offset((@page - 1) * @per)
