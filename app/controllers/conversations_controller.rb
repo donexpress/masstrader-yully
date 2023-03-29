@@ -15,7 +15,6 @@ class ConversationsController < ApplicationController
       conversation_query = conversation_query
                   .where('client_phone_number LIKE ?', "%#{@q}%").or(
         Conversation.where(":keywords = ANY (keywords)", keywords: @q))
-      #conversation_query = conversation_query.select(":keywords").uniq
     end
 
     # https://bhserna.com/query-date-ranges-rails-active-record.html
@@ -39,7 +38,7 @@ class ConversationsController < ApplicationController
         elsif @sort == 'keyword_desc'
           unnesting_arr = Conversation.select('conversations.id', 'unnest(conversations.keywords)').to_sql
           conversation_query = conversation_query.joins("join (#{unnesting_arr}) as c1 on conversations.id = c1.id")
-          conversation_query = conversation_query.select("*")
+          conversation_query = conversation_query.select("*").uniq
           conversation_query.order(Arel.sql("unnest DESC NULLS LAST"))
         else
           conversation_query.order('latest_message_sent_at DESC NULLS LAST')
