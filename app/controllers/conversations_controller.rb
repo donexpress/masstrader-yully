@@ -15,7 +15,7 @@ class ConversationsController < ApplicationController
       conversation_query = conversation_query
                   .where('client_phone_number LIKE ?', "%#{@q}%").or(
         Conversation.where(":keywords = ANY (keywords)", keywords: @q))
-      conversation_query = conversation_query.select(":keywords").uniq
+      #conversation_query = conversation_query.select(":keywords").uniq
     end
 
     # https://bhserna.com/query-date-ranges-rails-active-record.html
