@@ -1,16 +1,16 @@
 wb = xlsx_package.workbook
-head = ["Keyword"]
+head = ["Keyword", "Phone number"]
 rows = []
 @items.each do |item|
   item.messages.each do |message|
-    head.append(DateTime.parse(message.delivered_at))
+    head.append(message.delivered_at)
   end
 end
 wb.add_worksheet(name: "Conversations") do |sheet|
   # Create the header row
   sheet.add_row head
   @items.each do |item|
-    row = [item.keywords.last]
+    row = [item.keywords.last, item.client_phone_number]
     item.messages.each do |message|
       row.append(message.body)
     end

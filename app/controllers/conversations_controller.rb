@@ -145,9 +145,12 @@ class ConversationsController < ApplicationController
     @date = params[:date]
     if !@date.present?
       @date = DateTime.now
+      start_datetime = @date
+    else 
+      start_datetime = DateTime.parse(@date)
     end
+
     conversation_query = Conversation.includes(:messages)
-    start_datetime = DateTime.parse(@date)
     end_datetime = start_datetime.at_end_of_day()
     start_utc_offset = Time.parse(start_datetime.to_date.to_s).in_time_zone('America/Mexico_City').utc_offset
     end_utc_offset = Time.parse(end_datetime.to_date.to_s).in_time_zone('America/Mexico_City').utc_offset
