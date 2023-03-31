@@ -21,12 +21,13 @@ class ConversationsController < ApplicationController
     if @date.present?
       start_datetime = DateTime.parse(@date)
       end_datetime = start_datetime.at_end_of_day()
-      start_utc_offset = Time.parse(start_datetime.to_date.to_s).in_time_zone(@tz).utc_offset
-      end_utc_offset = Time.parse(end_datetime.to_date.to_s).in_time_zone(@tz).utc_offset
+      start_utc_offset = Time.parse(start_datetime.to_date.to_s).in_time_zone('America/Mexico_City').utc_offset
+      end_utc_offset = Time.parse(end_datetime.to_date.to_s).in_time_zone('America/Mexico_City').utc_offset
       shifted_start_datetime = start_datetime - start_utc_offset.seconds
       shifted_end_datetime = end_datetime - end_utc_offset.seconds
       Rails.logger.info shifted_start_datetime
       Rails.logger.info shifted_end_datetime
+      # puts(@tz)
       conversation_query = conversation_query.where('latest_message_sent_at BETWEEN ? AND ?', shifted_start_datetime, shifted_end_datetime)
     end
     conversation_query = conversation_query.select("*")
@@ -124,7 +125,8 @@ class ConversationsController < ApplicationController
     at_end_of_day = date_init.at_end_of_day()
     @conversation = Conversation.includes(:messages).find(@conversation.id)
 
-    @conversation.broadcast_replace(locals: { date: date, q: q, tz: @tz, page: page, sort: sort })
+    # @conversation.broadcast_replace(locals: { date: date, q: q, tz: @tz, page: page, sort: sort })
+    @conversation.broadcast_replace(locals: { date: date, q: q, tz: 'America/Mexico_City', page: page, sort: sort })
 
     head :ok
   end
