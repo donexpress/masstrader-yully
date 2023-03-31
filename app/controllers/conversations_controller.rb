@@ -141,6 +141,33 @@ class ConversationsController < ApplicationController
     end
   end
 
+  def export_excel
+    @date = params[:date]
+    if !@date.present?
+      @date = DateTime.now
+    end
+    conversation_query = Conversation.includes(:messages)
+    start_datetime = DateTime.parse(@date)
+    end_datetime = start_datetime.at_end_of_day()
+    start_utc_offset = Time.parse(start_datetime.to_date.to_s).in_time_zone('America/Mexico_City').utc_offset
+    end_utc_offset = Time.parse(end_datetime.to_date.to_s).in_time_zone('America/Mexico_City').utc_offset
+    shifted_start_datetime = start_datetime - start_utc_offset.seconds
+    shifted_end_datetime = end_datetime - end_utc_offset.seconds
+    Rails.logger.info shifted_start_datetime
+    Rails.logger.info shifted_end_datetime
+    # puts(@tz)
+    conversation_query = conversation_query.where('latest_message_sent_at BETWEEN ? AND ?', shifted_start_datetime, shifted_end_datetime)
+    @items = conversation_query.all
+    respond_to do |format|
+      format.xlsx {
+        response.headers[
+          'Content-Disposition'
+        ] = "attachment; filename=conversations-#{@date}.xlsx"
+      }
+      format.html { render :index }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_conversation

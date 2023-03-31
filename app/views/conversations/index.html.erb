@@ -4,7 +4,8 @@
 
   <div class='flex'>
     <%= link_to "+ Bulk", new_message_path, class: 'p-2 bg-teal-500 rounded-md text-slate-50 mr-2' %>
-    <%= link_to "+ Conversation", new_conversation_path, class: 'p-2 bg-teal-500 rounded-md text-slate-50' %>
+    <%= link_to "+ Conversation", new_conversation_path, class: 'p-2 bg-teal-500 rounded-md text-slate-50 mr-2' %>
+    <%= link_to "Download as Excel", export_excel_path(format: :xlsx, date: params[:date]), class: 'p-2 bg-teal-500 rounded-md text-slate-50' %>
   </div>
 </div>
 
