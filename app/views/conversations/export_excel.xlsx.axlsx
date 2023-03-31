@@ -1,0 +1,25 @@
+wb = xlsx_package.workbook
+head = ["Keyword"]
+rows = []
+@items.each do |item|
+  item.messages.each do |message|
+    head.append(DateTime.parse(message.delivered_at))
+  end
+end
+wb.add_worksheet(name: "Conversations") do |sheet|
+  # Create the header row
+  sheet.add_row head
+  @items.each do |item|
+    row = [item.keywords.last]
+    item.messages.each do |message|
+      row.append(message.body)
+    end
+    sheet.add_row row 
+
+  end
+  
+  # Create entries for each item
+#  @items.each do |item|
+ #   sheet.add_row [item.name, item.quantity]
+ # end
+end
