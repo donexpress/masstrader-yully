@@ -34,7 +34,7 @@
       <%= conversation.messages.last.body %>
       </strong>
       at
-      <%= conversation.messages.last.sent_at&.in_time_zone(tz) %>
+      <%= conversation.messages.last.sent_at&.in_time_zone('America/Mexico_City') %>
     </p>
   <% end %>
 
@@ -42,7 +42,7 @@
     <% if conversation.messages.select(&:outgoing?).empty? %>
       No outgoing message sent yet
     <% else %>
-      First message sent at: <%= conversation.first_message_dispatched_at&.in_time_zone(tz) %>
+      First message sent at: <%= conversation.first_message_dispatched_at&.in_time_zone('America/Mexico_City') %>
     <% end %>
   </p>
 </div>

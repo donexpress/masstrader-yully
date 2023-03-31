@@ -40,7 +40,7 @@
   <p class='text-center'>Total Records: <strong><%= @total_count %></strong> - Current Page: <strong><%= @page %></strong> - Total Pages: <strong><%= @page_count %></strong></p>
   <div id="conversations">
     <% @conversations.each do |conversation| %>
-      <%= render conversation, date: @date, q: @q, tz: @tz, page: @page, sort: @sort %>
+      <%= render conversation, date: @date, q: @q, tz: "America/Mexico_City", page: @page, sort: @sort %>
     <% end %>
   </div>
 <% end %>

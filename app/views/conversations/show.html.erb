@@ -8,7 +8,7 @@
 
   <% @conversation.messages.each do |message| %>
     <% if !message.new_record? %>
-      <%= render message, tz: @tz %>
+      <%= render message, tz: 'America/Mexico_City' %>
     <% end %>
   <% end %>
 </div>

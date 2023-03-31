@@ -12,12 +12,12 @@
     <%= message.body %>
   </p>
   <p class='text-sm text-slate-700'>
-    Sent at: <%= message.sent_at&.in_time_zone(tz) %>
+    Sent at: <%= message.sent_at&.in_time_zone('America/Mexico_City') %>
   </p>
 
   <% if message.outgoing %>
     <p class='text-sm text-slate-700'>
-      Delivered at: <%= message.delivered_at&.in_time_zone(tz) %>
+      Delivered at: <%= message.delivered_at&.in_time_zone('America/Mexico_City') %>
     </p>
   <% end %>
 </div>
