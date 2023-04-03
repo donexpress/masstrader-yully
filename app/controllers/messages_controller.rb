@@ -24,6 +24,7 @@ class MessagesController < ApplicationController
     @message_type = message_params[:message_type]
 
     csv_file = params[:message][:csv_file]
+    puts '-----------CSV FILE----------------'
     if csv_file.present?
       begin
         csv_rows = CSV.read(csv_file)
@@ -37,8 +38,21 @@ class MessagesController < ApplicationController
         end
       end
       csv_rows.shift # remove headers - unorthodox but whatever
+      data = []
+      csv_rows.each do |r|
+        attributes = {}
+        r.each_with_index do |value, index|
+          if index == 1
+            if !value.nil? && value.strip.start_with?("569") && value.strip.length != 11
+              data.append(value);
+            elsif !value.nil? && value.strip.start_with?("52") && value.strip.length != 12
+              data.append(value);
+            end           
+          end
+        end
+      end
       @messages = Message.new(message_params).from_csv_rows(csv_rows)
-      bulk_create
+      bulk_create(data)
     else
       single_create
     end
@@ -103,7 +117,7 @@ class MessagesController < ApplicationController
       end
     end
 
-    def bulk_create
+    def bulk_create(phones)
       # we discard invalid messages for now
       messages = @messages
       messages.each do |message|
@@ -146,15 +160,17 @@ class MessagesController < ApplicationController
 
       # refactor candidate
 
-      # if valid_csv?
+      if phones.length == 0
       respond_to do |format|
         format.html { redirect_to conversations_url, notice: "Messages were successfully created." }
         format.json { render :show, status: :created, location: @message }
       end
-      # else
-      #   format.html { render 'conversations/show', status: :unprocessable_entity }
-      #   format.json { render json: @message.errors, status: :unprocessable_entity }
-      # end
+      else
+        respond_to do |format|
+          format.html { redirect_to conversations_url, error: "This phone numbers may not have been sent a message #{phones.join(", ")}" }
+          format.json { render :show, status: :created, location: @message }
+        end
+      end
     end
 
     # Use callbacks to share common setup or constraints between actions.
