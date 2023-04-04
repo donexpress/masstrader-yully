@@ -14,13 +14,13 @@ wb.add_worksheet(name: "Conversations") do |sheet|
   # Create the header row
   sheet.add_row head
   sheet.row_style 0, head_style
-  
   sheet.add_row [], :style => black_border
   @items.each do |item|
     row = [item.keywords.last, item.client_phone_number]
     item.messages.each do |message|
       row.append(message.body)
     end
+    row.append(" ")
     sheet.add_row row
   end
   
