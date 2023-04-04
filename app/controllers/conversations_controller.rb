@@ -4,6 +4,19 @@ class ConversationsController < ApplicationController
 
   # GET /conversations or /conversations.json
   def index
+    conversations = Conversation.includes(:messages).all
+    conversations.each do |conversation|
+      lastmsg = nil
+      conversation.messages.each do |message|
+        if message.outgoing
+          lastmsg = message.sent_at
+        end
+      end
+      conversation.update_column(:latest_outgoing_sent_at, lastmsg)
+
+    end
+
+
     @page = params[:page].to_i > 0 ? params[:page].to_i : 1
     @per = 20
     @q = params[:q]
@@ -28,7 +41,7 @@ class ConversationsController < ApplicationController
       Rails.logger.info shifted_start_datetime
       Rails.logger.info shifted_end_datetime
       # puts(@tz)
-      conversation_query = conversation_query.where('latest_message_sent_at BETWEEN ? AND ?', shifted_start_datetime, shifted_end_datetime)
+      conversation_query = conversation_query.where('latest_outgoing_sent_at BETWEEN ? AND ?', shifted_start_datetime, shifted_end_datetime)
     end
     conversation_query = conversation_query.select("*")
     conversation_query =

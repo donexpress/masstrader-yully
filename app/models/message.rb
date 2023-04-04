@@ -104,7 +104,9 @@ class Message < ApplicationRecord
 
   def update_conversation_timestamps
     conversation.update_column(:latest_message_sent_at, DateTime.now)
-
+    if outgoing?
+      conversation.update_column(:latest_outgoing_sent_at, DateTime.now)
+    end
     if outgoing? && conversation.first_message_dispatched_at.nil?
       conversation.update_column(:first_message_dispatched_at, DateTime.now)
     end

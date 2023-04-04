@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_09_203458) do
+ActiveRecord::Schema[7.0].define(version: 202304041146911) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,12 +22,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_09_203458) do
     t.datetime "updated_at", null: false
     t.string "keywords", default: [], array: true
     t.datetime "first_message_dispatched_at", precision: nil
+    t.datetime "latest_outgoing_sent_at", precision: nil
     t.index ["client_phone_number", "business_phone_number"], name: "index_conversations_phone_pair_unique", unique: true
     t.index ["client_phone_number", "first_message_dispatched_at"], name: "first_msg_dispatch_client_number_idx_context"
     t.index ["client_phone_number"], name: "index_conversations_on_client_phone_number"
     t.index ["keywords", "first_message_dispatched_at"], name: "first_msg_dispatch_keywords_idx_content"
     t.index ["keywords"], name: "index_conversations_on_keywords"
     t.index ["latest_message_sent_at"], name: "index_conversations_on_latest_message_sent_at"
+    t.index ["latest_outgoing_sent_at"], name: "index_conversations_on_latest_outgoing_sent_at"
   end
 
   create_table "fb_events", force: :cascade do |t|
