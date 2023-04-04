@@ -42,7 +42,7 @@ class MessagesController < ApplicationController
       csv_rows.each do |r|
         attributes = {}
         r.each_with_index do |value, index|
-          if index == 1
+          if index == 0
             if !value.nil? && value.strip.start_with?("569") && value.strip.length != 11
               data.append(value);
             elsif !value.nil? && value.strip.start_with?("52") && value.strip.length != 12
