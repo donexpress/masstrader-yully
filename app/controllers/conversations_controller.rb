@@ -4,17 +4,17 @@ class ConversationsController < ApplicationController
 
   # GET /conversations or /conversations.json
   def index
-    conversations = Conversation.includes(:messages).all
-    conversations.each do |conversation|
-      lastmsg = nil
-      conversation.messages.each do |message|
-        if message.outgoing
-          lastmsg = message.sent_at
-        end
-      end
-      conversation.update_column(:latest_outgoing_sent_at, lastmsg)
+    # conversations = Conversation.includes(:messages).all
+    # conversations.each do |conversation|
+    #   lastmsg = nil
+    #   conversation.messages.each do |message|
+    #     if message.outgoing
+    #       lastmsg = message.sent_at
+    #     end
+    #   end
+    #   conversation.update_column(:latest_outgoing_sent_at, lastmsg)
 
-    end
+    # end
 
 
     @page = params[:page].to_i > 0 ? params[:page].to_i : 1
