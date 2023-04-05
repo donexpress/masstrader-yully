@@ -178,12 +178,14 @@ class ConversationsController < ApplicationController
     conversation_query = conversation_query.select("*")
     conversation_query =
         if @sort == 'keyword_asc'          
-          unnesting_arr = Conversation.select('conversations.id', 'unnest(conversations.keywords)')
+          unnesting_arr = Conversation.select('distinct on (conversations.id) id', 'unnest(conversations.keywords)')
+          unnesting_arr = unnesting_arr.order(Arel.sql("id, unnest DESC NULLS LAST"))
           conversation_query = conversation_query.joins("join (#{unnesting_arr.to_sql}) as c1 on conversations.id = c1.id")
           conversation_query = conversation_query.order(Arel.sql("unnest ASC NULLS LAST"))
 
         elsif @sort == 'keyword_desc'
-          unnesting_arr = Conversation.select('conversations.id', 'unnest(conversations.keywords)')
+          unnesting_arr = Conversation.select('distinct on (conversations.id) id', 'unnest(conversations.keywords)')
+          unnesting_arr = unnesting_arr.order(Arel.sql("id, unnest DESC NULLS LAST"))
           conversation_query = conversation_query.joins("join (#{unnesting_arr.to_sql}) as c1 on conversations.id = c1.id")
           conversation_query = conversation_query.order(Arel.sql("unnest DESC NULLS LAST"))
         else
