@@ -156,6 +156,7 @@ class ConversationsController < ApplicationController
 
   def export_excel
     @date = params[:date]
+    @sort = params[:sort]
     if !@date.present?
       @date = DateTime.now
       start_datetime = @date
