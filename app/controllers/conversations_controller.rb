@@ -189,7 +189,7 @@ class ConversationsController < ApplicationController
           conversation_query = conversation_query.joins("join (#{unnesting_arr.to_sql}) as c1 on conversations.id = c1.id")
           conversation_query = conversation_query.order(Arel.sql("unnest DESC NULLS LAST"))
         else
-          conversation_query.order('latest_message_sent_at DESC NULLS LAST')
+          conversation_query.order('latest_outgoing_sent_at DESC NULLS LAST')
         end
     @items = conversation_query.all
     respond_to do |format|
