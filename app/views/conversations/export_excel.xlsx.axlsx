@@ -1,3 +1,28 @@
+def getKeywordFromMessage(message)
+  arr = message.body.split(",");
+  arr.last
+end
+
+def checkMessageDate(message)
+  start_datetime = DateTime.parse(@date)
+  end_datetime = start_datetime.at_end_of_day()
+  if(message && message.delivered_at)
+    start_datetime < message.delivered_at && message.delivered_at < end_datetime
+  else
+    true
+  end
+end
+
+def restOfMessages(messages, firstIndex)
+  rest = []
+  messages.each_with_index do |message, index|
+    if index > firstIndex && !message.body.start_with?("cod_")
+      rest.append(message.body)
+    end
+  end
+  rest
+end
+
 wb = xlsx_package.workbook
 head_style = wb.styles.add_style bg_color: "DDDDDD",  b: true
 wb.use_autowidth = false
@@ -14,15 +39,26 @@ wb.add_worksheet(name: "Conversations") do |sheet|
   sheet.row_style 0, head_style
   widths = [20,20]
   @items.each do |item|
-    row = [item.keywords.last, item.client_phone_number]
-    item.messages.each do |message|
-      row.append(message.body)
-      if(row.size > widths.size)
-        widths.append(40)
+    # row = [item.keywords.last, item.client_phone_number]
+    row = []
+    item.messages.each_with_index do |message, index|
+      if checkMessageDate(message)
+        row.append(getKeywordFromMessage(message))
+        row.append(item.client_phone_number)
+        row.append(message.body)
+        restOfMessages(item.messages, index).each do |el|
+          row.append(el)
+        end
+        if(row.size > widths.size)
+          widths.append(40)
+        end
+        if row.size > 0
+          row.append(" ")
+          sheet.add_row row
+          row = []
+        end
       end
     end
-    row.append(" ")
-    sheet.add_row row
   end
   sheet.column_widths(*widths)
   # Create entries for each item
