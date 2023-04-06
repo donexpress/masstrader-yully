@@ -173,7 +173,7 @@ class ConversationsController < ApplicationController
     Rails.logger.info shifted_start_datetime
     Rails.logger.info shifted_end_datetime
     # puts(@tz)
-    conversation_query = conversation_query.where('latest_message_sent_at BETWEEN ? AND ?', shifted_start_datetime, shifted_end_datetime)
+    conversation_query = conversation_query.where('latest_outgoing_sent_at BETWEEN ? AND ?', shifted_start_datetime, shifted_end_datetime)
 
     conversation_query = conversation_query.select("*")
     conversation_query =
@@ -189,7 +189,7 @@ class ConversationsController < ApplicationController
           conversation_query = conversation_query.joins("join (#{unnesting_arr.to_sql}) as c1 on conversations.id = c1.id")
           conversation_query = conversation_query.order(Arel.sql("unnest DESC NULLS LAST"))
         else
-          conversation_query.order('latest_outgoing_sent_at DESC NULLS LAST')
+          conversation_query.order('latest_message_sent_at DESC NULLS LAST')
         end
     @items = conversation_query.all
     respond_to do |format|

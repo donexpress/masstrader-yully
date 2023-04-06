@@ -15,9 +15,12 @@ end
 
 def restOfMessages(messages, firstIndex)
   rest = []
+  continue = true;
   messages.each_with_index do |message, index|
-    if index > firstIndex && !message.body.start_with?("cod_")
+    if index > firstIndex && !message.body.start_with?("cod_") && continue
       rest.append(message.body)
+    elsif index > firstIndex && message.body.start_with?("cod_")
+      continue = false
     end
   end
   rest
