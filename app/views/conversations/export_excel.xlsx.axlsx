@@ -9,7 +9,7 @@ def checkMessageDate(message)
   if(message && message.delivered_at)
     start_datetime < message.delivered_at && message.delivered_at < end_datetime
   else
-    true
+    false
   end
 end
 
