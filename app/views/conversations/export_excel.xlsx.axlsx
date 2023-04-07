@@ -1,13 +1,25 @@
-def getKeywordFromMessage(message)
-  arr = message.body.split(",");
-  arr.last
+def getKeyword(keywords, messages)
+  key = []
+  start_datetime = DateTime.parse(@date)
+  end_datetime = start_datetime.at_end_of_day()
+  keywords.each do |keyword|
+    messages.each do |message|
+      if(message.body.start_with?("cod_"))
+        cKye = message.body.split(",").last
+        if(cKye == keyword && message && message.sent_at && start_datetime < message.sent_at && message.sent_at < end_datetime)
+          key.append(keyword)
+        end
+      end
+    end
+  end
+  key.join(", ")
 end
 
 def checkMessageDate(message)
   start_datetime = DateTime.parse(@date)
   end_datetime = start_datetime.at_end_of_day()
-  if(message && message.delivered_at)
-    start_datetime < message.delivered_at && message.delivered_at < end_datetime
+  if(message && message.sent_at)
+    start_datetime < message.sent_at && message.sent_at < end_datetime
   else
     false
   end
@@ -31,23 +43,19 @@ head_style = wb.styles.add_style bg_color: "DDDDDD",  b: true
 wb.use_autowidth = false
 head = ["Keyword", "Phone number", @date]
 rows = []
-# @items.each do |item|
-#   item.messages.each do |message|
-#     head.append(message.delivered_at)
-#   end
-# end
+
 wb.add_worksheet(name: "Conversations") do |sheet|
   # Create the header row
   sheet.add_row head
   sheet.row_style 0, head_style
   widths = [20,20]
   @items.each do |item|
-    # row = [item.keywords.last, item.client_phone_number]
-    row = []
+    row = [getKeyword(item.keywords, item.messages), item.client_phone_number]
+    # row = []
     item.messages.each_with_index do |message, index|
       if checkMessageDate(message)
-        row.append(getKeywordFromMessage(message))
-        row.append(item.client_phone_number)
+        # row.append(getKeyword(item.keywords))
+        # row.append(item.client_phone_number)
         row.append(message.body)
         restOfMessages(item.messages, index).each do |el|
           row.append(el)
@@ -55,17 +63,13 @@ wb.add_worksheet(name: "Conversations") do |sheet|
         if(row.size > widths.size)
           widths.append(40)
         end
-        if row.size > 0
-          row.append(" ")
-          sheet.add_row row
-          row = []
-        end
       end
     end
+    # if row.size > 2
+      row.append(" ")
+      sheet.add_row row
+      row = []
+    # end
   end
   sheet.column_widths(*widths)
-  # Create entries for each item
-#  @items.each do |item|
- #   sheet.add_row [item.name, item.quantity]
- # end
 end

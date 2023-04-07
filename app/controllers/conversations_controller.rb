@@ -69,7 +69,13 @@ class ConversationsController < ApplicationController
         end
 
     
-    @conversations = conversation_query.limit(@per).offset((@page - 1) * @per)
+    # @conversations = conversation_query.limit(@per).offset((@page - 1) * @per).all
+    conversations = conversation_query.limit(@per).offset((@page - 1) * @per).all
+    conversations = conversations.each do |conversation|
+      conversation.keywords = getKeyword(conversation.keywords, conversation.messages)
+    end
+
+    @conversations = conversations
     @total_count = conversation_query.count
     @page_count = (@total_count / @per) + 1
   end
@@ -218,5 +224,22 @@ class ConversationsController < ApplicationController
       messages.each do |message|
         message.update(read: true)
       end
+    end
+
+    def getKeyword(keywords, messages)
+      key = []
+      start_datetime = DateTime.parse(@date)
+      end_datetime = start_datetime.at_end_of_day()
+      keywords.each do |keyword|
+        messages.each do |message|
+          if(message.body.start_with?("cod_"))
+            cKye = message.body.split(",").last
+            if(cKye == keyword && message && message.sent_at && start_datetime < message.sent_at && message.sent_at < end_datetime)
+              key.append(keyword)
+            end
+          end
+        end
+      end
+      key
     end
 end

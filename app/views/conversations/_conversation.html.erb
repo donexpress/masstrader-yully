@@ -42,7 +42,12 @@
     <% if conversation.messages.select(&:outgoing?).empty? %>
       No outgoing message sent yet
     <% else %>
-      First message sent at: <%= conversation.first_message_dispatched_at&.in_time_zone('America/Mexico_City') %>
+      <p class='text-slate-50 text-sm'>
+        First message sent at: <%= conversation.first_message_dispatched_at&.in_time_zone('America/Mexico_City') %>
+      </p>
+      <p class='text-slate-50 text-sm'>
+        Last message sent at: <%= conversation.latest_outgoing_sent_at&.in_time_zone('America/Mexico_City') %>
+      </p>
     <% end %>
   </p>
 </div>

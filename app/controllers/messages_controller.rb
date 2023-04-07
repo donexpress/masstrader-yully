@@ -24,7 +24,6 @@ class MessagesController < ApplicationController
     @message_type = message_params[:message_type]
 
     csv_file = params[:message][:csv_file]
-    puts '-----------CSV FILE----------------'
     if csv_file.present?
       begin
         csv_rows = CSV.read(csv_file)
@@ -167,7 +166,7 @@ class MessagesController < ApplicationController
       end
       else
         respond_to do |format|
-          format.html { redirect_to conversations_url, error: "This phone numbers may not have been sent a message #{phones.join(", ")}" }
+          format.html { redirect_to conversations_url, notice: "Messages were successfully created.", error: "This phone numbers may not have been sent a message #{phones.join(", ")}" }
           format.json { render :show, status: :created, location: @message }
         end
       end
