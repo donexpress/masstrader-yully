@@ -68,14 +68,15 @@ class ConversationsController < ApplicationController
           conversation_query.order('latest_message_sent_at DESC NULLS LAST')
         end
 
-    
-    # @conversations = conversation_query.limit(@per).offset((@page - 1) * @per).all
+    if(@date.present?)
     conversations = conversation_query.limit(@per).offset((@page - 1) * @per).all
     conversations = conversations.each do |conversation|
       conversation.keywords = getKeyword(conversation.keywords, conversation.messages)
     end
-
     @conversations = conversations
+  else
+    @conversations = conversation_query.limit(@per).offset((@page - 1) * @per)
+  end
     @total_count = conversation_query.count
     @page_count = (@total_count / @per) + 1
   end
