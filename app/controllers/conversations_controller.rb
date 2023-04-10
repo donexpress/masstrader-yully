@@ -70,10 +70,15 @@ class ConversationsController < ApplicationController
 
     if(@date.present?)
     conversations = conversation_query.limit(@per).offset((@page - 1) * @per).all
-    conversations = conversations.each do |conversation|
+    final_conversation = []
+    conversations = conversations.each_with_index do |conversation, index|
+      older_kywords = conversation.keywords.size
       conversation.keywords = getKeyword(conversation.keywords, conversation.messages)
+      if((index == 0 && older_kywords == conversation.keywords.size) || (index > 0 && older_kywords == conversation.keywords.size) || index > 0 && older_kywords != conversation.keywords.size && checkOrder(conversations[index-1], conversation))
+        final_conversation.append(conversation)
+      end
     end
-    @conversations = conversations
+    @conversations = final_conversation
   else
     @conversations = conversation_query.limit(@per).offset((@page - 1) * @per)
   end
@@ -250,5 +255,18 @@ class ConversationsController < ApplicationController
         end
       end
       key
+    end
+
+    def checkOrder(previous, current)
+      is_correct = false
+
+      previous.keywords.each do |previous_kyword|
+        current.keywords.each do |current_keyword|
+          if(previous_kyword[0...1] == current_keyword[0...1])
+            is_correct = true;
+          end
+        end
+      end
+      is_correct
     end
 end
