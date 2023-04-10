@@ -74,7 +74,7 @@ class ConversationsController < ApplicationController
     conversations = conversations.each_with_index do |conversation, index|
       older_kywords = conversation.keywords.first
       conversation.keywords = getKeyword(conversation.keywords, conversation.messages)
-      if((index == 0 && older_kywords == conversation.keywords.first) || (index > 0 && older_kywords == conversation.keywords.first) || (index > 0 && older_kywords != conversation.keywords.first && checkOrder(conversations[index-1], conversation) && ableToAdd(final_conversation, conversation)))
+      if((index == 0 && older_kywords == conversation.keywords.first) || (index > 0 && older_kywords == conversation.keywords.first) || (index > 0 && older_kywords != conversation.keywords.first && ableToAdd(final_conversation, conversation)))
         final_conversation.append(conversation)
       end
     end
