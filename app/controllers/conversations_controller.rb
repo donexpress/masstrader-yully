@@ -236,7 +236,15 @@ class ConversationsController < ApplicationController
           if(message.body.start_with?("cod_"))
             cKye = message.body.split(",").last
             if(cKye == keyword && message && message.sent_at && start_datetime < message.sent_at && message.sent_at < end_datetime)
-              key.append(keyword)
+              found = false
+              key.each do |added|
+                if(added == keyword)
+                  found = true
+                end
+              end
+              if(!found)
+                key.append(keyword)
+              end
             end
           end
         end
