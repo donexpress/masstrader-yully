@@ -69,19 +69,17 @@ class ConversationsController < ApplicationController
         end
 
     if(@date.present?)
-    conversations = conversation_query.limit(@per).offset((@page - 1) * @per).all
+    conversations = conversation_query.all
     final_conversation = []
     conversations = conversations.each do |conversation|
       conversation.keywords = getKeyword(conversation.keywords, conversation.messages)
     end
-    puts "--------------Begin Data-------------"
     conversations.each do |conversation|
       found = false
       final_conversation.each do |final|
         conversation.keywords.each do |c_keyword|
           final.keywords.each do |f_keyword|
             if(c_keyword == f_keyword)
-              puts c_keyword + " ---- " + f_keyword 
               found = true
             end
           end
@@ -91,7 +89,13 @@ class ConversationsController < ApplicationController
         final_conversation.append(conversation)
       end
     end
-    @conversations = final_conversation
+    page = []
+    final_conversation.each_with_index do |conversation, index|
+      if(index >= (@page - 1) * @per) && index <= ((@page - 1) * @per)+@per
+        page.append(conversation)
+      end
+    end
+    @conversations = page
   else
     @conversations = conversation_query.limit(@per).offset((@page - 1) * @per)
   end
