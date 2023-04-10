@@ -42,9 +42,9 @@ class MessagesController < ApplicationController
         attributes = {}
         r.each_with_index do |value, index|
           if index == 0
-            if !value.nil? && value.strip.start_with?("569") && value.strip.length != 11
+            if !value.nil? && sanitize_phone_number(value.strip.start_with?("569")) && value.strip.length != 11
               data.append(value);
-            elsif !value.nil? && value.strip.start_with?("52") && value.strip.length != 12
+            elsif !value.nil? && sanitize_phone_number(value.strip.start_with?("52")) && value.strip.length != 12
               data.append(value);
             end           
           end
