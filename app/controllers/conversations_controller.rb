@@ -72,9 +72,9 @@ class ConversationsController < ApplicationController
     conversations = conversation_query.limit(@per).offset((@page - 1) * @per).all
     final_conversation = []
     conversations = conversations.each_with_index do |conversation, index|
-      older_kywords = conversation.keywords.size
+      older_kywords = conversation.keywords.first
       conversation.keywords = getKeyword(conversation.keywords, conversation.messages)
-      if((index == 0 && older_kywords == conversation.keywords.size) || (index > 0 && older_kywords == conversation.keywords.size) || index > 0 && older_kywords != conversation.keywords.size && checkOrder(conversations[index-1], conversation))
+      if((index == 0 && older_kywords == conversation.keywords.first) || (index > 0 && older_kywords == conversation.keywords.first) || (index > 0 && older_kywords != conversation.keywords.first && checkOrder(conversations[index-1], conversation) && ableToAdd(final_conversation, conversation)))
         final_conversation.append(conversation)
       end
     end
@@ -268,5 +268,19 @@ class ConversationsController < ApplicationController
         end
       end
       is_correct
+    end
+
+    def ableToAdd(final_conversations, conversation)
+      is_able = true;
+      final_conversations.each do |previous_conversation|
+        previous_conversation.keywords.each do |previous_keyword|
+          conversation.keywords.each do |current_keyword|
+            if(previous_keyword == current_keyword)
+              is_able = false;
+            end
+          end
+        end
+      end
+      is_able
     end
 end
