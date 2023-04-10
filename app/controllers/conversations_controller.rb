@@ -76,7 +76,7 @@ class ConversationsController < ApplicationController
       conversation.keywords = getKeyword(conversation.keywords, conversation.messages)
     end
 
-    conversation.each do |conversation|
+    conversations.each do |conversation|
       found = false
       final_conversation.each do |final|
         conversation.keywords.each do |c_keyword|
