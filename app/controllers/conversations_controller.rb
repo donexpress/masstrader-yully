@@ -72,16 +72,16 @@ class ConversationsController < ApplicationController
     conversations = conversation_query.limit(@per).offset((@page - 1) * @per).all
     final_conversation = []
     conversations = conversations.each do |conversation|
-      older_kywords = conversation.keywords.first
       conversation.keywords = getKeyword(conversation.keywords, conversation.messages)
     end
-
+    puts "--------------Begin Data-------------"
     conversations.each do |conversation|
       found = false
       final_conversation.each do |final|
         conversation.keywords.each do |c_keyword|
           final.keywords.each do |f_keyword|
             if(c_keyword == f_keyword)
+              puts c_keyword + " ---- " + f_keyword 
               found = true
             end
           end
