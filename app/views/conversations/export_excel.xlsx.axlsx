@@ -51,25 +51,17 @@ wb.add_worksheet(name: "Conversations") do |sheet|
   widths = [20,20]
   @items.each do |item|
     row = [getKeyword(item.keywords, item.messages), item.client_phone_number]
-    # row = []
     item.messages.each_with_index do |message, index|
       if checkMessageDate(message)
-        # row.append(getKeyword(item.keywords))
-        # row.append(item.client_phone_number)
         row.append(message.body)
-        restOfMessages(item.messages, index).each do |el|
-          row.append(el)
-        end
         if(row.size > widths.size)
           widths.append(40)
         end
       end
     end
-    # if row.size > 2
       row.append(" ")
       sheet.add_row row
       row = []
-    # end
   end
   sheet.column_widths(*widths)
 end
