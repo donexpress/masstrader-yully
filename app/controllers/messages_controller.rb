@@ -42,9 +42,9 @@ class MessagesController < ApplicationController
         attributes = {}
         r.each_with_index do |value, index|
           if index == 0
-            if !value.nil? && sanitize_phone_number(value.strip.start_with?("569")) && value.strip.length != 11
+            if !value.nil? && sanitize_phone_number(value.strip).start_with?("569") && value.strip.length != 11
               data.append(value);
-            elsif !value.nil? && sanitize_phone_number(value.strip.start_with?("52")) && value.strip.length != 12
+            elsif !value.nil? && sanitize_phone_number(value.strip).start_with?("52") && value.strip.length != 12
               data.append(value);
             end           
           end
@@ -192,5 +192,9 @@ class MessagesController < ApplicationController
       @q = url_params['q'].is_a?(Array) ? url_params['q']&.first : url_params['q']
       @sort = url_params['sort'].is_a?(Array) ? url_params['sort']&.first : url_params['sort']
       @page = url_params['page'].is_a?(Array) ? url_params['page']&.first : url_params['page']
+    end
+
+    def sanitize_phone_number(phone_number)
+      phone_number.gsub(/\D+/, '')
     end
 end

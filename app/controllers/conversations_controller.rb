@@ -253,11 +253,15 @@ class ConversationsController < ApplicationController
       key = []
       start_datetime = DateTime.parse(@date)
       end_datetime = start_datetime.at_end_of_day()
+      start_utc_offset = Time.parse(start_datetime.to_date.to_s).in_time_zone('America/Mexico_City').utc_offset
+      end_utc_offset = Time.parse(end_datetime.to_date.to_s).in_time_zone('America/Mexico_City').utc_offset
+      shifted_start_datetime = start_datetime - start_utc_offset.seconds
+      shifted_end_datetime = end_datetime - end_utc_offset.seconds
       keywords.each do |keyword|
         messages.each do |message|
           if(message.body.start_with?("cod_"))
             cKye = message.body.split(",").last
-            if(cKye == keyword && message && message.sent_at && start_datetime < message.sent_at && message.sent_at < end_datetime)
+            if(cKye == keyword && shifted_start_datetime < message.sent_at && message.sent_at < shifted_end_datetime)
               found = false
               key.each do |added|
                 if(added == keyword)
