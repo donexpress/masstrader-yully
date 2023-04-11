@@ -90,9 +90,9 @@ class ConversationsController < ApplicationController
       end
     end
     if @sort == 'keyword_desc'
-      final_conversation = final_conversation.sort { |a, b| ((a.present? && a.keywords.present?) ? a.keywords.last : "" )<=> ((b.present? && b.keywords.present?) ? b.keywords.last : "" )} .reverse!
+      final_conversation = final_conversation.sort { |a, b| a.keywords.last <=> b.keywords.last } .reverse!
     elsif @sort == 'keyword_asc'
-      final_conversation = final_conversation.sort { |a, b| ((a.present? && a.keywords.present?) ? a.keywords.last : "") <=> ((b.present? && b.keywords.present?) ? b.keywords.last : "" )}.sort
+      final_conversation = final_conversation { |a, b| a.keywords.last <=> b.keywords.last }.sort
     end
     page = []
     final_conversation.each_with_index do |conversation, index|
