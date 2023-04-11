@@ -45,18 +45,18 @@ class MessagesController < ApplicationController
             if !value.nil?
               if sanitize_phone_number(value.strip).start_with?("569")
                 if sanitize_phone_number(value.strip).length != 11
-                  data.append(value);
+                  data.append(sanitize_phone_number(value.strip));
                 end
               elsif sanitize_phone_number(value.strip).start_with?("521")
                 if sanitize_phone_number(value.strip).length != 13
-                  data.append(value);
+                  data.append(sanitize_phone_number(value.strip));
                 end
               elsif sanitize_phone_number(value.strip).start_with?("52")
                 if sanitize_phone_number(value.strip).length != 12
-                  data.append(value);
+                  data.append(sanitize_phone_number(value.strip));
                 end
               else
-                data.append(value);
+                data.append(sanitize_phone_number(value.strip));
               end
             end
                   # if !value.nil? && sanitize_phone_number(value.strip).start_with?("569") && sanitize_phone_number(value.strip).length != 11
