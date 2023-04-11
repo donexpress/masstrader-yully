@@ -225,7 +225,33 @@ class ConversationsController < ApplicationController
         else
           conversation_query.order('latest_message_sent_at DESC NULLS LAST')
         end
-    @items = conversation_query.all
+
+    conversations = conversation_query.all
+    final_conversation = []
+    conversations = conversations.each do |conversation|
+      conversation.keywords = getKeyword(conversation.keywords, conversation.messages)
+    end
+    conversations.each do |conversation|
+      found = false
+      final_conversation.each do |final|
+        conversation.keywords.each do |c_keyword|
+          final.keywords.each do |f_keyword|
+            if(c_keyword == f_keyword)
+              found = true
+            end
+          end
+        end
+      end
+      if !found
+        final_conversation.append(conversation)
+      end
+    end
+    if @sort == 'keyword_desc'
+      final_conversation = final_conversation.sort { |a, b| ((a.present? && a.keywords.present?) ? a.keywords.last : "" )<=> ((b.present? && b.keywords.present?) ? b.keywords.last : "" )} .reverse!
+    elsif @sort == 'keyword_asc'
+      final_conversation = final_conversation.sort { |a, b| ((a.present? && a.keywords.present?) ? a.keywords.last : "") <=> ((b.present? && b.keywords.present?) ? b.keywords.last : "" )}.sort
+    end
+    @items = final_conversation
     respond_to do |format|
       format.xlsx {
         response.headers[

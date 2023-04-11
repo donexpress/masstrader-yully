@@ -68,7 +68,7 @@ wb.add_worksheet(name: "Conversations") do |sheet|
   sheet.row_style 0, head_style
   widths = [20,20]
   @items.each do |item|
-    row = [getKeyword(item.keywords, item.messages), item.client_phone_number]
+    row = [item.keywords.join(", "), item.client_phone_number]
     item.messages.each_with_index do |message, index|
       if checkMessageDate(message)
         row.append(message.body)
