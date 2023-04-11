@@ -42,13 +42,30 @@ class MessagesController < ApplicationController
         attributes = {}
         r.each_with_index do |value, index|
           if index == 0
-            if !value.nil? && sanitize_phone_number(value.strip).start_with?("569") && value.strip.length != 11
-              data.append(value);
-            elsif !value.nil? && (sanitize_phone_number(value.strip).start_with?("52") && value.strip.length != 12 || sanitize_phone_number(value.strip).start_with?("521") && value.strip.length != 13)
-              data.append(value);
-            else
-              data.append(value)
-            end           
+            if !value.nil?
+              if sanitize_phone_number(value.strip).start_with?("569")
+                if sanitize_phone_number(value.strip).length != 11
+                  data.append(value);
+                end
+              elsif sanitize_phone_number(value.strip).start_with?("521")
+                if sanitize_phone_number(value.strip).length != 13
+                  data.append(value);
+                end
+              elsif sanitize_phone_number(value.strip).start_with?("52")
+                if sanitize_phone_number(value.strip).length != 12
+                  data.append(value);
+                end
+              else
+                data.append(value);
+              end
+            end
+                  # if !value.nil? && sanitize_phone_number(value.strip).start_with?("569") && sanitize_phone_number(value.strip).length != 11
+            #   data.append(value);
+            # elsif !value.nil? && (sanitize_phone_number(value.strip).start_with?("52") && sanitize_phone_number(value.strip).length != 12 || sanitize_phone_number(value.strip).start_with?("521") && value.strip.length != 13)
+            #   data.append(value);
+            # else
+            #   data.append(value)
+            # end           
           end
         end
       end
@@ -120,44 +137,44 @@ class MessagesController < ApplicationController
 
     def bulk_create(phones)
       # we discard invalid messages for now
-      messages = @messages
-      messages.each do |message|
-        # can improve this as
-        conversation = Conversation.find_by(client_phone_number: message.client_phone_number)
-        if conversation.nil?
-          new_conversation = Conversation.new(client_phone_number: message.client_phone_number)
-          if new_conversation.save
-            # skip because it would mean that the phone number is invalid
-            conversation = new_conversation
-          else
-            next
-          end
-        end
+      # messages = @messages
+      # messages.each do |message|
+      #   # can improve this as
+      #   conversation = Conversation.find_by(client_phone_number: message.client_phone_number)
+      #   if conversation.nil?
+      #     new_conversation = Conversation.new(client_phone_number: message.client_phone_number)
+      #     if new_conversation.save
+      #       # skip because it would mean that the phone number is invalid
+      #       conversation = new_conversation
+      #     else
+      #       next
+      #     end
+      #   end
 
-        keyword = message.keyword_string
-        if !conversation.keywords.include?(keyword)
-          conversation.keywords.push(keyword)
-          conversation.save!
-        end
+      #   keyword = message.keyword_string
+      #   if !conversation.keywords.include?(keyword)
+      #     conversation.keywords.push(keyword)
+      #     conversation.save!
+      #   end
 
-        message.conversation = conversation
-      end
+      #   message.conversation = conversation
+      # end
 
-      # may want to join these two each blocks
-      # for now if conversation is nil
-      # we next inside this loop as well
-      messages.each do |message|
-        next if message.conversation.nil?
+      # # may want to join these two each blocks
+      # # for now if conversation is nil
+      # # we next inside this loop as well
+      # messages.each do |message|
+      #   next if message.conversation.nil?
 
-        if message.body.blank?
-          message.body = "cod_alert_template #{message.template_params.values.join(',')}"
-        end
+      #   if message.body.blank?
+      #     message.body = "cod_alert_template #{message.template_params.values.join(',')}"
+      #   end
 
-        sleep 0.05
-        dms = DispatchMessageService.new(message)
-        message = dms.send
-        message.save
-      end
+      #   sleep 0.05
+      #   dms = DispatchMessageService.new(message)
+      #   message = dms.send
+      #   message.save
+      # end
 
       # refactor candidate
 

@@ -1,7 +1,7 @@
 <p style="color: green"><%= notice %></p>
 <p style="color: red"><%= error %></p>
 <div class="flex justify-between w-full">
-  <h1 class='text-3xl font-bold underline'>Conversations</h1>
+  <%= link_to "Conversations", conversations_path, class: "text-3xl font-bold underline" %>
 
   <div class='flex'>
     <%= link_to "+ Bulk", new_message_path, class: 'p-2 bg-teal-500 rounded-md text-slate-50 mr-2' %>

@@ -89,6 +89,11 @@ class ConversationsController < ApplicationController
         final_conversation.append(conversation)
       end
     end
+    if @sort == 'keyword_desc'
+      final_conversation = final_conversation.sort { |a, b| a.keywords.last <=> b.keywords.last } .reverse!
+    elsif @sort == 'keyword_asc'
+      final_conversation = final_conversation { |a, b| a.keywords.last <=> b.keywords.last }.sort
+    end
     page = []
     final_conversation.each_with_index do |conversation, index|
       if(index >= (@page - 1) * @per) && index <= ((@page - 1) * @per)+@per
