@@ -136,45 +136,45 @@ class MessagesController < ApplicationController
     end
 
     def bulk_create(phones)
-      # we discard invalid messages for now
-      # messages = @messages
-      # messages.each do |message|
-      #   # can improve this as
-      #   conversation = Conversation.find_by(client_phone_number: message.client_phone_number)
-      #   if conversation.nil?
-      #     new_conversation = Conversation.new(client_phone_number: message.client_phone_number)
-      #     if new_conversation.save
-      #       # skip because it would mean that the phone number is invalid
-      #       conversation = new_conversation
-      #     else
-      #       next
-      #     end
-      #   end
+      we discard invalid messages for now
+      messages = @messages
+      messages.each do |message|
+        # can improve this as
+        conversation = Conversation.find_by(client_phone_number: message.client_phone_number)
+        if conversation.nil?
+          new_conversation = Conversation.new(client_phone_number: message.client_phone_number)
+          if new_conversation.save
+            # skip because it would mean that the phone number is invalid
+            conversation = new_conversation
+          else
+            next
+          end
+        end
 
-      #   keyword = message.keyword_string
-      #   if !conversation.keywords.include?(keyword)
-      #     conversation.keywords.push(keyword)
-      #     conversation.save!
-      #   end
+        keyword = message.keyword_string
+        if !conversation.keywords.include?(keyword)
+          conversation.keywords.push(keyword)
+          conversation.save!
+        end
 
-      #   message.conversation = conversation
-      # end
+        message.conversation = conversation
+      end
 
-      # # may want to join these two each blocks
-      # # for now if conversation is nil
-      # # we next inside this loop as well
-      # messages.each do |message|
-      #   next if message.conversation.nil?
+      # may want to join these two each blocks
+      # for now if conversation is nil
+      # we next inside this loop as well
+      messages.each do |message|
+        next if message.conversation.nil?
 
-      #   if message.body.blank?
-      #     message.body = "cod_alert_template #{message.template_params.values.join(',')}"
-      #   end
+        if message.body.blank?
+          message.body = "cod_alert_template #{message.template_params.values.join(',')}"
+        end
 
-      #   sleep 0.05
-      #   dms = DispatchMessageService.new(message)
-      #   message = dms.send
-      #   message.save
-      # end
+        sleep 0.05
+        dms = DispatchMessageService.new(message)
+        message = dms.send
+        message.save
+      end
 
       # refactor candidate
 
