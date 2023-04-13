@@ -13,7 +13,7 @@ class ConversationsController < ApplicationController
 
     @conversation_query = Conversation.includes(:messages)
     if @q.present?
-      @conversation_query = conversation_query
+      @conversation_query = @conversation_query
                   .where('client_phone_number LIKE ?', "%#{@q}%").or(
         Conversation.where(":keywords = ANY (keywords)", keywords: @q))
     end
