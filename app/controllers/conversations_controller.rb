@@ -167,21 +167,28 @@ class ConversationsController < ApplicationController
           unnesting_arr = unnesting_arr.order(Arel.sql("id, unnest DESC NULLS LAST"))
           conversation_query = conversation_query.joins("join (#{unnesting_arr.to_sql}) as c1 on conversations.id = c1.id")
           conversation_query = conversation_query.order(Arel.sql("unnest DESC NULLS LAST"))
-        elsif @sort == 'no_keyword'
-          conversation_query = conversation_query.where("keywords = '{}'")
-        elsif @sort == 'unread_message'
-          conversation_query = conversation_query.joins("join messages as m1 on conversations.id = m1.conversation_id")
-          conversation_query = conversation_query.where("read = false and outgoing = false")
         else
           conversation_query.order('latest_message_sent_at DESC NULLS LAST')
         end
 
+        
+      if @sort == 'no_keyword'
+        conversation_query = conversation_query.where("keywords = '{}'")
+      elsif @sort == 'unread_message'
+        conversation_query = conversation_query.joins("join messages as m1 on conversations.id = m1.conversation_id")
+        conversation_query = conversation_query.where("read = false and outgoing = false")
+      end
     conversations = conversation_query.all
     final_conversation = []
 
     if @sort != 'unread_message'
       conversations = conversations.each do |conversation|
         conversation.keywords = getKeyword(conversation.keywords, conversation.messages)
+      end
+    end
+    if @sort == 'unread_message'
+      conversations = conversations.each do |conversation|
+        conversation.keywords = conversation.keywords.reverse![0...1]
       end
     end
     conversations.each do |conversation|
@@ -360,6 +367,7 @@ class ConversationsController < ApplicationController
     def unreadMessage
       @conversation_query = @conversation_query.joins("join messages as m1 on conversations.id = m1.conversation_id")
       @conversation_query = @conversation_query.where("read = false and outgoing = false")
-      @conversations = @conversation_query.limit(@per).offset((@page - 1) * @per)
+      @conversations = @conversation_query.select("distinct conversations.*")
+      @conversations = @conversations.limit(@per).offset((@page - 1) * @per)
     end
 end
