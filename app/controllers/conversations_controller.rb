@@ -188,7 +188,13 @@ class ConversationsController < ApplicationController
     end
     if @sort == 'unread_message'
       conversations = conversations.each do |conversation|
-        conversation.keywords = conversation.keywords.reverse![0...1]
+        key = ""
+        conversation.keywords.each do |keyw|
+          if(keyw != "" && keyw.present?)
+            key = keyw
+          end
+        end
+        conversation.keywords = [key]
       end
     end
     conversations.each do |conversation|
