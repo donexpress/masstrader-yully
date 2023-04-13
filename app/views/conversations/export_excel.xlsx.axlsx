@@ -70,7 +70,7 @@ wb.add_worksheet(name: "Conversations") do |sheet|
   @items.each do |item|
     row = [item.keywords.join(", "), item.client_phone_number]
     item.messages.each_with_index do |message, index|
-      if checkMessageDate(message)
+      if checkMessageDate(message) || @sort == 'unread_message' || @sort == 'no_keyword'
         row.append(message.body)
         if(row.size > widths.size)
           widths.append(40)
