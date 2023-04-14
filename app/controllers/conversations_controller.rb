@@ -377,7 +377,7 @@ class ConversationsController < ApplicationController
     end
     def noOutgoingMessages
       @conversations = @conversation_query.select("distinct conversations.*")
-      @conversation_query = @conversation_query.where("latest_outgoing_sent_at IS NULL")
+      @conversation_query = @conversation_query.where("latest_outgoing_sent_at IS NULL AND keywords <> '{}' AND keywords <> '{\"\"}' AND cardinality(keywords) > 0")
       @conversations = @conversation_query.order('id ASC NULLS LAST')
       conversations = @conversation_query.all
       final_conversation = []
