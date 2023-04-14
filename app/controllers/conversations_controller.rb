@@ -29,7 +29,7 @@ class ConversationsController < ApplicationController
       Rails.logger.info shifted_start_datetime
       Rails.logger.info shifted_end_datetime
       # puts(@tz)
-      if @sort.present? && @sort == "no_keyword"
+      if @sort.present? && (@sort == "no_keyword" || @sort == "no_outgoing_messages")
         @conversation_query = @conversation_query.where('latest_message_sent_at BETWEEN ? AND ?', shifted_start_datetime, shifted_end_datetime)
       else
         @conversation_query = @conversation_query.where('latest_outgoing_sent_at BETWEEN ? AND ?', shifted_start_datetime, shifted_end_datetime)
@@ -41,6 +41,8 @@ class ConversationsController < ApplicationController
       noKeyword()
     elsif @sort.present? && @sort == "unread_message"
       unreadMessage()
+    elsif @sort.present? && @sort == "no_outgoing_messages"
+      noOutgoingMessages()
     end
     @total_count = @conversation_query.count
     @page_count = (@total_count / @per) + 1
@@ -145,56 +147,38 @@ class ConversationsController < ApplicationController
     Rails.logger.info shifted_start_datetime
     Rails.logger.info shifted_end_datetime
     # puts(@tz)
-
-    if @sort.present? && @sort == "no_keyword"
+    conversation_query = conversation_query.select("conversations.*")
+    if @sort.present? && (@sort == "no_keyword" || @sort == "no_outgoing_messages")
       conversation_query = conversation_query.where('latest_message_sent_at BETWEEN ? AND ?', shifted_start_datetime, shifted_end_datetime)
     else
       conversation_query = conversation_query.where('latest_outgoing_sent_at BETWEEN ? AND ?', shifted_start_datetime, shifted_end_datetime)
     end
-
-    # conversation_query = conversation_query.where('latest_outgoing_sent_at BETWEEN ? AND ?', shifted_start_datetime, shifted_end_datetime)
-
-    conversation_query = conversation_query.select("conversations.*")
-    conversation_query =
+    # conversation_query =
         if @sort == 'keyword_asc' || @sort == 'keyword_desc'          
-          # unnesting_arr = Conversation.select('distinct on (conversations.id) id', 'unnest(conversations.keywords)')
-          # unnesting_arr = unnesting_arr.order(Arel.sql("id, unnest DESC NULLS LAST"))
-          # conversation_query = conversation_query.joins("join (#{unnesting_arr.to_sql}) as c1 on conversations.id = c1.id")
-          # conversation_query = conversation_query.order(Arel.sql("unnest ASC NULLS LAST"))
-
-        # elsif @sort == 'keyword_desc'
           unnesting_arr = Conversation.select('distinct on (conversations.id) id', 'unnest(conversations.keywords)')
           unnesting_arr = unnesting_arr.order(Arel.sql("id, unnest DESC NULLS LAST"))
           conversation_query = conversation_query.joins("join (#{unnesting_arr.to_sql}) as c1 on conversations.id = c1.id")
           conversation_query = conversation_query.order(Arel.sql("unnest DESC NULLS LAST"))
-        else
-          conversation_query.order('latest_message_sent_at DESC NULLS LAST')
+        elsif @sort == 'latest_updated'
+          conversation_query = conversation_query.order('latest_message_sent_at DESC NULLS LAST')
         end
-
-        
       if @sort == 'no_keyword'
         conversation_query = conversation_query.where("keywords = '{}'")
+        conversation_query = conversation_query.order('id ASC NULLS LAST')
+
       elsif @sort == 'unread_message'
         conversation_query = conversation_query.joins("join messages as m1 on conversations.id = m1.conversation_id")
         conversation_query = conversation_query.where("read = false and outgoing = false")
+      elsif @sort == "no_outgoing_messages"
+        conversation_query = conversation_query.where("latest_outgoing_sent_at IS NULL")
+        conversation_query = conversation_query.order('id ASC NULLS LAST')
       end
     conversations = conversation_query.all
     final_conversation = []
 
-    if @sort != 'unread_message'
+    if @sort != 'unread_message' && @sort != 'no_keyword'
       conversations = conversations.each do |conversation|
         conversation.keywords = getKeyword(conversation.keywords, conversation.messages)
-      end
-    end
-    if @sort == 'unread_message'
-      conversations = conversations.each do |conversation|
-        key = ""
-        conversation.keywords.each do |keyw|
-          if(keyw != "" && keyw.present?)
-            key = keyw
-          end
-        end
-        conversation.keywords = [key]
       end
     end
     conversations.each do |conversation|
@@ -212,7 +196,7 @@ class ConversationsController < ApplicationController
         final_conversation.append(conversation)
       end
     end
-    if @sort == 'keyword_desc'
+    if @sort == 'keyword_desc' || @sort == 'unread_message'
       final_conversation = final_conversation.sort { |a, b| ((a.present? && a.keywords.present?) ? a.keywords.last : "" )<=> ((b.present? && b.keywords.present?) ? b.keywords.last : "" )} .reverse!
     elsif @sort == 'keyword_asc'
       final_conversation = final_conversation.sort { |a, b| ((a.present? && a.keywords.present?) ? a.keywords.last : "") <=> ((b.present? && b.keywords.present?) ? b.keywords.last : "" )}
@@ -306,16 +290,6 @@ class ConversationsController < ApplicationController
       @conversation_query = @conversation_query.select("*")
       @conversation_query =
           if @sort == 'keyword_asc' || @sort == 'keyword_desc'
-            # if @q.present?
-            #   unnesting_arr = Conversation.select('distinct on (conversations.id) id', 'unnest(conversations.keywords)')
-            #   unnesting_arr = unnesting_arr.order(Arel.sql("id, unnest ASC NULLS LAST"))
-            # else
-            #   unnesting_arr = Conversation.select('conversations.id', 'unnest(conversations.keywords)')
-            # end
-            # @conversation_query = @conversation_query.joins("join (#{unnesting_arr.to_sql}) as c1 on conversations.id = c1.id")
-            # @conversation_query = @conversation_query.order(Arel.sql("unnest ASC NULLS LAST"))
-  
-          # elsif @sort == 'keyword_desc'
             if @q.present?
               unnesting_arr = Conversation.select('distinct on (conversations.id) id', 'unnest(conversations.keywords)')
               unnesting_arr = unnesting_arr.order(Arel.sql("id, unnest DESC NULLS LAST"))
@@ -334,26 +308,49 @@ class ConversationsController < ApplicationController
         conversations = conversations.each do |conversation|
           conversation.keywords = getKeyword(conversation.keywords, conversation.messages)
         end
-        conversations.each do |conversation|
-          found = false
-          final_conversation.each do |final|
-            conversation.keywords.each do |c_keyword|
-              final.keywords.each do |f_keyword|
-                if(c_keyword == f_keyword)
-                  found = true
+          conversations.each do |conversation|
+            found = false
+            final_conversation.each do |final|
+              conversation.keywords.each do |c_keyword|
+                final.keywords.each do |f_keyword|
+                  if(c_keyword == f_keyword)
+                    found = true
+                  end
                 end
               end
             end
+            if !found
+              final_conversation.append(conversation)
+            end
           end
-          if !found
-            final_conversation.append(conversation)
+        if @sort == 'keyword_desc'
+          final_conversation = final_conversation.sort { |a, b| ((a.present? && a.keywords.present?) ? a.keywords.last : "" )<=> ((b.present? && b.keywords.present?) ? b.keywords.last : "" )} .reverse!
+        elsif @sort == 'keyword_asc'
+          final_conversation = final_conversation.sort { |a, b| ((a.present? && a.keywords.present?) ? a.keywords.last : "") <=> ((b.present? && b.keywords.present?) ? b.keywords.last : "" )}
+        end
+        page = []
+        final_conversation.each_with_index do |conversation, index|
+          if(index >= (@page - 1) * @per) && index < ((@page - 1) * @per)+@per
+            page.append(conversation)
           end
         end
-      if @sort == 'keyword_desc'
-        final_conversation = final_conversation.sort { |a, b| ((a.present? && a.keywords.present?) ? a.keywords.last : "" )<=> ((b.present? && b.keywords.present?) ? b.keywords.last : "" )} .reverse!
-      elsif @sort == 'keyword_asc'
-        final_conversation = final_conversation.sort { |a, b| ((a.present? && a.keywords.present?) ? a.keywords.last : "") <=> ((b.present? && b.keywords.present?) ? b.keywords.last : "" )}
+        @conversations = page
+      else
+        @conversations = @conversation_query.limit(@per).offset((@page - 1) * @per)
       end
+    end
+
+    def noKeyword
+      @conversation_query = @conversation_query.where("keywords = '{}'")
+      @conversations = @conversation_query.order('id ASC NULLS LAST')
+      @conversations = @conversation_query.limit(@per).offset((@page - 1) * @per)
+    end
+    def unreadMessage
+      @conversation_query = @conversation_query.joins("join messages as m1 on conversations.id = m1.conversation_id")
+      @conversation_query = @conversation_query.where("read = false and outgoing = false")
+      @conversations = @conversation_query.select("distinct conversations.*")
+      final_conversation = @conversation_query.all
+      final_conversation = final_conversation.sort { |a, b| ((a.present? && a.keywords.present?) ? a.keywords.last : "" )<=> ((b.present? && b.keywords.present?) ? b.keywords.last : "" )} .reverse!
       page = []
       final_conversation.each_with_index do |conversation, index|
         if(index >= (@page - 1) * @per) && index < ((@page - 1) * @per)+@per
@@ -361,19 +358,12 @@ class ConversationsController < ApplicationController
         end
       end
       @conversations = page
-    else
-      @conversations = @conversation_query.limit(@per).offset((@page - 1) * @per)
     end
-    end
-
-    def noKeyword
-      @conversation_query = @conversation_query.where("keywords = '{}'")
-      @conversations = @conversation_query.limit(@per).offset((@page - 1) * @per)
-    end
-    def unreadMessage
-      @conversation_query = @conversation_query.joins("join messages as m1 on conversations.id = m1.conversation_id")
-      @conversation_query = @conversation_query.where("read = false and outgoing = false")
+    def noOutgoingMessages
       @conversations = @conversation_query.select("distinct conversations.*")
-      @conversations = @conversations.limit(@per).offset((@page - 1) * @per)
+      @conversation_query = @conversation_query.where("latest_outgoing_sent_at IS NULL")
+      @conversations = @conversation_query.order('id ASC NULLS LAST')
+      @conversations = @conversation_query.limit(@per).offset((@page - 1) * @per)
+      
     end
 end

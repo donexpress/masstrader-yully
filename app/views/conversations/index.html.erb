@@ -14,9 +14,9 @@
     <%= form_with url: conversations_path, method: :get, data: { turbo_frame: "conversations-turbo-frame", turbo_action: "advance" } do |form| %>
       <%= form.date_field :date, class: 'rounded-md', value: @date || '', max: Date.today %>
       <%= form.text_field :q, placeholder: 'Enter phone number or keyword', class: 'rounded-md', value: @q || '' %>
-      <%= form.select :sort, [["Latest updated", "latest_updated"], ["Keyword DESC", "keyword_desc"], ["Keyword ASC", "keyword_asc"], ["No Keyword", "no_keyword"], ["Unread Messages", "unread_message"]], { selected: @sort || 'latest_updated' }, { class: 'rounded-md' } %>
+      <%= form.select :sort, [["Latest updated", "latest_updated"], ["Keyword DESC", "keyword_desc"], ["Keyword ASC", "keyword_asc"], ["No Keyword", "no_keyword"], ["Unread Messages", "unread_message"], ["No Outgoing Messages", "no_outgoing_messages"]], { selected: @sort || 'latest_updated' }, { class: 'rounded-md' } %>
       <%= form.submit "Search", class: 'bg-teal-500 text-slate-50 p-2 rounded-md cursor-pointer' %>
-      <%  if @date.present? || @sort == "no_keyword" || @sort == "unread_message" %>
+      <%  if @date.present? %>
       <%= link_to "Download as Excel", export_excel_path(format: :xlsx, date: params[:date], sort: params[:sort]), class: 'p-2 bg-teal-500 rounded-md text-slate-50' %>
       <% end %>
       <% end %>
