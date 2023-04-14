@@ -349,7 +349,23 @@ class ConversationsController < ApplicationController
       @conversation_query = @conversation_query.joins("join messages as m1 on conversations.id = m1.conversation_id")
       @conversation_query = @conversation_query.where("read = false and outgoing = false")
       @conversations = @conversation_query.select("distinct conversations.*")
-      final_conversation = @conversation_query.all
+      conversations = @conversation_query.all
+      final_conversation = []
+      conversations.each do |conversation|
+        found = false
+        final_conversation.each do |final|
+          conversation.keywords.each do |c_keyword|
+            final.keywords.each do |f_keyword|
+              if(c_keyword == f_keyword)
+                found = true
+              end
+            end
+          end
+        end
+        if !found
+          final_conversation.append(conversation)
+        end
+      end
       final_conversation = final_conversation.sort { |a, b| ((a.present? && a.keywords.present?) ? a.keywords.last : "" )<=> ((b.present? && b.keywords.present?) ? b.keywords.last : "" )} .reverse!
       page = []
       final_conversation.each_with_index do |conversation, index|
@@ -363,7 +379,31 @@ class ConversationsController < ApplicationController
       @conversations = @conversation_query.select("distinct conversations.*")
       @conversation_query = @conversation_query.where("latest_outgoing_sent_at IS NULL")
       @conversations = @conversation_query.order('id ASC NULLS LAST')
-      @conversations = @conversation_query.limit(@per).offset((@page - 1) * @per)
+      conversations = @conversation_query.all
+      final_conversation = []
+      conversations.each do |conversation|
+        found = false
+        final_conversation.each do |final|
+          conversation.keywords.each do |c_keyword|
+            final.keywords.each do |f_keyword|
+              if(c_keyword == f_keyword)
+                found = true
+              end
+            end
+          end
+        end
+        if !found
+          final_conversation.append(conversation)
+        end
+      end
+      page = []
+      final_conversation.each_with_index do |conversation, index|
+        if(index >= (@page - 1) * @per) && index < ((@page - 1) * @per)+@per
+          page.append(conversation)
+        end
+      end
+      @conversations = page
+      # @conversations = @conversation_query.limit(@per).offset((@page - 1) * @per)
       
     end
 end
