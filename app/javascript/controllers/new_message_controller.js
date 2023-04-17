@@ -1,7 +1,8 @@
 import { Controller } from "@hotwired/stimulus"
 
-function messagePreview(...args){
-  return `Hola ${args[0]}: 
+function messagePreview(template, ...args) {
+  if (template === 'template') {
+    return `Hola ${args[0]}: 
 
   Se nos ha confiado la entrega de ${args[1]} producto(s) que compra en línea. 
 
@@ -10,11 +11,17 @@ function messagePreview(...args){
 
   ¡Que tengas un buen día!
   `
+  } else {
+    return `Dear customer ${args[1]}:
+    We have been entrusted with the delivery of ${args[2]}, which you have purchased online.
+    We would be grateful if you could answer "*Confirmed*" so that we can send your product immediately to the address ${args[3]}. If you do not wish to receive the product we still need you to reply "*Canceled*". Shipments are COD and only cash payment is accepted. Please have cash ready in the amount of ${args[4]} to pay when you receive it. Delivery time is *3-7 days*.
+    After Confirm shipment, if you have any questions, you can use reference ${args[5]}. This message is for your record only, if you accept delivery, we will not use this route for customer service.`
+  }
 }
 
 // Connects to data-controller="new-conversation"
 export default class extends Controller {
-  static targets = [ "select", "templateSection", "textSection", "templateOutput", "preview" ]
+  static targets = ["select", "templateSection", "textSection", "templateOutput", "preview"]
 
   connect() {
     console.log('Hello from NewMessageController');
@@ -22,33 +29,37 @@ export default class extends Controller {
     this.fillPreview()
   }
 
-  fillPreview(){
+  fillPreview() {
     const preview = this.previewTarget;
     const clientName = document.getElementById('message_template_params[0]').value;
     const product = document.getElementById('message_template_params[1]').value;
     const address = document.getElementById('message_template_params[2]').value;
     const amount = document.getElementById('message_template_params[3]').value;
     const referenceId = document.getElementById('message_template_params[4]').value;
-    preview.value = messagePreview(clientName || '{clientName}', product || '{product}', address || '{address}', amount || '{amount}', referenceId || '{referenceId}');
+    const messageType = document.getElementById('message_message_type').value;
+    preview.value = messagePreview(messageType, clientName || '{clientName}', product || '{product}', address || '{address}', amount || '{amount}', referenceId || '{referenceId}');
+    console.log(messageType)
+
   }
 
-  toggleSections(value){
-    if (value === 'template' || value === 'template 2'){
+  toggleSections(value) {
+    if (value === 'template' || value === 'template 2') {
       this.templateSectionTarget.hidden = false;
       this.textSectionTarget.hidden = true;
+      this.fillPreview()
     } else {
       this.templateSectionTarget.hidden = true;
       this.textSectionTarget.hidden = false;
     }
   }
 
-  handleSelectChange(e){
+  handleSelectChange(e) {
     const value = e.target.value;
     this.toggleSections(value);
 
   }
 
-  handleInputChange(){
+  handleInputChange() {
     this.fillPreview();
   }
 }
