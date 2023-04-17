@@ -9,10 +9,12 @@ class Message < ApplicationRecord
 
   TEXT_TYPE = 'text'
   TEMPLATE_TYPE = 'template'
+  TEMPLATE_TYPE_2 = 'template 2'
 
   BODY_TYPES = [
     TEXT_TYPE,
-    TEMPLATE_TYPE
+    TEMPLATE_TYPE,
+    TEMPLATE_TYPE_2
   ].freeze
 
   validates :body, presence: true
@@ -93,7 +95,7 @@ class Message < ApplicationRecord
       errors.add(:message_type, 'cannot be blank')
     elsif message_type == TEXT_TYPE
       # do something here
-    elsif message_type == TEMPLATE_TYPE
+    elsif message_type == TEMPLATE_TYPE || message_type == TEMPLATE_TYPE_2
       if template_params.values.any?(&:blank?)
         errors.add(:message, 'must fill in all template params.')
       end

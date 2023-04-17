@@ -33,7 +33,7 @@ export default class extends Controller {
   }
 
   toggleSections(value){
-    if (value === 'template'){
+    if (value === 'template' || value === 'template 2'){
       this.templateSectionTarget.hidden = false;
       this.textSectionTarget.hidden = true;
     } else {
@@ -45,6 +45,7 @@ export default class extends Controller {
   handleSelectChange(e){
     const value = e.target.value;
     this.toggleSections(value);
+
   }
 
   handleInputChange(){

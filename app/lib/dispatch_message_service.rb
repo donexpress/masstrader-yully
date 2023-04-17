@@ -69,6 +69,20 @@ class DispatchMessageService
           }]
         }
       })
+    elsif @message.message_type == Message::TEMPLATE_TYPE_2
+      base_params.merge({
+        type: 'template',
+        template: {
+          name: 'cod_alert_v9',
+          language: {
+            code: 'en',
+          },
+          components: [{
+            type: "body",
+            parameters: generate_template_params
+          }]
+        }
+      })
     else
       base_params.merge({
         type: 'text',
