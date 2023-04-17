@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 function messagePreview(template, ...args) {
-  if (template === 'template') {
+  if (template === 'template 1 (español)') {
     return `Hola ${args[0]}: 
 
   Se nos ha confiado la entrega de ${args[1]} producto(s) que compra en línea. 
@@ -12,10 +12,10 @@ function messagePreview(template, ...args) {
   ¡Que tengas un buen día!
   `
   } else {
-    return `Dear customer ${args[1]}:
-    We have been entrusted with the delivery of ${args[2]}, which you have purchased online.
-    We would be grateful if you could answer "*Confirmed*" so that we can send your product immediately to the address ${args[3]}. If you do not wish to receive the product we still need you to reply "*Canceled*". Shipments are COD and only cash payment is accepted. Please have cash ready in the amount of ${args[4]} to pay when you receive it. Delivery time is *3-7 days*.
-    After Confirm shipment, if you have any questions, you can use reference ${args[5]}. This message is for your record only, if you accept delivery, we will not use this route for customer service.`
+    return `Dear customer ${args[0]}:
+    We have been entrusted with the delivery of ${args[1]}, which you have purchased online.
+    We would be grateful if you could answer "Confirmed" so that we can send your product immediately to the address ${args[2]}. If you do not wish to receive the product we still need you to reply "Canceled". Shipments are COD and only cash payment is accepted. Please have cash ready in the amount of ${args[3]} to pay when you receive it. Delivery time is 3-7 days.
+    After Confirm shipment, if you have any questions, you can use reference ${args[4]}. This message is for your record only, if you accept delivery, we will not use this route for customer service.`
   }
 }
 
@@ -43,7 +43,7 @@ export default class extends Controller {
   }
 
   toggleSections(value) {
-    if (value === 'template' || value === 'template 2') {
+    if (value === 'template 1 (español)' || value === 'template 2 (english)') {
       this.templateSectionTarget.hidden = false;
       this.textSectionTarget.hidden = true;
       this.fillPreview()

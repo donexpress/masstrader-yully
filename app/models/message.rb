@@ -8,8 +8,8 @@ class Message < ApplicationRecord
   include PhoneNumber
 
   TEXT_TYPE = 'text'
-  TEMPLATE_TYPE = 'template'
-  TEMPLATE_TYPE_2 = 'template 2'
+  TEMPLATE_TYPE = 'template 1 (español)'
+  TEMPLATE_TYPE_2 = 'template 2 (english)'
 
   BODY_TYPES = [
     TEXT_TYPE,

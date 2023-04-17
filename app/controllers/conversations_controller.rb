@@ -44,7 +44,8 @@ class ConversationsController < ApplicationController
     elsif @sort.present? && @sort == "no_outgoing_messages"
       noOutgoingMessages()
     end
-    @total_count = @conversation_query.count
+    # @total_count = @conversation_query.count
+    @total_count = @count
     @page_count = (@total_count / @per) + 1
   end
 
@@ -334,16 +335,19 @@ class ConversationsController < ApplicationController
             page.append(conversation)
           end
         end
+        @count = final_conversation.size
         @conversations = page
       else
         @conversations = @conversation_query.limit(@per).offset((@page - 1) * @per)
+        @count = @conversation_query.count
       end
     end
 
     def noKeyword
       @conversation_query = @conversation_query.where("keywords = '{}'")
       @conversations = @conversation_query.order('id ASC NULLS LAST')
-      @conversations = @conversation_query.limit(@per).offset((@page - 1) * @per)
+      @conversations = @conversation_query.limit(@per).offset((@page - 1) * @per).all
+      @conversation_query.count
     end
     def unreadMessage
       @conversation_query = @conversation_query.joins("join messages as m1 on conversations.id = m1.conversation_id")
@@ -373,6 +377,7 @@ class ConversationsController < ApplicationController
           page.append(conversation)
         end
       end
+      @count = final_conversation.size
       @conversations = page
     end
     def noOutgoingMessages
@@ -402,6 +407,7 @@ class ConversationsController < ApplicationController
           page.append(conversation)
         end
       end
+      @count = final_conversation.size
       @conversations = page
       # @conversations = @conversation_query.limit(@per).offset((@page - 1) * @per)
       
