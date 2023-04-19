@@ -1,21 +1,26 @@
 <%= turbo_stream_from conversation %>
 <div id="<%= dom_id conversation %>" class='shadow-xl rounded-lg mt-3 w-3/4 border border-transparent hover:border-[#69B7D3]' style='position: relative'>
   <div class="flex w-100 justify-between bg-[#69B7D3] rounded-t-lg px-3 py-2 items-center">
-    <p class='text-slate-50 text-sm'>
+    <p class='text-[#333333] text-md'>
       <strong>Client phone number:</strong>
       <%= conversation.client_phone_number %>
     </p>
-    <span class='text-slate-50 text-sm'>
+    <span class='text-[#333333] text-md'>
       <strong>Keywords:</strong>
-      <% conversation.keywords.each do |keyword| %>
-        <span class="bg-[#009588] text-xs px-[5px] py-[3px] rounded-md"><%= keyword%></span>
+      <% conversation.keywords.reverse!.each_with_index do |keyword, index| %>
+        <% if index < 4 %>
+        <span class="bg-slate-50 text-md px-[5px] py-[3px] rounded-md font-semibold"><%= keyword%></span>
+        <% end %>
+      <% end %>
+      <% if conversation.keywords.size > 4 %>
+        <span class="bg-slate-50 text-md px-[5px] py-[3px] rounded-md font-semibold">...</span>
       <% end %>
     </span>
     
 
     <div class="flex w-[204px] justify-end">
       <% if conversation.unread_messages? %>
-          <div class='relative mr-2 text-sm rounded-md p-1 bg-[#F16821] text-slate-50'>
+          <div class='relative mr-2 text-md rounded-md p-1 bg-[#F16821] text-slate-50'>
             <div class="absolute top-[-8px] right-[-5px] bg-slate-50 rounded-full w-[15px] h-[15px] text-[0.70rem] text-[#fe8800] flex justify-center items-center" >
               <strong><%= conversation.messages.count(&:unread?) %></strong>
             </div>
@@ -30,11 +35,11 @@
   </div>
 
   <% if conversation.messages.size.zero? %>
-    <p class='text-[#1c1c27] text-sm py-2 px-3'>
+    <p class='text-[#1c1c27] text-md py-2 px-3'>
       No messages yet
     </p>
   <% else %>
-    <p class='text-[#1c1c27] text-sm py-1 px-3'>
+    <p class='text-[#1c1c27] text-md py-1 px-3'>
       <% if conversation.messages.last.outgoing %>
       You said:
       <% else %>
