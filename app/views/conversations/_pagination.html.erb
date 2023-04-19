@@ -1,0 +1,107 @@
+<div class="mx-auto w-2/3 sm:py-8">
+      <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+        <div>
+          <p class="text-sm text-gray-700">
+            Showing
+            <span class="font-medium"><%= (@page * 20) + 1 - 20 %></span>
+            to
+            <span class="font-medium"><%= (@page * 20) %></span>
+            of
+            <span class="font-medium"><%= @total_count%></span>
+            results
+          </p>
+        </div>
+        <div>
+          <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+            <a href="?date=<%=@date%>&q=<%=@q%>&sort=<%=@sort || 'latest_updated'%>&page=<%=@page-1%>&commit=<%=@page-1%>" class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+              <span class="sr-only">Previous</span>
+              <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
+              </svg>
+            </a>
+            
+            
+            <span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold <%= @page == 1 ? 'bg-indigo-600 z-10 text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600' : 'text-gray-900 text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0' %>" >
+              <%= form_with url: conversations_path, method: :get, data: { turbo_frame: "conversations-turbo-frame", turbo_action: "advance" } do |form| %>
+                <%= form.hidden_field :date, value: @date || '' %>
+                <%= form.hidden_field :q, value: @q || '' %>
+                <%= form.hidden_field :sort, value: @sort || 'latest_updated' %>
+                <%= form.hidden_field :page, value: 1 %>
+                <%= form.submit 1 %>
+              <% end %>
+            </span>
+            <span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold <%= @page == 2 ? 'bg-indigo-600 z-10 text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600' : 'text-gray-900 text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0' %>" >
+              <%= form_with url: conversations_path, method: :get, data: { turbo_frame: "conversations-turbo-frame", turbo_action: "advance" } do |form| %>
+                <%= form.hidden_field :date, value: @date || '' %>
+                <%= form.hidden_field :q, value: @q || '' %>
+                <%= form.hidden_field :sort, value: @sort || 'latest_updated' %>
+                <%= form.hidden_field :page, value: 2 %>
+                <%= form.submit 2 %>
+              <% end %>
+            </span>
+            <span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold <%= @page == 3 ? 'bg-indigo-600 z-10 text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600' : 'text-gray-900 text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0' %>" >
+              <%= form_with url: conversations_path, method: :get, data: { turbo_frame: "conversations-turbo-frame", turbo_action: "advance" } do |form| %>
+                <%= form.hidden_field :date, value: @date || '' %>
+                <%= form.hidden_field :q, value: @q || '' %>
+                <%= form.hidden_field :sort, value: @sort || 'latest_updated' %>
+                <%= form.hidden_field :page, value: 3 %>
+                <%= form.submit 3 %>
+              <% end %>
+            </span>
+            <% if @page > 5 && @page < @page_count - 3 %>
+            <span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300 focus:outline-offset-0">...</span>
+            <% end %>
+            <% if @page > 1 && @page < @page_count - 3 %>
+              <% (@page-1..@page+1).each do |page_number| %>
+                <% if page_number > 3 %>
+                <span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold <%= @page == page_number ? 'bg-indigo-600 z-10 text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600' : 'text-gray-900 text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0' %>" >
+                  <%= form_with url: conversations_path, method: :get, data: { turbo_frame: "conversations-turbo-frame", turbo_action: "advance" } do |form| %>
+                    <%= form.hidden_field :date, value: @date || '' %>
+                    <%= form.hidden_field :q, value: @q || '' %>
+                    <%= form.hidden_field :sort, value: @sort || 'latest_updated' %>
+                    <%= form.hidden_field :page, value: page_number %>
+                    <%= form.submit page_number %>
+                  <% end %>
+                </span>
+                <% end %>
+              <% end %>            
+            <% end %>
+            <span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300 focus:outline-offset-0">...</span>
+            <span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold <%= @page == @page_count - 3 ? 'bg-indigo-600 z-10 text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600' : 'text-gray-900 text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0' %>" >
+              <%= form_with url: conversations_path, method: :get, data: { turbo_frame: "conversations-turbo-frame", turbo_action: "advance" } do |form| %>
+                <%= form.hidden_field :date, value: @date || '' %>
+                <%= form.hidden_field :q, value: @q || '' %>
+                <%= form.hidden_field :sort, value: @sort || 'latest_updated' %>
+                <%= form.hidden_field :page, value: @page_count - 3 %>
+                <%= form.submit @page_count - 3 %>
+              <% end %>
+            </span>
+            <span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold <%= @page == @page_count -2 ? 'bg-indigo-600 z-10 text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600' : 'text-gray-900 text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0' %>" >
+              <%= form_with url: conversations_path, method: :get, data: { turbo_frame: "conversations-turbo-frame", turbo_action: "advance" } do |form| %>
+                <%= form.hidden_field :date, value: @date || '' %>
+                <%= form.hidden_field :q, value: @q || '' %>
+                <%= form.hidden_field :sort, value: @sort || 'latest_updated' %>
+                <%= form.hidden_field :page, value: @page_count -2 %>
+                <%= form.submit @page_count - 2 %>
+              <% end %>
+            </span>
+            <span class="relative inline-flex items-center px-4 py-2 text-sm font-semibold <%= @page == @page_count ? 'bg-indigo-600 z-10 text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600' : 'text-gray-900 text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0' %>" >
+              <%= form_with url: conversations_path, method: :get, data: { turbo_frame: "conversations-turbo-frame", turbo_action: "advance" } do |form| %>
+                <%= form.hidden_field :date, value: @date || '' %>
+                <%= form.hidden_field :q, value: @q || '' %>
+                <%= form.hidden_field :sort, value: @sort || 'latest_updated' %>
+                <%= form.hidden_field :page, value: @page_count %>
+                <%= form.submit @page_count %>
+              <% end %>
+            </span>
+
+            <a href="?date=<%=@date%>&q=<%=@q%>&sort=<%=@sort || 'latest_updated'%>&page=<%=@page+1%>&commit=<%=@page+1%>" class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+              <span class="sr-only">Next</span>
+              <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+              </svg>
+            </a>
+          </nav>
+        </div>
+      </div>
+    </div>

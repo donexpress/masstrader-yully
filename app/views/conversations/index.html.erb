@@ -1,50 +1,53 @@
-<p style="color: green"><%= notice %></p>
-<p style="color: red"><%= error %></p>
-<div class="flex justify-between w-full">
-  <%= link_to "Conversations", conversations_path, class: "text-3xl font-bold underline" %>
+<div class="bg-white">
+  <header class="absolute inset-x-0 top-0 z-50">
+    <nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
+      <div class="flex lg:flex-1">
+        <a href="/wa/conversations" class="-m-1.5 p-1.5">
+          <span class="sr-only">Masstrader</span>
+          <img class="h-20 w-auto" src="/assets/logo mastrader.jpeg" alt="">
+        </a>
+      </div>
+      <!-- <div class="hidden lg:flex lg:gap-x-12">
+        <a href="/wa/conversations" class="text-sm font-semibold leading-6 text-gray-900">Conversations</a>
+      </div> -->
+      <!-- <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+      </div> -->
+    </nav>
+  </header>
 
-  <div class='flex'>
-    <%= link_to "+ Bulk", new_message_path, class: 'p-2 bg-teal-500 rounded-md text-slate-50 mr-2' %>
-    <%= link_to "+ Conversation", new_conversation_path, class: 'p-2 bg-teal-500 rounded-md text-slate-50 mr-2' %>
-  </div>
-</div>
-
-<%= turbo_frame_tag "conversations-turbo-frame" do %>
-  <div class="w-full text-center">
-    <%= form_with url: conversations_path, method: :get, data: { turbo_frame: "conversations-turbo-frame", turbo_action: "advance" } do |form| %>
-      <%= form.date_field :date, class: 'rounded-md', value: @date || '', max: Date.today %>
-      <%= form.text_field :q, placeholder: 'Enter phone number or keyword', class: 'rounded-md', value: @q || '' %>
-      <%= form.select :sort, [["Latest updated", "latest_updated"], ["Keyword DESC", "keyword_desc"], ["Keyword ASC", "keyword_asc"], ["No Keyword", "no_keyword"], ["Unread Messages", "unread_message"], ["No Outgoing Messages", "no_outgoing_messages"]], { selected: @sort || 'latest_updated' }, { class: 'rounded-md' } %>
-      <%= form.submit "Search", class: 'bg-teal-500 text-slate-50 p-2 rounded-md cursor-pointer' %>
+  <div class="mx-auto flex flex-col relative isolate px-6 pt-14 lg:px-8">
+    <div class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true">
+      <div class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
+    </div>
+    <div class="mx-auto w-3/4 inline-flex flex-row">
+      <%= form_with url: conversations_path, method: :get, :html => {:class => 'flex flex-row justify-evenly w-full'}, data: { turbo_frame: "conversations-turbo-frame", turbo_action: "advance" } do |form| %>
+      <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
+        <%= form.date_field :date, class: 'block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6', value: @date || '', max: Date.today %>
+      </div>
+      <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
+        <%= form.text_field :q, placeholder: 'Enter phone number or keyword', class: 'block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6', value: @q || '' %>
+      </div>
+      <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
+        <%= form.select :sort, [["Latest updated", "latest_updated"], ["Keyword DESC", "keyword_desc"], ["Keyword ASC", "keyword_asc"], ["No Keyword", "no_keyword"], ["Unread Messages", "unread_message"], ["No Outgoing Messages", "no_outgoing_messages"]], { selected: @sort || 'latest_updated' }, { class: 'block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6' } %>
+      </div>
+      <div class="flex">
+        <%= form.submit "Search", class: 'bg-indigo-600 shadow-sm text-slate-50 p-2 rounded-md cursor-pointer' %>
+      </div>
       <%  if @date.present? %>
-      <%= link_to "Download as Excel", export_excel_path(format: :xlsx, date: params[:date], sort: params[:sort]), class: 'p-2 bg-teal-500 rounded-md text-slate-50' %>
-      <% end %>
-      <% end %>
-    <div id='conversations-paginator'>
-      <% if @page_count == 1 %>
-        <p>There is only one page</p>
-      <% else %>
-        <div class='flex flex-wrap'>
-          <% (1..@page_count).each do |page_number| %>
-            <span class='mr-2 page cursor-pointer <%= @page == page_number ? 'font-bold' : '' %>' >
-              <%= form_with url: conversations_path, method: :get, data: { turbo_frame: "conversations-turbo-frame", turbo_action: "advance" } do |form| %>
-                <%= form.hidden_field :date, value: @date || '' %>
-                <%= form.hidden_field :q, value: @q || '' %>
-                <%= form.hidden_field :sort, value: @sort || 'latest_updated' %>
-                <%= form.hidden_field :page, value: page_number %>
-                <%= form.submit page_number %>
-              <% end %>
-            </span>
-          <% end %>
-        </div>
+      <div class="flex">
+        <%= link_to "Download as Excel", export_excel_path(format: :xlsx, date: params[:date], sort: params[:sort]), class: 'bg-indigo-600 shadow-sm text-slate-50 p-2 rounded-md cursor-pointer' %>
+      </div>
+        <% end %>         
       <% end %>
     </div>
+    <%= render partial:"conversations/pagination", date: @date, q: @q, tz: "America/Mexico_City", page: @page, sort: @sort, total_count: @total_count %>
+    <div id="conversations" class="flex flex-col items-center">
+      <% @conversations.each do |conversation| %>
+        <%= render conversation, date: @date, q: @q, tz: "America/Mexico_City", page: @page, sort: @sort %>
+      <% end %>
+    </div>
+    <div class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]" aria-hidden="true">
+      <div class="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
+    </div>
   </div>
-
-  <p class='text-center'>Total Records: <strong><%= @total_count %></strong> - Current Page: <strong><%= @page %></strong> - Total Pages: <strong><%= @page_count %></strong></p>
-  <div id="conversations">
-    <% @conversations.each do |conversation| %>
-      <%= render conversation, date: @date, q: @q, tz: "America/Mexico_City", page: @page, sort: @sort %>
-    <% end %>
-  </div>
-<% end %>
+</div>

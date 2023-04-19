@@ -1,30 +1,40 @@
 <%= turbo_stream_from conversation %>
-<div id="<%= dom_id conversation %>" class='bg-sky-600 shadow-xl rounded-lg mt-3 px-2 py-4' style='position: relative'>
-  <div class="flex w-100 justify-between">
-    <p class='text-slate-50'>
+<div id="<%= dom_id conversation %>" class='shadow-xl rounded-lg mt-3 w-3/4 border border-transparent hover:border-indigo-600' style='position: relative'>
+  <div class="flex w-100 justify-between bg-indigo-600 rounded-t-lg px-3 py-2 items-center">
+    <p class='text-slate-50 text-sm'>
       <strong>Client phone number:</strong>
       <%= conversation.client_phone_number %>
-      <strong>- Keywords:</strong>
-      <%= conversation.keywords.join(', ') %>
     </p>
+    <span class='text-slate-50 text-sm'>
+      <strong>Keywords:</strong>
+      <% conversation.keywords.each do |keyword| %>
+        <span class="bg-[#05c270] text-xs px-[5px] py-[3px] rounded-md"><%= keyword%></span>
+      <% end %>
+    </span>
+    
 
-    <div class="flex">
+    <div class="flex w-[204px] justify-end">
       <% if conversation.unread_messages? %>
-        <div class='mr-2 text-sm rounded-md p-1 bg-amber-500 text-slate-50'>New messages <strong>(<%= conversation.messages.count(&:unread?) %>)</strong></div>
+          <div class='relative mr-2 text-sm rounded-md p-1 bg-[#fe8800] text-slate-50'>
+            <div class="absolute top-[-8px] right-[-5px] bg-slate-50 rounded-full w-[15px] h-[15px] text-[0.70rem] text-[#fe8800] flex justify-center items-center" >
+              <strong><%= conversation.messages.count(&:unread?) %></strong>
+            </div>
+            <img class="h-5 w-auto" src="/assets/visibility_off_white_24dp.svg" alt="">
+          </div>
         <%= form_for conversation, url: read_conversation_url(conversation), method: :patch, remote: true do |form| %>
-          <%= form.submit "Mark as Read", class: 'bg-teal-500 text-slate-50 p-1 rounded-md cursor-pointer text-sm mr-2' %>
+          <%= form.submit "Mark as Read", class: 'bg-[#ff3b3b] text-slate-50 py-1 px-2 rounded-md cursor-pointer text-sm mr-2' %>
         <% end %>
       <% end %>
-      <%= link_to 'Open', conversation_path(conversation, date: date, q: q, page: page, sort: sort), data: { turbo_frame: '_top' }, class: 'bg-teal-500 text-slate-50 p-1 rounded-md cursor-pointer text-sm' %>
+      <%= link_to 'Open', conversation_path(conversation, date: date, q: q, page: page, sort: sort), data: { turbo_frame: '_top' }, class: 'bg-[#05c270] text-slate-50 py-1 px-2 rounded-md cursor-pointer text-sm' %>
     </div>
   </div>
 
   <% if conversation.messages.size.zero? %>
-    <p class='text-slate-50'>
+    <p class='text-[#1c1c27] text-sm py-2 px-3'>
       No messages yet
     </p>
   <% else %>
-    <p class='text-slate-50'>
+    <p class='text-[#1c1c27] text-sm py-1 px-3'>
       <% if conversation.messages.last.outgoing %>
       You said:
       <% else %>
@@ -38,16 +48,16 @@
     </p>
   <% end %>
 
-  <p class='text-slate-50 text-sm'>
     <% if conversation.messages.select(&:outgoing?).empty? %>
-      No outgoing message sent yet
-    <% else %>
-      <p class='text-slate-50 text-sm'>
+      <p class='text-[#1c1c27] text-sm py-1 px-3'>
+        No outgoing message sent yet
+      </p>
+  <% else %>
+      <p class='text-[#1c1c27] text-sm py-1 px-3'>
         First message sent at: <%= conversation.first_message_dispatched_at&.in_time_zone('America/Mexico_City') %>
       </p>
-      <p class='text-slate-50 text-sm'>
+      <p class='text-[#1c1c27] text-sm py-1 px-3'>
         Last message sent at: <%= conversation.latest_outgoing_sent_at&.in_time_zone('America/Mexico_City') %>
       </p>
     <% end %>
-  </p>
 </div>
