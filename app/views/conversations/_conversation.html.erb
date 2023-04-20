@@ -1,5 +1,5 @@
 <%= turbo_stream_from conversation %>
-<div id="<%= dom_id conversation %>" class='shadow-xl rounded-lg mt-3 w-3/4 border border-transparent hover:border-[#69B7D3]' style='position: relative'>
+<div id="<%= dom_id conversation %>" class='shadow-xl rounded-lg mt-3 w-3/4 border border-transparent border-[#69B7D3] hover:bg-gray-200' style='position: relative'>
   <div class="flex w-100 justify-between bg-[#69B7D3] rounded-t-lg px-3 py-2 items-center">
     <p class='text-[#333333] text-md'>
       <strong>Client phone number:</strong>
@@ -8,7 +8,7 @@
     <span class='text-[#333333] text-md'>
       <strong>Keywords:</strong>
       <% conversation.keywords.reverse!.each_with_index do |keyword, index| %>
-        <% if index < 4 %>
+        <% if index < 3 %>
         <span class="bg-slate-50 text-md px-[5px] py-[3px] rounded-md font-semibold"><%= keyword%></span>
         <% end %>
       <% end %>
@@ -18,13 +18,16 @@
     </span>
     
 
-    <div class="flex w-[204px] justify-end">
+    <div class="flex w-[300px] justify-end">
       <% if conversation.unread_messages? %>
-          <div class='relative mr-2 text-md rounded-md p-1 bg-[#F16821] text-slate-50'>
+          <div class='relative mr-2 text-md rounded-md px-2 bg-[#F16821] text-slate-50'>
             <div class="absolute top-[-8px] right-[-5px] bg-slate-50 rounded-full w-[15px] h-[15px] text-[0.70rem] text-[#fe8800] flex justify-center items-center" >
               <strong><%= conversation.messages.count(&:unread?) %></strong>
             </div>
-            <img class="h-5 w-auto" src="/assets/visibility_off_white_24dp.svg" alt="">
+            <span class="text-sm">
+              New messages
+            </span>
+            <!-- <img class="h-5 w-auto" src="/assets/visibility_off_white_24dp.svg" alt=""> -->
           </div>
         <%= form_for conversation, url: read_conversation_url(conversation), method: :patch, remote: true do |form| %>
           <%= form.submit "Mark as Read", class: 'bg-[#AA4F56] text-slate-50 py-1 px-2 rounded-md cursor-pointer text-sm mr-2' %>
