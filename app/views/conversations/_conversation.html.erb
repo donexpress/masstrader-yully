@@ -24,7 +24,7 @@
             <div class="absolute top-[-8px] right-[-5px] bg-slate-50 rounded-full w-[15px] h-[15px] text-[0.70rem] text-[#fe8800] flex justify-center items-center" >
               <strong><%= conversation.messages.count(&:unread?) %></strong>
             </div>
-            <img class="h-5 w-auto" src="/assets/visibility_off_white_24dp.svg" alt="">
+            <%= image_tag 'visibility_off_white_24dp.svg', :class => "h-5 w-auto" >
           </div>
         <%= form_for conversation, url: read_conversation_url(conversation), method: :patch, remote: true do |form| %>
           <%= form.submit "Mark as Read", class: 'bg-[#AA4F56] text-slate-50 py-1 px-2 rounded-md cursor-pointer text-sm mr-2' %>
