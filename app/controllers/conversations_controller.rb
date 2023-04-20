@@ -243,7 +243,7 @@ class ConversationsController < ApplicationController
         messages.each do |message|
           if(message.body.start_with?("cod_"))
             cKye = message.body.split(",").last
-            if(cKye == keyword && shifted_start_datetime < message.sent_at && message.sent_at < shifted_end_datetime)
+            if(cKye == keyword && message.sent_at && shifted_start_datetime < message.sent_at && message.sent_at < shifted_end_datetime)
               found = false
               key.each do |added|
                 if(added == keyword)
