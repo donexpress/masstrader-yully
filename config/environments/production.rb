@@ -31,7 +31,7 @@ Rails.application.configure do
   config.assets.compile = false
 
   # https://stackoverflow.com/questions/8052865/rails-3-1-asset-pipeline-why-my-images-do-not-precompile-for-production
-  config.assets.precompile += %w[*.png *.jpg *.jpeg *.gif] 
+  config.assets.precompile += %w[*.png *.jpg *.jpeg *.gif *.svg] 
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
