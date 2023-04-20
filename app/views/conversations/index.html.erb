@@ -20,6 +20,8 @@
     <%= link_to "+ Conversation", new_conversation_path, class: 'bg-[#009588] text-slate-50 p-2 rounded-md cursor-pointer text-md' %>
   </div>
  </div>
+ <p style="color: green"><%= notice %></p>
+  <p style="color: red"><%= error %></p>
   <div class="mx-auto flex flex-col relative isolate px-6 lg:px-8 mt-5">
     <div class="mx-auto w-full inline-flex flex-row">
       <%= form_with url: conversations_path, method: :get, :html => {:class => 'flex flex-row justify-end w-[88%]'}, data: { turbo_frame: "conversations-turbo-frame", turbo_action: "advance" } do |form| %>
