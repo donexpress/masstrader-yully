@@ -9,7 +9,7 @@
       <strong>Keywords:</strong>
       <% conversation.keywords.reverse!.each_with_index do |keyword, index| %>
         <% if index < 3 %>
-        <span class="bg-slate-50 text-md px-[5px] py-[3px] rounded-md font-semibold"><%= keyword%></span>
+          <span class="bg-slate-50 text-md px-[5px] py-[3px] rounded-md font-semibold"><%= keyword != "" ? keyword : "N/K"%></span>
         <% end %>
       <% end %>
       <% if conversation.keywords.size > 4 %>
