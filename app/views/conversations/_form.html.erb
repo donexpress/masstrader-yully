@@ -12,11 +12,13 @@
   <% end %>
 
   <div class='mb-2'>
-    <%= form.label :client_phone_number, style: "display: block", class: 'font-bold' %>
-    <%= form.text_field :client_phone_number, placeholder: '56940234906', class: 'w-full rounded-lg' %>
+    <%= form.label :client_phone_number, style: "display: block", class: 'block text-sm font-medium leading-6 text-gray-900' %>
+    <div class="relative mt-2 rounded-md shadow-sm">
+      <%= form.text_field :client_phone_number, placeholder: '56940234906', class: 'block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#69B7D3] sm:text-sm sm:leading-6' %>
+    </div>
   </div>
 
   <div>
-    <%= form.submit class: 'w-full bg-sky-600 text-slate-50 p-4 text-center rounded-lg cursor-pointer' %>
+    <%= form.submit class: 'w-full bg-[#009588] text-slate-50 p-2 rounded-md cursor-pointer text-md' %>
   </div>
 <% end %>

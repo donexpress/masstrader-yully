@@ -23,13 +23,13 @@
   <div class="mx-auto flex flex-col relative isolate px-6 lg:px-8 mt-5">
     <div class="mx-auto w-full inline-flex flex-row">
       <%= form_with url: conversations_path, method: :get, :html => {:class => 'flex flex-row justify-end w-[88%]'}, data: { turbo_frame: "conversations-turbo-frame", turbo_action: "advance" } do |form| %>
-      <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 mr-2">
+      <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#69B7D3] mr-2">
         <%= form.date_field :date, class: 'block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 md:text-md md:leading-6', value: @date || '', max: Date.today %>
       </div>
-      <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 mr-2">
+      <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#69B7D3] mr-2">
         <%= form.text_field :q, placeholder: 'Enter phone number or keyword', class: 'block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 md:text-md md:leading-6 w-[280px]', value: @q || '' %>
       </div>
-      <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 mr-2">
+      <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#69B7D3] mr-2">
         <%= form.select :sort, [["Latest updated", "latest_updated"], ["Keyword DESC", "keyword_desc"], ["Keyword ASC", "keyword_asc"], ["No Keyword", "no_keyword"], ["Unread Messages", "unread_message"], ["No Outgoing Messages", "no_outgoing_messages"]], { selected: @sort || 'latest_updated' }, { class: 'block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 md:text-md md:leading-6' } %>
       </div>
       <div class="flex">

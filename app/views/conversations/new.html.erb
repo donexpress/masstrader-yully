@@ -1,11 +1,6 @@
-<div class="flex items-center">
-  <div class='mr-2'>
-    <%= link_to "<-- Back to conversations", conversations_path %>
-  </div>
-  <h1 class='text-3xl font-bold underline'>New Conversation</h1>
-</div>
+<%= render partial: 'shared/conversation_header', locals: { page: @page, client_phone_number: nil, heading: nil, conversation: nil, date: @date, q: @q, sort: @sort } %>
 
-<br />
+
 <div class='w-1/2 mx-auto'>
   <%= render "form", conversation: @conversation %>
 </div>
