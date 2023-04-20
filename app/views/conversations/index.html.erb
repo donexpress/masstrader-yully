@@ -1,10 +1,11 @@
 <div class="bg-white">
-  <header class="absolute inset-x-0 top-0 z-50">
-    <nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
+ <div class="flex mx-auto w-[72%] justify-between items-end">
+  <header class="">
+    <nav class="" aria-label="Global">
       <div class="flex lg:flex-1">
-        <a href="/wa/conversations" class="-m-1.5 p-1.5">
+        <a href="/wa/conversations" class="">
           <span class="sr-only">Masstrader</span>
-          <%= image_tag 'logo_mastrader.jpg', :class => "h-[11rem] relative left-[375px]" %>
+          <%= image_tag 'logo_mastrader.jpg', :class => "h-[11rem]" %>
         </a>
       </div>
       <!-- <div class="hidden lg:flex lg:gap-x-12">
@@ -14,11 +15,12 @@
       </div> -->
     </nav>
   </header>
-  <div class='flex w-[86%] justify-end'>
+  <div class='flex justify-end'>
     <%= link_to "+ Bulk", new_message_path, class: 'bg-[#009588] text-slate-50 p-2 rounded-md cursor-pointer text-md mr-2' %>
     <%= link_to "+ Conversation", new_conversation_path, class: 'bg-[#009588] text-slate-50 p-2 rounded-md cursor-pointer text-md' %>
   </div>
-  <div class="mx-auto flex flex-col relative isolate px-6 pt-14 lg:px-8">
+ </div>
+  <div class="mx-auto flex flex-col relative isolate px-6 lg:px-8 mt-5">
     <div class="mx-auto w-full inline-flex flex-row">
       <%= form_with url: conversations_path, method: :get, :html => {:class => 'flex flex-row justify-end w-[88%]'}, data: { turbo_frame: "conversations-turbo-frame", turbo_action: "advance" } do |form| %>
       <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 mr-2">
@@ -41,7 +43,7 @@
       <% end %>
     </div>
     <%= render partial:"conversations/pagination", date: @date, q: @q, tz: "America/Mexico_City", page: @page, sort: @sort, total_count: @total_count %>
-    <div id="conversations" class="flex flex-col items-center">
+    <div id="conversations" class="flex flex-col items-center mb-[20px]">
       <% @conversations.each do |conversation| %>
         <%= render conversation, date: @date, q: @q, tz: "America/Mexico_City", page: @page, sort: @sort %>
       <% end %>

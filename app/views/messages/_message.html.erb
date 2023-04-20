@@ -1,23 +1,26 @@
-<div id="<%= dom_id message %>" class='bg-teal-200 rounded-lg mt-3 py-3 px-2 shadow-xl' style='position: relative'>
-  <% if !message.read && !message.outgoing %>
-    <div class='text-sm rounded-md p-1 bg-amber-500 text-slate-50' style='position: absolute; top: 8px; right: 8px'>New</div>
-  <% end %>
 
-  <p>
-    <% if message.outgoing %>
-      <strong>Outgoing Message --></strong>
-    <% else %>
-      <strong>Incoming Message <--</strong>
+<div class="w-full flex <%= message.outgoing ? 'justify-end' : 'justify-start' %>" id="<%= dom_id message %>">
+  <div class="<%= message.outgoing ? 'bg-[#B6E5F5]' : 'bg-gray-100' %> rounded-lg mt-3 py-3 px-2 shadow-xl w-2/4" style='position: relative'>
+    <% if !message.read && !message.outgoing %>
+      <div class='text-sm rounded-md p-1 bg-amber-500 text-slate-50' style='position: absolute; top: 8px; right: 8px'>New</div>
     <% end %>
-    <%= message.body %>
-  </p>
-  <p class='text-sm text-slate-700'>
-    Sent at: <%= message.sent_at&.in_time_zone('America/Mexico_City') %>
-  </p>
 
-  <% if message.outgoing %>
-    <p class='text-sm text-slate-700'>
-      Delivered at: <%= message.delivered_at&.in_time_zone('America/Mexico_City') %>
+    <p>
+      <% if message.outgoing %>
+        <strong>Outgoing Message --></strong>
+      <% else %>
+        <strong>Incoming Message <--</strong>
+      <% end %>
+      <%= message.body %>
     </p>
-  <% end %>
+    <p class='text-sm text-slate-700'>
+      Sent at: <%= message.sent_at&.in_time_zone('America/Mexico_City') %>
+    </p>
+
+    <% if message.outgoing %>
+      <p class='text-sm text-slate-700'>
+        Delivered at: <%= message.delivered_at&.in_time_zone('America/Mexico_City') %>
+      </p>
+    <% end %>
+  </div>
 </div>

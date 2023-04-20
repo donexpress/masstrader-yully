@@ -1,10 +1,25 @@
-<div class="flex items-center">
-  <div class='mr-2'>
+<div class="bg-white">
+<div class="flex mx-auto w-[72%] justify-between items-end">
+  <header class="">
+    <nav class="" aria-label="Global">
+      <div class="flex lg:flex-1">
+        <a href="/wa/conversations?date=<%= date %>&page=<%= page %>&q=<%= q %>&sort=<%= sort %>#<%= conversation.present? ? dom_id(conversation) : nil %>" class="">
+          <span class="sr-only">Masstrader</span>
+          <%= image_tag 'logo_mastrader.jpg', :class => "h-[11rem]" %>
+        </a>
+      </div>
+    </nav>
+  </header>
+  <div class='flex justify-end'>
+    <h1 class=''><%= heading %>: <%= client_phone_number || '' %></h1>
+  </div>
+ </div>
+  <!-- <div class='mr-2'>
     <% if conversation.present? %>
       <%= link_to "<-- Back to conversations", conversations_path(page: page, q: q, date: date, anchor: dom_id(conversation), sort: sort) %>
     <% else %>
       <%= link_to "<-- Back to conversations", conversations_path(page: page, q: q, date: date, sort: sort) %>
     <% end %>
   </div>
-  <h1 class='text-3xl font-bold underline'><%= heading %>: <%= client_phone_number || '' %></h1>
+  <h1 class='text-3xl font-bold underline'><%= heading %>: <%= client_phone_number || '' %></h1> -->
 </div>

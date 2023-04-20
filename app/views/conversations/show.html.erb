@@ -5,11 +5,12 @@
   <div data-controller='new-message'>
     <%= render "messages/form", message: @message, conversation: @conversation, message_type: @message_type, template_params: @template_params %>
   </div>
-
-  <% @conversation.messages.each do |message| %>
-    <% if !message.new_record? %>
-      <%= render message, tz: 'America/Mexico_City' %>
+  <div class="mb-[20px]">
+    <% @conversation.messages.each do |message| %>
+      <% if !message.new_record? %>
+        <%= render message, tz: 'America/Mexico_City' %>
+      <% end %>
     <% end %>
-  <% end %>
+  </div>
 </div>
 
