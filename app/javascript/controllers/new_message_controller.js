@@ -62,4 +62,8 @@ export default class extends Controller {
   handleInputChange() {
     this.fillPreview();
   }
+
+  disableButton() {
+    alert('hello')
+  }
 }

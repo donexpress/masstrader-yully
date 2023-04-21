@@ -347,7 +347,7 @@ class ConversationsController < ApplicationController
       @conversation_query = @conversation_query.where("keywords = '{}'")
       @conversations = @conversation_query.order('id ASC NULLS LAST')
       @conversations = @conversation_query.limit(@per).offset((@page - 1) * @per).all
-      @conversation_query.count
+      @count = @conversation_query.count
     end
     def unreadMessage
       @conversation_query = @conversation_query.joins("join messages as m1 on conversations.id = m1.conversation_id")

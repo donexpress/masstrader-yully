@@ -8,7 +8,7 @@
     <span class='text-[#333333] text-md'>
       <strong>Keywords:</strong>
       <% conversation.keywords.reverse!.each_with_index do |keyword, index| %>
-        <% if index < 3 %>
+        <% if index < 3 && keyword != "" %>
           <span class="bg-slate-50 text-md px-[5px] py-[3px] rounded-md font-semibold"><%= keyword != "" ? keyword : "N/K"%></span>
         <% end %>
       <% end %>
@@ -19,10 +19,10 @@
     
 
     <div class="flex w-[300px] justify-end">
-      <% if conversation.unread_messages? %>
+      <% if conversation.messages.count{|m| m.outgoing && !m.read} > 0 %>
           <div class='relative mr-2 text-md rounded-md px-2 bg-[#F16821] text-slate-50 flex justify-center items-center'>
             <div class="absolute top-[-8px] right-[-5px] bg-slate-50 rounded-full w-[15px] h-[15px] text-[0.70rem] text-[#fe8800] flex justify-center items-center" >
-              <strong><%= conversation.messages.count(&:unread?) %></strong>
+              <strong><%= conversation.messages.count{|m| m.outgoing && !m.read} %></strong>
             </div>
             <%= image_tag 'visibility_off_white_24dp.svg', :class => "h-5 w-auto" %>
           </div>
