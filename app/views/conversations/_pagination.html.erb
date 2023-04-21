@@ -100,12 +100,25 @@
                 <% end %>
               </span>
             <% end %>
-            <a href="?date=<%=@date%>&q=<%=@q%>&sort=<%=@sort || 'latest_updated'%>&page=<%=@page+1%>&commit=<%=@page+1%>" class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+            <a href="?date=<%=@date%>&q=<%=@q%>&sort=<%=@sort || 'latest_updated'%>&page=<%=@page+1%>&commit=<%=@page+1%>" class="relative inline-flex items-center px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
               <span class="sr-only">Next</span>
               <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                 <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
               </svg>
             </a>
+            
+            <span class="rounded-r-md relative inline-flex items-center ml-[5px] pr-[5px] text-sm font-semibold text-gray-900 border border-[#d1d5db]">
+            <%= form_with url: conversations_path, method: :get, class: 'flex', data: { turbo_frame: "conversations-turbo-frame", turbo_action: "advance" } do |form| %>
+              <%= form.hidden_field :date, value: @date || '' %>
+              <%= form.hidden_field :q, value: @q || '' %>
+              <div class="rounded-md">
+                <%= form.text_field :page, class:'border-none w-[55px]', value: @page %>
+              </div>
+              <%= form.hidden_field :sort, value: @sort || 'latest_updated' %>
+              <%= form.submit 'Go' %>
+            <% end %>
+          </span>
+
           </nav>
         </div>
       </div>
