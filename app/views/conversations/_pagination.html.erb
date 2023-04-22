@@ -107,7 +107,7 @@
               </svg>
             </a>
             
-            <span class="rounded-r-md relative inline-flex items-center ml-[5px] pr-[5px] text-sm font-semibold text-gray-900 border border-[#d1d5db]">
+            <span class="rounded-r-md relative inline-flex items-center ml-[5px] text-sm font-semibold text-gray-900 border border-[#d1d5db]">
             <%= form_with url: conversations_path, method: :get, class: 'flex', data: { turbo_frame: "conversations-turbo-frame", turbo_action: "advance" } do |form| %>
               <%= form.hidden_field :date, value: @date || '' %>
               <%= form.hidden_field :q, value: @q || '' %>
@@ -115,7 +115,7 @@
                 <%= form.text_field :page, class:'border-none w-[55px]', value: @page %>
               </div>
               <%= form.hidden_field :sort, value: @sort || 'latest_updated' %>
-              <%= form.submit 'Go' %>
+              <%= form.submit 'Go' ,class: 'bg-[#009588] text-slate-50 p-2 rounded-r-md' %>
             <% end %>
           </span>
 
