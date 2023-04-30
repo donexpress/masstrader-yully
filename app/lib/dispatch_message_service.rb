@@ -59,9 +59,9 @@ class DispatchMessageService
       base_params.merge({
         type: 'template',
         template: {
-          name: 'cod_alert_v9',
+          name: 'm_1',
           language: {
-            code: 'es',
+            code: 'en',
           },
           components: [{
             type: "body",
@@ -73,7 +73,7 @@ class DispatchMessageService
       base_params.merge({
         type: 'template',
         template: {
-          name: 'cod_alert_v10',
+          name: 'm_1',
           language: {
             code: 'en',
           },

@@ -9,11 +9,11 @@ class Message < ApplicationRecord
 
   TEXT_TYPE = 'text'
   TEMPLATE_TYPE = 'template 1 (español)'
-  TEMPLATE_TYPE_2 = 'template 2 (english)'
+  TEMPLATE_TYPE_2 = 'template'
 
   BODY_TYPES = [
     TEXT_TYPE,
-    TEMPLATE_TYPE,
+    #TEMPLATE_TYPE,
     TEMPLATE_TYPE_2
   ].freeze
 
@@ -22,7 +22,7 @@ class Message < ApplicationRecord
   validates :outgoing, inclusion: { in: [true, false] }
 
   attribute :dispatch_error, :string, default: nil
-  attribute :message_type, :string, default: TEMPLATE_TYPE
+  attribute :message_type, :string, default: TEMPLATE_TYPE_2
   attribute :template_params, :json, default: {}
   attribute :client_phone_number, :string, default: nil
   attribute :keyword_string, :string
