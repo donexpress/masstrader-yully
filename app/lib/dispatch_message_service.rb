@@ -59,7 +59,7 @@ class DispatchMessageService
       base_params.merge({
         type: 'template',
         template: {
-          name: 'm_1',
+          name: 'cod_ym_1',
           language: {
             code: 'en',
           },
@@ -73,7 +73,7 @@ class DispatchMessageService
       base_params.merge({
         type: 'template',
         template: {
-          name: 'm_1',
+          name: 'cod_ym_1',
           language: {
             code: 'en',
           },
