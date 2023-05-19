@@ -1,6 +1,6 @@
 <%= render partial: 'shared/conversation_header', locals: { page: @page, client_phone_number: nil, heading: 'Bulk Conversations', conversation: nil, date: @date, q: @q, sort: @sort } %>
 
-<div class='w-1/2 mx-auto mb-[20px]'>
+<div id="data_scroll_container" class='w-1/2 mx-auto mb-[20px]'>
   <div class='my-2'><strong>Bulk Conversations</strong></div>
   <div data-controller='new-message'>
     <% flash.each do |type, msg| %>
@@ -13,3 +13,5 @@
     <%= render "form", message: @message, conversation: nil, message_type: @message_type, template_params: @template_params %>
   </div>
 </div>
+
+<button id="myBtn" title="Go to top"><a href="#top">Top</a></button>
