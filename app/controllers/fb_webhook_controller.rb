@@ -14,7 +14,7 @@ class FbWebhookController < ApplicationController
         messages, client_phone_number = ReceiveMessageService.new(event).process
         conversation = Conversation.find_by(client_phone_number:)
 
-        if conversation.nil?
+        if conversation.nil? && event["entry"].first["changes"].first["value"]["metadata"]["display_phone_number"] == ENV.fetch('WA_SENDER_PHONE_NUMBER')
           conversation = Conversation.create!(client_phone_number:)
         end
 
