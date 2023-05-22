@@ -10,8 +10,10 @@ class ConversationsController < ApplicationController
     @q = params[:q]
     @date = params[:date]
     @sort = params[:sort]
+    business_phone_number = ENV.fetch('WA_SENDER_PHONE_NUMBER')
 
     @conversation_query = Conversation.includes(:messages)
+    @conversation_query = @conversation_query.where("business_phone_number = ?", business_phone_number)
     if @q.present?
       @conversation_query = @conversation_query
                   .where('client_phone_number LIKE ?', "%#{@q}%").or(
@@ -140,6 +142,10 @@ class ConversationsController < ApplicationController
     end
 
     conversation_query = Conversation.includes(:messages)
+    business_phone_number = ENV.fetch('WA_SENDER_PHONE_NUMBER')
+    conversation_query = conversation_query.where("business_phone_number = ?", business_phone_number)
+
+
     end_datetime = start_datetime.at_end_of_day()
     start_utc_offset = Time.parse(start_datetime.to_date.to_s).in_time_zone('America/Mexico_City').utc_offset
     end_utc_offset = Time.parse(end_datetime.to_date.to_s).in_time_zone('America/Mexico_City').utc_offset
