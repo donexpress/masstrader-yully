@@ -10,6 +10,7 @@ class FbWebhookController < ApplicationController
     begin
       fb_event = FbEvent.create!(data: event.permit!.to_h)
       if fb_event.incoming_message_event?
+        puts event
         messages, client_phone_number = ReceiveMessageService.new(event).process
         conversation = Conversation.find_by(client_phone_number:)
 
