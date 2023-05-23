@@ -52,6 +52,10 @@ class Conversation < ApplicationRecord
       if clean_client_phone_number.length != 12
         errors.add(:client_phone_number, 'Malaysian numbers require 10-digits followed after the country code and mobile fixed digit')
       end
+    elsif client_phone_number.starts_with?('86')
+      if client_phone_number.length != 13
+        errors.add(:client_phone_number, 'Cannot send message to this number. Check for the correct country code.')
+      end
     else
       errors.add(:client_phone_number, 'Invalid phone number')
     end
