@@ -49,7 +49,7 @@ class Conversation < ApplicationRecord
     return if client_phone_number.nil?
 
     if client_phone_number.start_with?('60')
-      if clean_client_phone_number.length != 12
+      if clean_client_phone_number.length != 12 && clean_client_phone_number.length != 11
         errors.add(:client_phone_number, 'Malaysian numbers require 10-digits followed after the country code and mobile fixed digit')
       end
     elsif client_phone_number.starts_with?('86')
