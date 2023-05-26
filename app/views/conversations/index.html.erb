@@ -37,7 +37,7 @@
       <div class="flex">
         <%= form.submit "Search", class: 'bg-[#009588] shadow-sm text-slate-50 p-2 rounded-md cursor-pointer mr-2' %>
       </div>
-      <%  if @date.present? %>
+      <% if @date.present? || params[:sort] == "no_keyword" || params[:sort] == "no_outgoing_messages" || params[:sort] == "no_outgoing_messages" || params[:sort] == "unread_message"%>
       <div class="flex">
         <%= link_to "Download as Excel", export_excel_path(format: :xlsx, date: params[:date], sort: params[:sort]), class: 'bg-[#009588] shadow-sm text-slate-50 p-2 rounded-md cursor-pointer' %>
       </div>

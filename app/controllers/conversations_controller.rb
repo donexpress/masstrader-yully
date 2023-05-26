@@ -135,8 +135,7 @@ class ConversationsController < ApplicationController
     @date = params[:date]
     @sort = params[:sort]
     if !@date.present?
-      @date = DateTime.now
-      start_datetime = @date
+      start_datetime = DateTime.now
     else 
       start_datetime = DateTime.parse(@date)
     end
@@ -156,9 +155,13 @@ class ConversationsController < ApplicationController
     # puts(@tz)
     conversation_query = conversation_query.select("conversations.*")
     if @sort.present? && (@sort == "no_keyword" || @sort == "no_outgoing_messages")
-      conversation_query = conversation_query.where('latest_message_sent_at BETWEEN ? AND ?', shifted_start_datetime, shifted_end_datetime)
+      if @date.present?
+        conversation_query = conversation_query.where('latest_message_sent_at BETWEEN ? AND ?', shifted_start_datetime, shifted_end_datetime)
+      end
     else
-      conversation_query = conversation_query.where('latest_outgoing_sent_at BETWEEN ? AND ?', shifted_start_datetime, shifted_end_datetime)
+      if @date.present?
+        conversation_query = conversation_query.where('latest_outgoing_sent_at BETWEEN ? AND ?', shifted_start_datetime, shifted_end_datetime)
+      end
     end
     # conversation_query =
         if @sort == 'keyword_asc' || @sort == 'keyword_desc'          
@@ -239,7 +242,12 @@ class ConversationsController < ApplicationController
 
     def getKeyword(keywords, messages)
       key = []
-      start_datetime = DateTime.parse(@date)
+      if @date.present?
+        local = DateTime.parse(@date)
+      else
+        local = DateTime.now
+      end
+      start_datetime = local
       end_datetime = start_datetime.at_end_of_day()
       start_utc_offset = Time.parse(start_datetime.to_date.to_s).in_time_zone('America/Mexico_City').utc_offset
       end_utc_offset = Time.parse(end_datetime.to_date.to_s).in_time_zone('America/Mexico_City').utc_offset
@@ -249,7 +257,7 @@ class ConversationsController < ApplicationController
         messages.each do |message|
           if(message.body.start_with?("cod_"))
             cKye = message.body.split(",").last
-            if(cKye == keyword && message.sent_at && shifted_start_datetime < message.sent_at && message.sent_at < shifted_end_datetime)
+            if(!@date.present? || cKye == keyword && message.sent_at && shifted_start_datetime < message.sent_at && message.sent_at < shifted_end_datetime)
               found = false
               key.each do |added|
                 if(added == keyword)
