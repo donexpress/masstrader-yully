@@ -44,7 +44,7 @@ class Message < ApplicationRecord
 
   def from_csv_rows(rows)
     messages = rows.map do |row|
-      next nil if row.select(&:present?).size < 5
+      next nil if row.select(&:present?).size < 6
 
       client_phone_number = sanitize_and_localize_phone_number(row[0])
 
