@@ -7,7 +7,10 @@ function messagePreview(template, ...args) {
     To proceed with the delivery of your order, please reply to this message with the word "*yes*". After receiving your confirmation, our courier will deliver your package to the address you provided: ${args[3]}.
     Your order will be shipped within 24 hours and estimated delivery time is 1-3 days. Payment will be made upon delivery (COD), and we accept cash and QR pay. The amount is ${args[4]}.
 
-    Feel free to contact us: service@daynel.com reference ${args[5]}.`;
+    Feel free to contact us: 
+    WhatsApp: +60 196812677
+    email: service@daynel.com 
+    reference ${args[5]}.`;
 }
 
 // Connects to data-controller="new-conversation"
