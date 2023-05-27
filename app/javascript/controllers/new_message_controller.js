@@ -32,8 +32,8 @@ export default class extends Controller {
       "message_template_params[0]"
     ).value;
     const product = document.getElementById("message_template_params[1]").value;
-    const address = document.getElementById("message_template_params[2]").value;
-    const specialGift = document.getElementById("message_template_params[3]").value;
+    const specialGift = document.getElementById("message_template_params[2]").value;
+    const address = document.getElementById("message_template_params[3]").value;
     const amount = document.getElementById("message_template_params[4]").value;
     const referenceId = document.getElementById(
       "message_template_params[5]"
