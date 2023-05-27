@@ -58,7 +58,8 @@ class Message < ApplicationRecord
           1 => row[3],
           2 => row[2],
           3 => row[4],
-          4 => row[1]
+          4 => row[1],
+          5 => row[6]
         }
       )
     end

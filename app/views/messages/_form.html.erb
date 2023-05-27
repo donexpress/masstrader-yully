@@ -35,14 +35,17 @@
     <%= form.label 'Product title', style: "display: block", class: 'font-bold' %>
     <%= form.text_field :'template_params[1]', class: 'w-full rounded-lg', placeholder: 'Product title', data: { action: 'input->new-message#handleInputChange' }, value: conversation.nil? ? 'CSV Product title' : template_params[1], disabled: conversation.nil? %>
 
+    <%= form.label 'Special gift', style: "display: block", class: 'font-bold' %>
+    <%= form.text_field :'template_params[2]', class: 'w-full rounded-lg', placeholder: 'Special gift', data: { action: 'input->new-message#handleInputChange' }, value: conversation.nil? ? 'CSV Special gift' : template_params[2], disabled: conversation.nil? %>
+
     <%= form.label 'Address', style: "display: block", class: 'font-bold' %>
-    <%= form.text_field :'template_params[2]', class: 'w-full rounded-lg', placeholder: 'Address', data: { action: 'input->new-message#handleInputChange' }, value: conversation.nil? ? 'CSV Address' : template_params[2], disabled: conversation.nil? %>
+    <%= form.text_field :'template_params[3]', class: 'w-full rounded-lg', placeholder: 'Address', data: { action: 'input->new-message#handleInputChange' }, value: conversation.nil? ? 'CSV Address' : template_params[3], disabled: conversation.nil? %>
 
     <%= form.label 'Amount', style: "display: block", class: 'font-bold' %>
-    <%= form.text_field :'template_params[3]', class: 'w-full rounded-lg', placeholder: 'Amount', data: { action: 'input->new-message#handleInputChange' }, value: conversation.nil? ? 'CSV Amount' : template_params[3], disabled: conversation.nil? %>
+    <%= form.text_field :'template_params[4]', class: 'w-full rounded-lg', placeholder: 'Amount', data: { action: 'input->new-message#handleInputChange' }, value: conversation.nil? ? 'CSV Amount' : template_params[4], disabled: conversation.nil? %>
 
     <%= form.label 'Reference ID', style: "display: block", class: 'font-bold' %>
-    <%= form.text_field :'template_params[4]', class: 'w-full rounded-lg', placeholder: 'Reference ID', data: { action: 'input->new-message#handleInputChange' }, value: conversation.nil? ? 'CSV Reference ID' : template_params[4], disabled: conversation.nil? %>
+    <%= form.text_field :'template_params[5]', class: 'w-full rounded-lg', placeholder: 'Reference ID', data: { action: 'input->new-message#handleInputChange' }, value: conversation.nil? ? 'CSV Reference ID' : template_params[5], disabled: conversation.nil? %>
 
     <%= form.label 'Preview', style: "display: block", class: 'font-bold' %>
     <%= form.text_area :preview, class: 'w-full rounded-lg', rows: 12, disabled: true, data: { 'new-message-target': 'preview' }  %>
