@@ -56,10 +56,10 @@ class Message < ApplicationRecord
         template_params: {
           0 => row[5],
           1 => row[3],
-          2 => row[2],
-          3 => row[4],
-          4 => row[1],
-          5 => row[6]
+          2 => row[6],
+          3 => row[2],
+          4 => row[4],
+          5 => row[1]
         }
       )
     end
