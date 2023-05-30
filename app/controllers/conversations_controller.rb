@@ -134,6 +134,7 @@ class ConversationsController < ApplicationController
   def export_excel
     @date = params[:date]
     @sort = params[:sort]
+    mark_as_read = params[:mark_as_read]
     if !@date.present?
       start_datetime = DateTime.now
     else 
@@ -212,6 +213,13 @@ class ConversationsController < ApplicationController
       final_conversation = final_conversation.sort { |a, b| ((a.present? && a.keywords.present?) ? a.keywords.last : "") <=> ((b.present? && b.keywords.present?) ? b.keywords.last : "" )}
     end
     @items = final_conversation
+    if mark_as_read
+      if !@date.present?
+        Message.update_all "read = 'true'"
+      else
+        messages = Message.where("created_at BETWEEN ? AND ?", shifted_start_datetime, shifted_end_datetime).update_all "read = 'true'"
+      end
+    end
     respond_to do |format|
       format.xlsx {
         response.headers[

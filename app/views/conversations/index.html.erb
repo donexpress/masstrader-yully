@@ -38,11 +38,16 @@
         <%= form.submit "Search", class: 'bg-[#009588] shadow-sm text-slate-50 p-2 rounded-md cursor-pointer mr-2' %>
       </div>
       <% if @date.present? || params[:sort] == "no_keyword" || params[:sort] == "no_outgoing_messages" || params[:sort] == "no_outgoing_messages" || params[:sort] == "unread_message"%>
-      <div class="flex">
-        <%= link_to "Download as Excel", export_excel_path(format: :xlsx, date: params[:date], sort: params[:sort]), class: 'bg-[#009588] shadow-sm text-slate-50 p-2 rounded-md cursor-pointer' %>
-      </div>
-        <% end %>         
+        <div class="flex">
+          <%= link_to "Download as Excel", export_excel_path(format: :xlsx, date: params[:date], sort: params[:sort]), class: 'bg-[#009588] shadow-sm text-slate-50 p-2 rounded-md cursor-pointer' %>
+        </div>
       <% end %>
+      <%  if params[:sort] == "unread_message"%>
+        <div class="flex pl-[10px]">
+          <%= link_to "Mark all as read", export_excel_path(format: :xlsx, date: params[:date], sort: params[:sort], mark_as_read: true), class: 'bg-[#009588] shadow-sm text-slate-50 p-2 rounded-md cursor-pointer',:onclick => 'setTimeout(()=>{location.reload()}, 1000)' %>
+        </div>
+      <% end %>          
+    <% end %>
     </div>
     <%= render partial:"conversations/pagination", date: @date, q: @q, tz: "America/Mexico_City", page: @page, sort: @sort, total_count: @total_count %>
     <div id="conversations" class="flex flex-col items-center mb-[20px]">
