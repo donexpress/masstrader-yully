@@ -189,7 +189,7 @@ class MessagesController < ApplicationController
     def assign_new_message_vars
       @message = Message.new
       @message_type = Message::TEMPLATE_TYPE
-      @template_params = ['', '', '', '', '']
+      @template_params = ['', '', '', '', '', '']
 
       url_params = CGI.parse(URI.parse(request.referrer || '').query || '')
       @date = url_params['date'].is_a?(Array) ? url_params['date']&.first : url_params['date']

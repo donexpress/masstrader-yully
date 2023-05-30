@@ -69,11 +69,12 @@ class DispatchMessageService
           }]
         }
       })
+    # This condition is done
     elsif @message.message_type == Message::TEMPLATE_TYPE_2
       base_params.merge({
         type: 'template',
         template: {
-          name: 'cod_ym_1',
+          name: 'cod_ym_2',
           language: {
             code: 'en',
           },
