@@ -58,4 +58,13 @@
   </div>
 </div>
 <button id="myBtn" title="Go to top"><a href="#top"><%= image_tag 'up.png', :class => "h-[2rem]" %></a></button>
+<script>
+let mybutton = document.getElementById("myBtn");
+window.onscroll = function () { scrollFunction() };
+if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        mybutton.style.display = "block";
+    } else {
+        mybutton.style.display = "none";
+    }
+</script>
 
