@@ -64,7 +64,11 @@ end
 wb = xlsx_package.workbook
 head_style = wb.styles.add_style bg_color: "DDDDDD",  b: true
 wb.use_autowidth = false
-head = ["Keyword", "Phone number", @date]
+if !@date.present?
+  head = ["Date","Keyword", "Phone number", @date]
+else
+  head = ["Keyword", "Phone number", @date]
+end
 rows = []
 
 wb.add_worksheet(name: "Conversations") do |sheet|
@@ -73,7 +77,11 @@ wb.add_worksheet(name: "Conversations") do |sheet|
   sheet.row_style 0, head_style
   widths = [20,20]
   @items.each do |item|
-    row = [item.keywords.join(", "), item.client_phone_number]
+    if !@date.present? 
+      row = [item.latest_outgoing_sent_at ,item.keywords.join(", "), item.client_phone_number]
+    else
+      row = [item.keywords.join(", "), item.client_phone_number]
+    end
     item.messages.each_with_index do |message, index|
       if checkMessageDate(message) || @sort == 'unread_message' || @sort == 'no_keyword'
         row.append(message.body)
