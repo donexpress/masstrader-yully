@@ -1,16 +1,14 @@
 import { Controller } from "@hotwired/stimulus";
 
 function messagePreview(template, ...args) {
-  return `Dear customer ${args[0]}:
-
-  Here is the delivery center of ${args[1]}, which you ordered at Zkvay. We hope you are excited to get your order and the special gift we offer: ${args[2]}
-    To proceed with the delivery of your order, please reply to this message with the word "*yes*". After receiving your confirmation, our courier will deliver your package to the address you provided: ${args[3]}.
-    Your order will be shipped within 24 hours and estimated delivery time is 1-3 days. Payment will be made upon delivery (COD), and we accept cash and QR pay. The amount is ${args[4]}.
-
-    Feel free to contact us: 
+  return `
+  Important: Reply "*confirm*" to Confirm *FREE Gift* and Your Order Shipment
+    Dear ${args[0]},
+    Here is the delivery center of your order ${args[3]} ${args[1]}, ${args[4]} at Zkvay. To confirm your order shipment and *FREE Gift* we offer: ${args[2]}, please reply to this message with the word "*confirm*".
+    Once receiving your confirmation, we will ship your order within 12 hours. Estimated delivery time is 1-3 days.
+    Feel free to contact us:
     WhatsApp: +60 196812677
-    email: service@daynel.com 
-    reference ${args[5]}.`;
+    Email: service@daynel.com`;
 }
 
 // Connects to data-controller="new-conversation"
@@ -31,25 +29,20 @@ export default class extends Controller {
 
   fillPreview() {
     const preview = this.previewTarget;
-    const clientName = document.getElementById(
-      "message_template_params[0]"
-    ).value;
+    const clientName = document.getElementById("message_template_params[0]").value;
     const product = document.getElementById("message_template_params[1]").value;
     const specialGift = document.getElementById("message_template_params[2]").value;
-    const address = document.getElementById("message_template_params[3]").value;
+    const referenceId = document.getElementById("message_template_params[3]").value;
     const amount = document.getElementById("message_template_params[4]").value;
-    const referenceId = document.getElementById(
-      "message_template_params[5]"
-    ).value;
+    
     const messageType = document.getElementById("message_message_type").value;
     preview.value = messagePreview(
       messageType,
       clientName || "{clientName}",
       product || "{product}",
       specialGift || "{specialGift}",
-      address || "{address}",
+      referenceId || "{referenceId}",
       amount || "{amount}",
-      referenceId || "{referenceId}"
     );
     console.log(messageType);
   }
