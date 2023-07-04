@@ -61,7 +61,7 @@ class ConversationsController < ApplicationController
     @message = @conversation.messages.build
     @message_type = @conversation.messages.size.zero? ? Message::TEMPLATE_TYPE : Message::TEXT_TYPE
 
-    @template_params = ['', '', '', '', '', '']
+    @template_params = ['', '', '', '', '']
   end
 
   # GET /conversations/new

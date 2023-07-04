@@ -54,7 +54,7 @@ class DispatchMessageService
       recipient_type: 'individual',
       to: @message.conversation.client_phone_number,
     }
-
+    # This condition is not done
     if @message.message_type == Message::TEMPLATE_TYPE
       base_params.merge({
         type: 'template',
@@ -74,7 +74,7 @@ class DispatchMessageService
       base_params.merge({
         type: 'template',
         template: {
-          name: 'cod_ym_2',
+          name: 'cod_ym_3',
           language: {
             code: 'en',
           },
