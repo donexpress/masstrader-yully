@@ -3,9 +3,11 @@ import { Controller } from "@hotwired/stimulus";
 function messagePreview(template, ...args) {
   return `
   Important: Reply "*confirm*" to Confirm *FREE Gift* and Your Order Shipment
-  Dear ${args[0]},
-  Here is the delivery center of your order ${args[3]} ${args[1]}, ${args[4]} at Zkvay. To confirm your order shipment and *FREE Gift* we offer: ${args[2]}, please reply to this message with the word "*confirm*". Once receiving your confirmation, we will ship your order within 12 hours. Estimated delivery time is 1-3 days.
 
+  Dear ${args[0]},
+  Here is the delivery center of your order ${args[3]} ${args[1]}, ${args[4]} at Zkvay. To confirm your order shipment and *FREE Gift* we offer: ${args[2]}, please reply to this message with the word "*confirm*". 
+
+  Once receiving your confirmation, we will ship your order within 12 hours. Estimated delivery time is 1-3 days.
   Feel free to contact us:
   WhatsApp: +60 196812677
   Email: service@daynel.com`;
