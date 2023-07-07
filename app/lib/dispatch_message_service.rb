@@ -76,7 +76,7 @@ class DispatchMessageService
         template: {
           name: 'cod_ym_4',
           language: {
-            code: 'ms-MY',
+            code: 'ms',
           },
           components: [{
             type: "body",
