@@ -2,15 +2,14 @@ import { Controller } from "@hotwired/stimulus";
 
 function messagePreview(template, ...args) {
   return `
-  Important: Reply "*confirm*" to Confirm *FREE Gift* and Your Order Shipment
+  Hai ${args[0]},
 
-  Dear ${args[0]},
-  Here is the delivery center of your order ${args[3]} ${args[1]}, ${args[4]} at Zkvay. To confirm your order shipment and *FREE Gift* we offer: ${args[2]}, please reply to this message with the word "*confirm*". 
+  Saya ialah penghantar ${args[1]} (${args[3]}) yang anda beli. Kami sedang menyediakan pesanan anda dengan Hadiah Surprise: ${args[2]}
 
-  Once receiving your confirmation, we will ship your order within 12 hours. Estimated delivery time is 1-3 days.
-  Feel free to contact us:
-  WhatsApp: +60 196812677
-  Email: service@daynel.com`;
+  Sila balas *“Confirm”* untuk redeem hadiah surprise. Sila beritahu hari mana yang available untuk terima barang.
+
+  Hubungilah kami
+  WhatsApp: +60 196812677`;
 }
 
 // Connects to data-controller="new-conversation"
@@ -35,7 +34,6 @@ export default class extends Controller {
     const product = document.getElementById("message_template_params[1]").value;
     const specialGift = document.getElementById("message_template_params[2]").value;
     const referenceId = document.getElementById("message_template_params[3]").value;
-    const amount = document.getElementById("message_template_params[4]").value;
     
     const messageType = document.getElementById("message_message_type").value;
     preview.value = messagePreview(
@@ -43,8 +41,7 @@ export default class extends Controller {
       clientName || "{clientName}",
       product || "{product}",
       specialGift || "{specialGift}",
-      referenceId || "{referenceId}",
-      amount || "{amount}",
+      referenceId || "{referenceId}"
     );
     console.log(messageType);
   }

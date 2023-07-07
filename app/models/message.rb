@@ -44,7 +44,7 @@ class Message < ApplicationRecord
 
   def from_csv_rows(rows)
     messages = rows.map do |row|
-      next nil if row.select(&:present?).size < 5
+      next nil if row.select(&:present?).size < 4
 
       client_phone_number = sanitize_and_localize_phone_number(row[0])
 
@@ -54,11 +54,10 @@ class Message < ApplicationRecord
         keyword_string: row[1],
         message_type:,
         template_params: {
-          0 => row[4],
+          0 => row[3],
           1 => row[2],
-          2 => row[5],
-          3 => row[1],
-          4 => row[3]
+          2 => row[4],
+          3 => row[1]
         }
       )
     end

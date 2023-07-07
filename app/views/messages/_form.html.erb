@@ -41,9 +41,6 @@
     <%= form.label 'Order Number', style: "display: block", class: 'font-bold' %>
     <%= form.text_field :'template_params[3]', class: 'w-full rounded-lg', placeholder: 'Order Number', data: { action: 'input->new-message#handleInputChange' }, value: conversation.nil? ? 'CSV Order Number' : template_params[3], disabled: conversation.nil? %>
 
-    <%= form.label 'Amount', style: "display: block", class: 'font-bold' %>
-    <%= form.text_field :'template_params[4]', class: 'w-full rounded-lg', placeholder: 'Amount', data: { action: 'input->new-message#handleInputChange' }, value: conversation.nil? ? 'CSV Amount' : template_params[4], disabled: conversation.nil? %>
-
     <%= form.label 'Preview', style: "display: block", class: 'font-bold' %>
     <%= form.text_area :preview, class: 'w-full rounded-lg', rows: 12, disabled: true, data: { 'new-message-target': 'preview' }  %>
   </div>

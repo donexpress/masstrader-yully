@@ -74,9 +74,9 @@ class DispatchMessageService
       base_params.merge({
         type: 'template',
         template: {
-          name: 'cod_ym_3',
+          name: 'cod_ym_4',
           language: {
-            code: 'en',
+            code: 'ms-MY',
           },
           components: [{
             type: "body",
