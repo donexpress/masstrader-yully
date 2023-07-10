@@ -13,7 +13,7 @@ class ConversationsController < ApplicationController
     business_phone_number = ENV.fetch('WA_SENDER_PHONE_NUMBER')
 
     @conversation_query = Conversation.includes(:messages)
-    @conversation_query = @conversation_query.where("business_phone_number = ? and keywords <> '{}'", business_phone_number)
+    @conversation_query = @conversation_query.where("business_phone_number = ?", business_phone_number)
     if @q.present?
       @conversation_query = @conversation_query
                   .where('client_phone_number LIKE ?', "%#{@q}%").or(
@@ -143,7 +143,7 @@ class ConversationsController < ApplicationController
 
     conversation_query = Conversation.includes(:messages)
     business_phone_number = ENV.fetch('WA_SENDER_PHONE_NUMBER')
-    conversation_query = conversation_query.where("business_phone_number = ? and keywords <> '{}'", business_phone_number)
+    conversation_query = conversation_query.where("business_phone_number = ?", business_phone_number)
 
 
     end_datetime = start_datetime.at_end_of_day()
@@ -404,7 +404,7 @@ class ConversationsController < ApplicationController
     end
     def noOutgoingMessages
       @conversations = @conversation_query.select("distinct conversations.*")
-      @conversation_query = @conversation_query.where("latest_outgoing_sent_at IS NULL AND keywords <> '{}' AND keywords <> '{\"\"}' AND cardinality(keywords) > 0")
+      @conversation_query = @conversation_query.where("latest_outgoing_sent_at IS NULL")
       @conversations = @conversation_query.order('id ASC NULLS LAST')
       conversations = @conversation_query.all
       final_conversation = []
