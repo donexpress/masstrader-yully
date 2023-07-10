@@ -12,6 +12,17 @@ class FbWebhookController < ApplicationController
       if fb_event.incoming_message_event?
         puts event
         messages, client_phone_number = ReceiveMessageService.new(event).process
+        if !client_phone_number.start_with?("600") && client_phone_number.start_with?("60")
+          conversation = Conversation.find_by(client_phone_number:)
+          if conversation.nil?
+            client_phone_number_change = client_phone_number.insert(2, '0')
+            conversation1 = Conversation.find_by(client_phone_number_change:)
+            if !conversation.nil?
+              client_phone_number = client_phone_number_change
+            end
+          end
+
+        end
         conversation = Conversation.find_by(client_phone_number:)
 
         if conversation.nil? && event["entry"].first["changes"].first["value"]["metadata"]["display_phone_number"] == ENV.fetch('WA_SENDER_PHONE_NUMBER')
