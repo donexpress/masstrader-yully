@@ -47,7 +47,6 @@ class MessagesController < ApplicationController
                 if sanitize_phone_number(value.strip).length != 13 && sanitize_phone_number(value.strip).length != 12
                   data.append(sanitize_phone_number(value.strip));
                 end
-              end
               elsif sanitize_phone_number(value.strip).start_with?("60")
                 if sanitize_phone_number(value.strip).length != 12 && sanitize_phone_number(value.strip).length != 11
                   data.append(sanitize_phone_number(value.strip));
