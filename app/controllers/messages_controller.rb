@@ -168,10 +168,10 @@ class MessagesController < ApplicationController
       # refactor candidate
 
       if phones.length == 0
-      respond_to do |format|
-        format.html { redirect_to conversations_url, notice: "Messages were successfully created." }
-        format.json { render :show, status: :created, location: @message }
-      end
+        respond_to do |format|
+          format.html { redirect_to conversations_url, notice: "Messages were successfully created." }
+          format.json { render :show, status: :created, location: @message }
+        end
       else
         respond_to do |format|
           format.html { redirect_to conversations_url, notice: "Messages were successfully created.", error: "This phone numbers may not have been sent a message #{phones.join(", ")}" }
