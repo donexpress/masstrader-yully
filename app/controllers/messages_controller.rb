@@ -43,7 +43,11 @@ class MessagesController < ApplicationController
         r.each_with_index do |value, index|
           if index == 0
             if !value.nil?
-              if sanitize_phone_number(value.strip).start_with?("60")
+              if sanitize_phone_number(value.strip).start_with?("600")
+                if sanitize_phone_number(value.strip).length != 13 && sanitize_phone_number(value.strip).length != 12
+                  data.append(sanitize_phone_number(value.strip));
+                end
+              elsif sanitize_phone_number(value.strip).start_with?("60")
                 if sanitize_phone_number(value.strip).length != 12 && sanitize_phone_number(value.strip).length != 11
                   data.append(sanitize_phone_number(value.strip));
                 end
