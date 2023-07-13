@@ -43,12 +43,7 @@ class MessagesController < ApplicationController
         r.each_with_index do |value, index|
           if index == 0
             if !value.nil?
-              if sanitize_phone_number(value.strip).start_with?("600")
-                if sanitize_phone_number(value.strip).length != 13 && sanitize_phone_number(value.strip).length != 12
-                  data.append(sanitize_phone_number(value.strip));
-                end
-              end
-              elsif sanitize_phone_number(value.strip).start_with?("60")
+              if sanitize_phone_number(value.strip).start_with?("60")
                 if sanitize_phone_number(value.strip).length != 12 && sanitize_phone_number(value.strip).length != 11
                   data.append(sanitize_phone_number(value.strip));
                 end
@@ -130,6 +125,8 @@ class MessagesController < ApplicationController
       messages = @messages
       messages.each do |message|
         # can improve this as
+        puts "-------------------------HERE-------------------------"
+        puts message.client_phone_number
         conversation = Conversation.find_by(client_phone_number: message.client_phone_number)
         if conversation.nil?
           new_conversation = Conversation.new(client_phone_number: message.client_phone_number)
@@ -153,18 +150,18 @@ class MessagesController < ApplicationController
       # may want to join these two each blocks
       # for now if conversation is nil
       # we next inside this loop as well
-      messages.each do |message|
-        next if message.conversation.nil?
+      # messages.each do |message|
+      #   next if message.conversation.nil?
 
-        if message.body.blank?
-          message.body = "cod_alert_template #{message.template_params.values.join(',')}"
-        end
+      #   if message.body.blank?
+      #     message.body = "cod_alert_template #{message.template_params.values.join(',')}"
+      #   end
 
-        sleep 0.05
-        dms = DispatchMessageService.new(message)
-        message = dms.send
-        message.save
-      end
+      #   sleep 0.05
+      #   dms = DispatchMessageService.new(message)
+      #   message = dms.send
+      #   message.save
+      # end
 
       # refactor candidate
 
